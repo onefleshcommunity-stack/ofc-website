@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Events - One Flesh Community</title>
+<meta name="description" content="Upcoming gatherings, retreats, and sessions from One Flesh Community.">
+<link rel="icon" href="logo.jpg">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-nav">
+    <div class="wrap">
+      <a class="brand" href="index.html">
+        <img src="logo.jpg" alt="One Flesh Community logo">
+        <span class="word">One Flesh Community</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">&#9776;</button>
+      <nav id="navLinks">
+        <a class="" href="index.html">Home</a>
+      <a class="" href="about.html">About</a>
+      <a class="" href="values.html">Values</a>
+      <a class="active" href="events.html">Events</a>
+      <a class="" href="gallery.html">Gallery</a>
+      <a class="" href="messages.html">Messages</a>
+      <a class="" href="contact.html">Contact</a>
+      <a class="join-btn" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Join OFC</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-header wrap">
+    <span class="eyebrow">Training &amp; Outreach Overview</span>
+    <h1>Programme for the Year</h1>
+    <p>Here is what is planned across the year ahead.</p>
+  </div>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="grid-2">
+        <div class="card event-card">
+          <div class="date-badge"><div class="day">&#128197;</div><div class="mon">Monthly</div></div>
+          <div>
+            <h3>Monthly Webinars</h3>
+            <p>Singles meet the 1st week, Couples meet the 3rd week of every month.</p>
+          </div>
+        </div>
+        <div class="card event-card">
+          <div class="date-badge"><div class="day">27</div><div class="mon">Sep</div></div>
+          <div>
+            <h3>Community Hangout</h3>
+            <p>A relaxed time of connection for the whole community.</p>
+            <div class="meta">Sunday, 27th September</div>
+          </div>
+        </div>
+        <div class="card event-card">
+          <div class="date-badge"><div class="day">02</div><div class="mon">Nov</div></div>
+          <div>
+            <h3>Boot Camp for Singles</h3>
+            <p>A dedicated training day for singles preparing well for what is ahead.</p>
+            <div class="meta">Saturday, 2nd November</div>
+          </div>
+        </div>
+        <div class="card event-card">
+          <div class="date-badge"><div class="day">19</div><div class="mon">Dec</div></div>
+          <div>
+            <h3>Love Feast</h3>
+            <p>A celebratory close to the year together as a community.</p>
+            <div class="meta">Friday, 19th December</div>
+          </div>
+        </div>
+        <div class="card event-card">
+          <div class="date-badge"><div class="day">2027</div><div class="mon">Paid</div></div>
+          <div>
+            <h3>Couples &amp; Singles Retreat</h3>
+            <p>A structured paid programme, a dedicated getaway experience for couples and singles.</p>
+            <div class="meta">2027, Paid Programme</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block alt">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Financing</span>
+        <h2>How We Sustain the Vision</h2>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Boot Camps &amp; Hangouts</h3>
+          <p>Financed by OFC partners, keeping these gatherings free and accessible to all members.</p>
+        </div>
+        <div class="card">
+          <h3>Retreats</h3>
+          <p>Structured as paid programmes, with couples and singles contributing toward their respective slot of a dedicated getaway experience.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="wrap">
+      <h2>Want to be notified of upcoming events?</h2>
+      <p>Join the community to receive updates as events are scheduled.</p>
+      <a class="btn-primary" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Join One Flesh Community</a>
+    </div>
+  </section>
+
+<footer>
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="brand">
+          <img src="logo.jpg" alt="One Flesh Community logo">
+          <span class="word">One Flesh Community</span>
+        </div>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="values.html">Values</a>
+          <a href="events.html">Events</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="messages.html">Messages</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+      </div>
+      <div class="bottom">Growing in oneness. Building Kingdom marriages. &nbsp;|&nbsp; onefleshcommunity@gmail.com</div>
+    </div>
+  </footer>
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose" aria-label="Close">&times;</button>
+  <button class="lb-prev" id="lbPrev" aria-label="Previous">&#10094;</button>
+  <div class="lb-content" id="lbContent"></div>
+  <button class="lb-next" id="lbNext" aria-label="Next">&#10095;</button>
+  <div class="lb-caption" id="lbCaption"></div>
+</div>
+<script>
+  const toggle = document.getElementById('navToggle');
+  const links = document.getElementById('navLinks');
+  if (toggle) {
+    toggle.addEventListener('click', () => links.classList.toggle('open'));
+  }
+
+  // ---------- lightbox (event delegation so it works with dynamically added items too) ----------
+  (function() {
+    const lb = document.getElementById('lightbox');
+    if (!lb) return;
+    const lbContent = document.getElementById('lbContent');
+    const lbCaption = document.getElementById('lbCaption');
+    let current = 0;
+
+    function getItems() { return Array.from(document.querySelectorAll('.gitem')); }
+
+    function render(idx) {
+      const items = getItems();
+      if (!items.length) return;
+      current = (idx + items.length) % items.length;
+      const el = items[current];
+      const type = el.dataset.type;
+      const src = el.dataset.src;
+      const caption = el.dataset.caption || '';
+      lbContent.innerHTML = '';
+      if (type === 'video') {
+        const v = document.createElement('video');
+        v.src = src; v.controls = true; v.autoplay = true;
+        lbContent.appendChild(v);
+      } else if (type === 'youtube') {
+        const iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube.com/embed/' + src + '?autoplay=1';
+        iframe.setAttribute('frameborder','0');
+        iframe.setAttribute('allow','autoplay; encrypted-media; picture-in-picture');
+        iframe.setAttribute('allowfullscreen','');
+        lbContent.appendChild(iframe);
+      } else {
+        const img = document.createElement('img');
+        img.src = src; img.alt = caption;
+        lbContent.appendChild(img);
+      }
+      lbCaption.textContent = caption;
+    }
+
+    function open(idx) {
+      render(idx);
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      lb.classList.remove('open');
+      lbContent.innerHTML = '';
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('click', (e) => {
+      const item = e.target.closest('.gitem');
+      if (!item) return;
+      const items = getItems();
+      open(items.indexOf(item));
+    });
+    document.getElementById('lbClose').addEventListener('click', close);
+    document.getElementById('lbPrev').addEventListener('click', () => render(current - 1));
+    document.getElementById('lbNext').addEventListener('click', () => render(current + 1));
+    lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+    document.addEventListener('keydown', (e) => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') render(current - 1);
+      if (e.key === 'ArrowRight') render(current + 1);
+    });
+  })();
+
+  // ---------- auto-fetch new gallery uploads from GitHub (no code update needed) ----------
+  (function() {
+    const grid = document.getElementById('mainGalleryGrid');
+    if (!grid) return;
+    const note = document.getElementById('galleryLoadingNote');
+    const REPO = 'onefleshcommunity-stack/ofc-website';
+    const FOLDER = 'gallery-uploads';
+    if (note) note.style.display = 'block';
+
+    fetch('https://api.github.com/repos/' + REPO + '/contents/' + FOLDER)
+      .then(r => r.ok ? r.json() : [])
+      .then(files => {
+        if (note) note.style.display = 'none';
+        if (!Array.isArray(files)) return;
+        const imageExt = /\.(jpe?g|png|gif|webp)$/i;
+        const videoExt = /\.(mp4|mov|webm)$/i;
+        files.forEach(f => {
+          if (f.type !== 'file') return;
+          const caption = f.name.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ');
+          const div = document.createElement('div');
+          div.className = 'gitem';
+          div.dataset.caption = caption;
+          if (imageExt.test(f.name)) {
+            div.dataset.type = 'image';
+            div.dataset.src = f.download_url;
+            const img = document.createElement('img');
+            img.src = f.download_url; img.alt = caption;
+            div.appendChild(img);
+          } else if (videoExt.test(f.name)) {
+            div.dataset.type = 'video';
+            div.dataset.src = f.download_url;
+            const v = document.createElement('video');
+            v.muted = true; v.preload = 'metadata';
+            const source = document.createElement('source');
+            source.src = f.download_url;
+            v.appendChild(source);
+            const badge = document.createElement('div');
+            badge.className = 'play-badge';
+            badge.innerHTML = '&#9658;';
+            div.appendChild(v);
+            div.appendChild(badge);
+          } else {
+            return;
+          }
+          grid.appendChild(div);
+        });
+      })
+      .catch(() => { if (note) note.style.display = 'none'; });
+  })();
+
+  // ---------- messages page: tabs + player ----------
+  (function() {
+    const frame = document.getElementById('msgFrame');
+    const tabs = document.querySelectorAll('.msg-tab');
+    if (!tabs.length) return;
+    const nowPlaying = document.getElementById('msgNowPlaying');
+    const cards = document.querySelectorAll('.msg-card, .msg-empty');
+    const playerEmpty = document.getElementById('msgPlayerEmpty');
+
+    function selectCategory(cat) {
+      tabs.forEach(t => t.classList.toggle('active', t.dataset.category === cat));
+      cards.forEach(c => { c.style.display = (c.dataset.category === cat) ? '' : 'none'; });
+      const firstInCat = document.querySelector('.msg-card[data-category="' + cat + '"]');
+      if (firstInCat) {
+        loadCard(firstInCat);
+      } else if (frame) {
+        frame.src = '';
+        if (nowPlaying) { nowPlaying.querySelector('h3').textContent = ''; nowPlaying.querySelector('p').textContent = ''; }
+      }
+    }
+
+    function loadCard(card) {
+      document.querySelectorAll('.msg-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      if (frame) frame.src = card.dataset.src;
+      if (nowPlaying) {
+        nowPlaying.querySelector('h3').textContent = card.dataset.title;
+        nowPlaying.querySelector('p').textContent = card.dataset.meta;
+      }
+    }
+
+    tabs.forEach(tab => tab.addEventListener('click', () => selectCategory(tab.dataset.category)));
+
+    document.querySelectorAll('.msg-card').forEach(card => {
+      card.addEventListener('click', () => {
+        loadCard(card);
+        if (frame && typeof frame.scrollIntoView === 'function') {
+          try { frame.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(e) {}
+        }
+      });
+    });
+
+    // initialize: hide cards not matching the already-active tab
+    const activeTab = document.querySelector('.msg-tab.active');
+    if (activeTab) {
+      cards.forEach(c => { c.style.display = (c.dataset.category === activeTab.dataset.category) ? '' : 'none'; });
+    }
+  })();
+</script>
+</body>
+</html>

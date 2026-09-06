@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Values - One Flesh Community</title>
+<meta name="description" content="The community values One Flesh Community is built on.">
+<link rel="icon" href="logo.jpg">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-nav">
+    <div class="wrap">
+      <a class="brand" href="index.html">
+        <img src="logo.jpg" alt="One Flesh Community logo">
+        <span class="word">One Flesh Community</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">&#9776;</button>
+      <nav id="navLinks">
+        <a class="" href="index.html">Home</a>
+      <a class="" href="about.html">About</a>
+      <a class="active" href="values.html">Values</a>
+      <a class="" href="events.html">Events</a>
+      <a class="" href="gallery.html">Gallery</a>
+      <a class="" href="messages.html">Messages</a>
+      <a class="" href="contact.html">Contact</a>
+      <a class="join-btn" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Join OFC</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-header wrap">
+    <span class="eyebrow">Community Values</span>
+    <h1>Our Community Values</h1>
+    <p>OFC is a Christ-centered community built on Scripture, respect, growth, and genuine support.</p>
+  </div>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="section-head" style="margin-bottom:30px;">
+        <span class="eyebrow">Community Guidelines</span>
+        <p>The following guidelines shape how we live out our values together, day to day.</p>
+      </div>
+      <div class="values-list">
+        
+      <div class="value-row">
+        <div class="vnum">I</div>
+        <div>
+          <h3>Foundational Commitment</h3>
+          <p>We follow Jesus Christ, submit to Scripture, and pursue Kingdom marriage as a lived way of life.</p>
+        </div>
+      </div>
+      <div class="value-row">
+        <div class="vnum">II</div>
+        <div>
+          <h3>Confidentiality & Trust</h3>
+          <p>Protect what is shared here. No screenshots, forwarding, gossip, or sharing struggles without permission.</p>
+        </div>
+      </div>
+      <div class="value-row">
+        <div class="vnum">III</div>
+        <div>
+          <h3>Conduct & Communication</h3>
+          <p>Communicate with respect, avoid unsolicited counsel, resolve disagreements privately, and maintain boundaries.</p>
+        </div>
+      </div>
+      <div class="value-row">
+        <div class="vnum">IV</div>
+        <div>
+          <h3>Engagement & Participation</h3>
+          <p>Respond to posts, empathize, celebrate wins, and contribute without trying to solve others' situations.</p>
+        </div>
+      </div>
+      <div class="value-row">
+        <div class="vnum">V</div>
+        <div>
+          <h3>Advice & Support Boundaries</h3>
+          <p>This is a discipleship community, not a substitute for professional counseling.</p>
+        </div>
+      </div>
+      <div class="value-row">
+        <div class="vnum">VI</div>
+        <div>
+          <h3>Leaving & Removal</h3>
+          <p>You may leave at any time. Leadership may privately remove members for serious or repeated violations.</p>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="wrap">
+      <h2>Do these values resonate with you?</h2>
+      <p>If this stirs something in you, we invite you to take the first step.</p>
+      <a class="btn-primary" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Start Your Application</a>
+    </div>
+  </section>
+
+<footer>
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="brand">
+          <img src="logo.jpg" alt="One Flesh Community logo">
+          <span class="word">One Flesh Community</span>
+        </div>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="values.html">Values</a>
+          <a href="events.html">Events</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="messages.html">Messages</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+      </div>
+      <div class="bottom">Growing in oneness. Building Kingdom marriages. &nbsp;|&nbsp; onefleshcommunity@gmail.com</div>
+    </div>
+  </footer>
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose" aria-label="Close">&times;</button>
+  <button class="lb-prev" id="lbPrev" aria-label="Previous">&#10094;</button>
+  <div class="lb-content" id="lbContent"></div>
+  <button class="lb-next" id="lbNext" aria-label="Next">&#10095;</button>
+  <div class="lb-caption" id="lbCaption"></div>
+</div>
+<script>
+  const toggle = document.getElementById('navToggle');
+  const links = document.getElementById('navLinks');
+  if (toggle) {
+    toggle.addEventListener('click', () => links.classList.toggle('open'));
+  }
+
+  // ---------- lightbox (event delegation so it works with dynamically added items too) ----------
+  (function() {
+    const lb = document.getElementById('lightbox');
+    if (!lb) return;
+    const lbContent = document.getElementById('lbContent');
+    const lbCaption = document.getElementById('lbCaption');
+    let current = 0;
+
+    function getItems() { return Array.from(document.querySelectorAll('.gitem')); }
+
+    function render(idx) {
+      const items = getItems();
+      if (!items.length) return;
+      current = (idx + items.length) % items.length;
+      const el = items[current];
+      const type = el.dataset.type;
+      const src = el.dataset.src;
+      const caption = el.dataset.caption || '';
+      lbContent.innerHTML = '';
+      if (type === 'video') {
+        const v = document.createElement('video');
+        v.src = src; v.controls = true; v.autoplay = true;
+        lbContent.appendChild(v);
+      } else if (type === 'youtube') {
+        const iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube.com/embed/' + src + '?autoplay=1';
+        iframe.setAttribute('frameborder','0');
+        iframe.setAttribute('allow','autoplay; encrypted-media; picture-in-picture');
+        iframe.setAttribute('allowfullscreen','');
+        lbContent.appendChild(iframe);
+      } else {
+        const img = document.createElement('img');
+        img.src = src; img.alt = caption;
+        lbContent.appendChild(img);
+      }
+      lbCaption.textContent = caption;
+    }
+
+    function open(idx) {
+      render(idx);
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      lb.classList.remove('open');
+      lbContent.innerHTML = '';
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('click', (e) => {
+      const item = e.target.closest('.gitem');
+      if (!item) return;
+      const items = getItems();
+      open(items.indexOf(item));
+    });
+    document.getElementById('lbClose').addEventListener('click', close);
+    document.getElementById('lbPrev').addEventListener('click', () => render(current - 1));
+    document.getElementById('lbNext').addEventListener('click', () => render(current + 1));
+    lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+    document.addEventListener('keydown', (e) => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') render(current - 1);
+      if (e.key === 'ArrowRight') render(current + 1);
+    });
+  })();
+
+  // ---------- auto-fetch new gallery uploads from GitHub (no code update needed) ----------
+  (function() {
+    const grid = document.getElementById('mainGalleryGrid');
+    if (!grid) return;
+    const note = document.getElementById('galleryLoadingNote');
+    const REPO = 'onefleshcommunity-stack/ofc-website';
+    const FOLDER = 'gallery-uploads';
+    if (note) note.style.display = 'block';
+
+    fetch('https://api.github.com/repos/' + REPO + '/contents/' + FOLDER)
+      .then(r => r.ok ? r.json() : [])
+      .then(files => {
+        if (note) note.style.display = 'none';
+        if (!Array.isArray(files)) return;
+        const imageExt = /\.(jpe?g|png|gif|webp)$/i;
+        const videoExt = /\.(mp4|mov|webm)$/i;
+        files.forEach(f => {
+          if (f.type !== 'file') return;
+          const caption = f.name.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ');
+          const div = document.createElement('div');
+          div.className = 'gitem';
+          div.dataset.caption = caption;
+          if (imageExt.test(f.name)) {
+            div.dataset.type = 'image';
+            div.dataset.src = f.download_url;
+            const img = document.createElement('img');
+            img.src = f.download_url; img.alt = caption;
+            div.appendChild(img);
+          } else if (videoExt.test(f.name)) {
+            div.dataset.type = 'video';
+            div.dataset.src = f.download_url;
+            const v = document.createElement('video');
+            v.muted = true; v.preload = 'metadata';
+            const source = document.createElement('source');
+            source.src = f.download_url;
+            v.appendChild(source);
+            const badge = document.createElement('div');
+            badge.className = 'play-badge';
+            badge.innerHTML = '&#9658;';
+            div.appendChild(v);
+            div.appendChild(badge);
+          } else {
+            return;
+          }
+          grid.appendChild(div);
+        });
+      })
+      .catch(() => { if (note) note.style.display = 'none'; });
+  })();
+
+  // ---------- messages page: tabs + player ----------
+  (function() {
+    const frame = document.getElementById('msgFrame');
+    const tabs = document.querySelectorAll('.msg-tab');
+    if (!tabs.length) return;
+    const nowPlaying = document.getElementById('msgNowPlaying');
+    const cards = document.querySelectorAll('.msg-card, .msg-empty');
+    const playerEmpty = document.getElementById('msgPlayerEmpty');
+
+    function selectCategory(cat) {
+      tabs.forEach(t => t.classList.toggle('active', t.dataset.category === cat));
+      cards.forEach(c => { c.style.display = (c.dataset.category === cat) ? '' : 'none'; });
+      const firstInCat = document.querySelector('.msg-card[data-category="' + cat + '"]');
+      if (firstInCat) {
+        loadCard(firstInCat);
+      } else if (frame) {
+        frame.src = '';
+        if (nowPlaying) { nowPlaying.querySelector('h3').textContent = ''; nowPlaying.querySelector('p').textContent = ''; }
+      }
+    }
+
+    function loadCard(card) {
+      document.querySelectorAll('.msg-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      if (frame) frame.src = card.dataset.src;
+      if (nowPlaying) {
+        nowPlaying.querySelector('h3').textContent = card.dataset.title;
+        nowPlaying.querySelector('p').textContent = card.dataset.meta;
+      }
+    }
+
+    tabs.forEach(tab => tab.addEventListener('click', () => selectCategory(tab.dataset.category)));
+
+    document.querySelectorAll('.msg-card').forEach(card => {
+      card.addEventListener('click', () => {
+        loadCard(card);
+        if (frame && typeof frame.scrollIntoView === 'function') {
+          try { frame.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(e) {}
+        }
+      });
+    });
+
+    // initialize: hide cards not matching the already-active tab
+    const activeTab = document.querySelector('.msg-tab.active');
+    if (activeTab) {
+      cards.forEach(c => { c.style.display = (c.dataset.category === activeTab.dataset.category) ? '' : 'none'; });
+    }
+  })();
+</script>
+</body>
+</html>
