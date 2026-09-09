@@ -117,7 +117,7 @@
       <div class="gallery-grid">
         <div class="gitem" data-type="image" data-src="couple_eduansah.jpg" data-caption="Mr and Mrs Edu-Ansah"><img src="couple_eduansah.jpg" alt="Mr and Mrs Edu-Ansah"></div>
         <div class="gitem" data-type="image" data-src="couple_quarshie.jpg" data-caption="Mr and Mrs Quarshie"><img src="couple_quarshie.jpg" alt="Mr and Mrs Quarshie"></div>
-        <div class="gitem" data-type="image" data-src="gallery2.jpg" data-caption="OFC community moment"><img src="gallery2.jpg" alt="OFC community moment"></div>
+        <div class="gitem" data-type="image" data-src="leader_kofi.jpg" data-caption="One Flesh Community"><img src="leader_kofi.jpg" alt="One Flesh Community"></div>
       </div>
       <div style="text-align:center; margin-top:24px;">
         <a class="btn-secondary" href="gallery.html">View Full Gallery</a>
@@ -238,103 +238,236 @@
     });
   })();
 
-  // ---------- auto-fetch new gallery uploads from GitHub (no code update needed) ----------
+  // ---------- auto-fetch new gallery uploads from GitHub, per category subfolder ----------
   (function() {
     const grid = document.getElementById('mainGalleryGrid');
     if (!grid) return;
     const note = document.getElementById('galleryLoadingNote');
     const REPO = 'onefleshcommunity-stack/ofc-website';
-    const FOLDER = 'gallery-uploads';
+    const CATEGORIES = ['general','hangouts','retreats','bootcamps','lovefeast'];
     if (note) note.style.display = 'block';
+    initGalleryTabs();
 
-    fetch('https://api.github.com/repos/' + REPO + '/contents/' + FOLDER)
-      .then(r => r.ok ? r.json() : [])
-      .then(files => {
-        if (note) note.style.display = 'none';
-        if (!Array.isArray(files)) return;
-        const imageExt = /\.(jpe?g|png|gif|webp)$/i;
-        const videoExt = /\.(mp4|mov|webm)$/i;
-        files.forEach(f => {
-          if (f.type !== 'file') return;
-          const caption = f.name.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ');
-          const div = document.createElement('div');
-          div.className = 'gitem';
-          div.dataset.caption = caption;
-          if (imageExt.test(f.name)) {
-            div.dataset.type = 'image';
-            div.dataset.src = f.download_url;
-            const img = document.createElement('img');
-            img.src = f.download_url; img.alt = caption;
-            div.appendChild(img);
-          } else if (videoExt.test(f.name)) {
-            div.dataset.type = 'video';
-            div.dataset.src = f.download_url;
-            const v = document.createElement('video');
-            v.muted = true; v.preload = 'metadata';
-            const source = document.createElement('source');
-            source.src = f.download_url;
-            v.appendChild(source);
-            const badge = document.createElement('div');
-            badge.className = 'play-badge';
-            badge.innerHTML = '&#9658;';
-            div.appendChild(v);
-            div.appendChild(badge);
-          } else {
-            return;
-          }
-          grid.appendChild(div);
+    function fetchFolder(cat) {
+      return fetch('https://api.github.com/repos/' + REPO + '/contents/gallery-uploads/' + cat)
+        .then(r => r.ok ? r.json() : [])
+        .then(files => Array.isArray(files) ? files.map(f => ({ file: f, category: cat })) : [])
+        .catch(() => []);
+    }
+
+    Promise.all(CATEGORIES.map(fetchFolder)).then(results => {
+      if (note) note.style.display = 'none';
+      const imageExt = /\.(jpe?g|png|gif|webp)$/i;
+      const videoExt = /\.(mp4|mov|webm)$/i;
+      results.flat().forEach(({ file: f, category }) => {
+        if (f.type !== 'file') return;
+        const caption = f.name.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ');
+        const div = document.createElement('div');
+        div.className = 'gitem';
+        div.dataset.caption = caption;
+        div.dataset.category = category;
+        if (imageExt.test(f.name)) {
+          div.dataset.type = 'image';
+          div.dataset.src = f.download_url;
+          const img = document.createElement('img');
+          img.src = f.download_url; img.alt = caption;
+          div.appendChild(img);
+        } else if (videoExt.test(f.name)) {
+          div.dataset.type = 'video';
+          div.dataset.src = f.download_url;
+          const v = document.createElement('video');
+          v.muted = true; v.preload = 'metadata';
+          const source = document.createElement('source');
+          source.src = f.download_url;
+          v.appendChild(source);
+          const badge = document.createElement('div');
+          badge.className = 'play-badge';
+          badge.innerHTML = '&#9658;';
+          div.appendChild(v);
+          div.appendChild(badge);
+        } else {
+          return;
+        }
+        grid.appendChild(div);
+      });
+      initGalleryTabs();
+    });
+
+    function initGalleryTabs() {
+      const tabs = document.querySelectorAll('.gallery-tab');
+      const emptyNote = document.getElementById('galleryEmptyNote');
+      if (!tabs.length) return;
+
+      function selectCategory(cat) {
+        tabs.forEach(t => t.classList.toggle('active', t.dataset.category === cat));
+        const items = Array.from(grid.children);
+        let visibleCount = 0;
+        items.forEach(el => {
+          const show = el.dataset.category === cat;
+          el.style.display = show ? '' : 'none';
+          if (show) visibleCount++;
         });
-      })
-      .catch(() => { if (note) note.style.display = 'none'; });
+        if (emptyNote) emptyNote.style.display = visibleCount === 0 ? 'block' : 'none';
+      }
+
+      tabs.forEach(tab => tab.addEventListener('click', () => selectCategory(tab.dataset.category)));
+      const activeTab = document.querySelector('.gallery-tab.active');
+      selectCategory(activeTab ? activeTab.dataset.category : 'general');
+    }
   })();
 
-  // ---------- messages page: tabs + player ----------
+  // ---------- messages page: fetch messages-data.json and render everything ----------
   (function() {
-    const frame = document.getElementById('msgFrame');
     const tabs = document.querySelectorAll('.msg-tab');
-    if (!tabs.length) return;
-    const nowPlaying = document.getElementById('msgNowPlaying');
-    const cards = document.querySelectorAll('.msg-card, .msg-empty');
-    const playerEmpty = document.getElementById('msgPlayerEmpty');
+    const list = document.getElementById('msgList');
+    if (!tabs.length || !list) return;
 
-    function selectCategory(cat) {
+    const frame = document.getElementById('msgFrame');
+    const playerWrap = document.getElementById('msgPlayerWrap');
+    const playerEmpty = document.getElementById('msgPlayerEmpty');
+    const nowPlaying = document.getElementById('msgNowPlaying');
+    const shareBtn = document.getElementById('msgShareBtn');
+
+    const TAB_LABELS = { audio: 'audios', reel: 'reels', video: 'videos' };
+    let allItems = [];
+
+    function embedSrc(item) {
+      if (item.type === 'youtube') return 'https://www.youtube.com/embed/' + item.id;
+      if (item.type === 'drive') return 'https://drive.google.com/file/d/' + item.id + '/preview';
+      return '';
+    }
+    function thumbUrl(item) {
+      if (item.type === 'youtube') return 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
+      return '';
+    }
+
+    function buildCard(item, isActive) {
+      const div = document.createElement('div');
+      div.className = 'msg-card' + (isActive ? ' active' : '');
+      div.dataset.category = item.category;
+      div.dataset.id = item.id;
+      div.dataset.src = embedSrc(item);
+      div.dataset.title = item.title || '';
+      div.dataset.meta = (item.speaker || '') + (item.date ? ' ' + item.date : '');
+
+      const thumbDiv = document.createElement('div');
+      thumbDiv.className = 'msg-thumb';
+      const thumb = thumbUrl(item);
+      if (thumb) {
+        const img = document.createElement('img');
+        img.src = thumb; img.alt = item.title || '';
+        thumbDiv.appendChild(img);
+      } else {
+        const icon = document.createElement('div');
+        icon.className = 'audio-icon'; icon.innerHTML = '&#127925;';
+        thumbDiv.appendChild(icon);
+      }
+      const badge = document.createElement('div');
+      badge.className = 'play-badge'; badge.innerHTML = '&#9658;';
+      thumbDiv.appendChild(badge);
+
+      const infoDiv = document.createElement('div');
+      infoDiv.className = 'msg-info';
+      const h4 = document.createElement('h4'); h4.textContent = item.title || '';
+      const p = document.createElement('p');
+      p.textContent = (item.speaker || '') + (item.date ? ' · ' + item.date : '');
+      infoDiv.appendChild(h4); infoDiv.appendChild(p);
+
+      div.appendChild(thumbDiv); div.appendChild(infoDiv);
+      return div;
+    }
+
+    function buildEmpty(cat) {
+      const div = document.createElement('div');
+      div.className = 'msg-empty';
+      div.dataset.category = cat;
+      div.innerHTML = '<div style="font-size:32px; margin-bottom:10px;">&#127925;</div><p>No ' + TAB_LABELS[cat] + ' yet. Check back soon.</p>';
+      return div;
+    }
+
+    function loadCard(card) {
+      list.querySelectorAll('.msg-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      const src = card.dataset.src;
+      if (src && frame) {
+        frame.src = src;
+        playerWrap.style.display = '';
+        playerEmpty.style.display = 'none';
+      }
+      if (nowPlaying) {
+        nowPlaying.querySelector('h3').textContent = card.dataset.title;
+        nowPlaying.querySelector('p').textContent = card.dataset.meta;
+      }
+      const url = new URL(window.location.href);
+      url.searchParams.set('v', card.dataset.id);
+      try { window.history.replaceState(null, '', url.toString()); } catch(e) {}
+      if (shareBtn) shareBtn.dataset.shareUrl = url.toString();
+    }
+
+    if (shareBtn) {
+      shareBtn.addEventListener('click', () => {
+        const url = shareBtn.dataset.shareUrl || window.location.href;
+        const done = () => {
+          const original = shareBtn.textContent;
+          shareBtn.textContent = 'Link Copied!';
+          setTimeout(() => { shareBtn.textContent = original; }, 1800);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(done).catch(() => { window.prompt('Copy this link:', url); });
+        } else {
+          window.prompt('Copy this link:', url);
+        }
+      });
+    }
+
+    function selectCategory(cat, preferredCard) {
       tabs.forEach(t => t.classList.toggle('active', t.dataset.category === cat));
-      cards.forEach(c => { c.style.display = (c.dataset.category === cat) ? '' : 'none'; });
-      const firstInCat = document.querySelector('.msg-card[data-category="' + cat + '"]');
-      if (firstInCat) {
-        loadCard(firstInCat);
-      } else if (frame) {
-        frame.src = '';
+      Array.from(list.children).forEach(c => { c.style.display = (c.dataset.category === cat) ? '' : 'none'; });
+      const target = preferredCard || list.querySelector('.msg-card[data-category="' + cat + '"]');
+      if (target) {
+        loadCard(target);
+      } else {
+        if (frame) frame.src = '';
+        playerWrap.style.display = 'none';
+        playerEmpty.style.display = '';
+        playerEmpty.querySelector('p').textContent = 'No ' + TAB_LABELS[cat] + ' yet.';
         if (nowPlaying) { nowPlaying.querySelector('h3').textContent = ''; nowPlaying.querySelector('p').textContent = ''; }
       }
     }
 
-    function loadCard(card) {
-      document.querySelectorAll('.msg-card').forEach(c => c.classList.remove('active'));
-      card.classList.add('active');
-      if (frame) frame.src = card.dataset.src;
-      if (nowPlaying) {
-        nowPlaying.querySelector('h3').textContent = card.dataset.title;
-        nowPlaying.querySelector('p').textContent = card.dataset.meta;
+    function render(items) {
+      allItems = items;
+      list.innerHTML = '';
+      ['audio','reel','video'].forEach(cat => {
+        const inCat = items.filter(m => m.category === cat);
+        inCat.forEach((m, i) => list.appendChild(buildCard(m, false)));
+        if (!inCat.length) list.appendChild(buildEmpty(cat));
+      });
+      list.querySelectorAll('.msg-card').forEach(card => {
+        card.addEventListener('click', () => {
+          loadCard(card);
+          if (frame && typeof frame.scrollIntoView === 'function') {
+            try { frame.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(e) {}
+          }
+        });
+      });
+
+      const params = new URLSearchParams(window.location.search);
+      const wantedId = params.get('v');
+      const deepLinkCard = wantedId ? list.querySelector('.msg-card[data-id="' + wantedId + '"]') : null;
+      if (deepLinkCard) {
+        selectCategory(deepLinkCard.dataset.category, deepLinkCard);
+      } else {
+        selectCategory('video');
       }
     }
 
     tabs.forEach(tab => tab.addEventListener('click', () => selectCategory(tab.dataset.category)));
 
-    document.querySelectorAll('.msg-card').forEach(card => {
-      card.addEventListener('click', () => {
-        loadCard(card);
-        if (frame && typeof frame.scrollIntoView === 'function') {
-          try { frame.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(e) {}
-        }
-      });
-    });
-
-    // initialize: hide cards not matching the already-active tab
-    const activeTab = document.querySelector('.msg-tab.active');
-    if (activeTab) {
-      cards.forEach(c => { c.style.display = (c.dataset.category === activeTab.dataset.category) ? '' : 'none'; });
-    }
+    fetch('messages-data.json?_=' + Date.now())
+      .then(r => r.ok ? r.json() : [])
+      .then(items => { render(Array.isArray(items) ? items : []); })
+      .catch(() => { render([]); });
   })();
 </script>
 </body>

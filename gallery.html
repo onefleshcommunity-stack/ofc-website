@@ -38,7 +38,7 @@
   <section class="block">
     <div class="wrap">
       <div class="msg-tabs"><div class="msg-tab gallery-tab active" data-category="general">General</div><div class="msg-tab gallery-tab" data-category="hangouts">Hangouts</div><div class="msg-tab gallery-tab" data-category="retreats">Retreats</div><div class="msg-tab gallery-tab" data-category="bootcamps">Boot Camps</div><div class="msg-tab gallery-tab" data-category="lovefeast">Love Feast</div></div>
-      <div class="gallery-grid" id="mainGalleryGrid"><div class="gitem" data-category="general" data-type="image" data-src="gallery1.jpg" data-caption="Community dinner together"><img src="gallery1.jpg" alt="Community dinner together"></div><div class="gitem" data-category="general" data-type="image" data-src="gallery2.jpg" data-caption="Community hangout"><img src="gallery2.jpg" alt="Community hangout"></div><div class="gitem" data-category="general" data-type="image" data-src="gallery3.jpg" data-caption="Life together at OFC"><img src="gallery3.jpg" alt="Life together at OFC"></div><div class="gitem" data-category="general" data-type="image" data-src="gallery4.jpg" data-caption="A getaway together"><img src="gallery4.jpg" alt="A getaway together"></div><div class="gitem" data-category="general" data-type="image" data-src="gallery5.jpg" data-caption="Rainy day walk"><img src="gallery5.jpg" alt="Rainy day walk"></div><div class="gitem" data-category="general" data-type="image" data-src="gallery6.jpg" data-caption="Family moments"><img src="gallery6.jpg" alt="Family moments"></div><div class="gitem" data-category="general" data-type="image" data-src="gallery7.jpg" data-caption="Friends celebrating together"><img src="gallery7.jpg" alt="Friends celebrating together"></div></div>
+      <div class="gallery-grid" id="mainGalleryGrid"></div>
       <div class="msg-empty" id="galleryEmptyNote" style="display:none;">
         <div style="font-size:32px; margin-bottom:10px;">&#128247;</div>
         <p>No photos in this category yet.</p>
@@ -244,6 +244,7 @@
     const playerWrap = document.getElementById('msgPlayerWrap');
     const playerEmpty = document.getElementById('msgPlayerEmpty');
     const nowPlaying = document.getElementById('msgNowPlaying');
+    const shareBtn = document.getElementById('msgShareBtn');
 
     const TAB_LABELS = { audio: 'audios', reel: 'reels', video: 'videos' };
     let allItems = [];
@@ -262,6 +263,7 @@
       const div = document.createElement('div');
       div.className = 'msg-card' + (isActive ? ' active' : '');
       div.dataset.category = item.category;
+      div.dataset.id = item.id;
       div.dataset.src = embedSrc(item);
       div.dataset.title = item.title || '';
       div.dataset.meta = (item.speaker || '') + (item.date ? ' ' + item.date : '');
@@ -314,14 +316,34 @@
         nowPlaying.querySelector('h3').textContent = card.dataset.title;
         nowPlaying.querySelector('p').textContent = card.dataset.meta;
       }
+      const url = new URL(window.location.href);
+      url.searchParams.set('v', card.dataset.id);
+      try { window.history.replaceState(null, '', url.toString()); } catch(e) {}
+      if (shareBtn) shareBtn.dataset.shareUrl = url.toString();
     }
 
-    function selectCategory(cat) {
+    if (shareBtn) {
+      shareBtn.addEventListener('click', () => {
+        const url = shareBtn.dataset.shareUrl || window.location.href;
+        const done = () => {
+          const original = shareBtn.textContent;
+          shareBtn.textContent = 'Link Copied!';
+          setTimeout(() => { shareBtn.textContent = original; }, 1800);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(done).catch(() => { window.prompt('Copy this link:', url); });
+        } else {
+          window.prompt('Copy this link:', url);
+        }
+      });
+    }
+
+    function selectCategory(cat, preferredCard) {
       tabs.forEach(t => t.classList.toggle('active', t.dataset.category === cat));
       Array.from(list.children).forEach(c => { c.style.display = (c.dataset.category === cat) ? '' : 'none'; });
-      const firstInCat = list.querySelector('.msg-card[data-category="' + cat + '"]');
-      if (firstInCat) {
-        loadCard(firstInCat);
+      const target = preferredCard || list.querySelector('.msg-card[data-category="' + cat + '"]');
+      if (target) {
+        loadCard(target);
       } else {
         if (frame) frame.src = '';
         playerWrap.style.display = 'none';
@@ -347,7 +369,15 @@
           }
         });
       });
-      selectCategory('video');
+
+      const params = new URLSearchParams(window.location.search);
+      const wantedId = params.get('v');
+      const deepLinkCard = wantedId ? list.querySelector('.msg-card[data-id="' + wantedId + '"]') : null;
+      if (deepLinkCard) {
+        selectCategory(deepLinkCard.dataset.category, deepLinkCard);
+      } else {
+        selectCategory('video');
+      }
     }
 
     tabs.forEach(tab => tab.addEventListener('click', () => selectCategory(tab.dataset.category)));
