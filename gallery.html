@@ -97,7 +97,9 @@
     const lbCaption = document.getElementById('lbCaption');
     let current = 0;
 
-    function getItems() { return Array.from(document.querySelectorAll('.gitem')); }
+    function getItems() {
+      return Array.from(document.querySelectorAll('.gitem')).filter(el => el.style.display !== 'none');
+    }
 
     function render(idx) {
       const items = getItems();
