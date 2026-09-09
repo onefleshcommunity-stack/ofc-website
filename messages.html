@@ -42,7 +42,7 @@
       <div class="msg-player" id="msgPlayerWrap" style="display:none;">
         <iframe id="msgFrame" allow="autoplay; encrypted-media" allowfullscreen></iframe>
       </div>
-      <div class="msg-now-playing" id="msgNowPlaying"><h3></h3><p></p></div>
+      <div class="msg-now-playing" id="msgNowPlaying"><h3></h3><p></p><button type="button" id="msgShareBtn" class="msg-share-btn">&#128279; Copy Link</button></div>
       <div class="msg-list" id="msgList"></div>
     </div>
   </section>
@@ -244,6 +244,7 @@
     const playerWrap = document.getElementById('msgPlayerWrap');
     const playerEmpty = document.getElementById('msgPlayerEmpty');
     const nowPlaying = document.getElementById('msgNowPlaying');
+    const shareBtn = document.getElementById('msgShareBtn');
 
     const TAB_LABELS = { audio: 'audios', reel: 'reels', video: 'videos' };
     let allItems = [];
@@ -262,6 +263,7 @@
       const div = document.createElement('div');
       div.className = 'msg-card' + (isActive ? ' active' : '');
       div.dataset.category = item.category;
+      div.dataset.id = item.id;
       div.dataset.src = embedSrc(item);
       div.dataset.title = item.title || '';
       div.dataset.meta = (item.speaker || '') + (item.date ? ' ' + item.date : '');
@@ -314,14 +316,34 @@
         nowPlaying.querySelector('h3').textContent = card.dataset.title;
         nowPlaying.querySelector('p').textContent = card.dataset.meta;
       }
+      const url = new URL(window.location.href);
+      url.searchParams.set('v', card.dataset.id);
+      try { window.history.replaceState(null, '', url.toString()); } catch(e) {}
+      if (shareBtn) shareBtn.dataset.shareUrl = url.toString();
     }
 
-    function selectCategory(cat) {
+    if (shareBtn) {
+      shareBtn.addEventListener('click', () => {
+        const url = shareBtn.dataset.shareUrl || window.location.href;
+        const done = () => {
+          const original = shareBtn.textContent;
+          shareBtn.textContent = 'Link Copied!';
+          setTimeout(() => { shareBtn.textContent = original; }, 1800);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(done).catch(() => { window.prompt('Copy this link:', url); });
+        } else {
+          window.prompt('Copy this link:', url);
+        }
+      });
+    }
+
+    function selectCategory(cat, preferredCard) {
       tabs.forEach(t => t.classList.toggle('active', t.dataset.category === cat));
       Array.from(list.children).forEach(c => { c.style.display = (c.dataset.category === cat) ? '' : 'none'; });
-      const firstInCat = list.querySelector('.msg-card[data-category="' + cat + '"]');
-      if (firstInCat) {
-        loadCard(firstInCat);
+      const target = preferredCard || list.querySelector('.msg-card[data-category="' + cat + '"]');
+      if (target) {
+        loadCard(target);
       } else {
         if (frame) frame.src = '';
         playerWrap.style.display = 'none';
@@ -347,7 +369,15 @@
           }
         });
       });
-      selectCategory('video');
+
+      const params = new URLSearchParams(window.location.search);
+      const wantedId = params.get('v');
+      const deepLinkCard = wantedId ? list.querySelector('.msg-card[data-id="' + wantedId + '"]') : null;
+      if (deepLinkCard) {
+        selectCategory(deepLinkCard.dataset.category, deepLinkCard);
+      } else {
+        selectCategory('video');
+      }
     }
 
     tabs.forEach(tab => tab.addEventListener('click', () => selectCategory(tab.dataset.category)));
