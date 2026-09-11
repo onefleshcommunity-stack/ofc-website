@@ -37,7 +37,7 @@
 
   <section class="block">
     <div class="wrap">
-      <div class="msg-tabs"><div class="msg-tab gallery-tab active" data-category="general">General</div><div class="msg-tab gallery-tab" data-category="hangouts">Hangouts</div><div class="msg-tab gallery-tab" data-category="retreats">Retreats</div><div class="msg-tab gallery-tab" data-category="bootcamps">Boot Camps</div><div class="msg-tab gallery-tab" data-category="lovefeast">Love Feast</div></div>
+      <div class="msg-tabs"><div class="msg-tab gallery-tab active" data-category="general">General</div><div class="msg-tab gallery-tab" data-category="hangouts">Hangouts</div><div class="msg-tab gallery-tab" data-category="retreats">Retreats</div><div class="msg-tab gallery-tab" data-category="bootcamps">Boot Camps</div><div class="msg-tab gallery-tab" data-category="lovefeast">Love Feast</div><div class="msg-tab gallery-tab" data-category="celebrations">Celebrations</div></div>
       <div class="gallery-grid" id="mainGalleryGrid"></div>
       <div class="msg-empty" id="galleryEmptyNote" style="display:none;">
         <div style="font-size:32px; margin-bottom:10px;">&#128247;</div>
@@ -164,7 +164,7 @@
     if (!grid) return;
     const note = document.getElementById('galleryLoadingNote');
     const REPO = 'onefleshcommunity-stack/ofc-website';
-    const CATEGORIES = ['general','hangouts','retreats','bootcamps','lovefeast'];
+    const CATEGORIES = ['general','hangouts','retreats','bootcamps','lovefeast','celebrations'];
     if (note) note.style.display = 'block';
     initGalleryTabs();
 
@@ -181,16 +181,15 @@
       const videoExt = /\.(mp4|mov|webm)$/i;
       results.flat().forEach(({ file: f, category }) => {
         if (f.type !== 'file') return;
-        const caption = f.name.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ');
         const div = document.createElement('div');
         div.className = 'gitem';
-        div.dataset.caption = caption;
+        div.dataset.caption = '';
         div.dataset.category = category;
         if (imageExt.test(f.name)) {
           div.dataset.type = 'image';
           div.dataset.src = f.download_url;
           const img = document.createElement('img');
-          img.src = f.download_url; img.alt = caption;
+          img.src = f.download_url; img.alt = 'Community photo';
           div.appendChild(img);
         } else if (videoExt.test(f.name)) {
           div.dataset.type = 'video';
