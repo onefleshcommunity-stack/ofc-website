@@ -337,6 +337,13 @@ footer .bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 22px;
 }
 .msg-share-btn:hover { border-color: var(--gold); background: var(--panel); }
 
+.celeb-group { margin-bottom: 40px; }
+.celeb-title {
+  font-family: 'Fraunces', serif; color: var(--rust); font-size: 20px; margin-bottom: 16px;
+  padding-bottom: 10px; border-bottom: 1px solid var(--line);
+}
+.celeb-grid { margin-bottom: 0; }
+
 /* ---------- GALLERY ---------- */
 .gallery-grid { display: flex; flex-wrap: wrap; gap: 14px; }
 .gallery-grid .gitem { flex: 1 1 260px; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); cursor: pointer; position: relative; }

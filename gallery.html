@@ -39,6 +39,7 @@
     <div class="wrap">
       <div class="msg-tabs"><div class="msg-tab gallery-tab active" data-category="general">General</div><div class="msg-tab gallery-tab" data-category="hangouts">Hangouts</div><div class="msg-tab gallery-tab" data-category="retreats">Retreats</div><div class="msg-tab gallery-tab" data-category="bootcamps">Boot Camps</div><div class="msg-tab gallery-tab" data-category="lovefeast">Love Feast</div><div class="msg-tab gallery-tab" data-category="celebrations">Celebrations</div></div>
       <div class="gallery-grid" id="mainGalleryGrid"></div>
+      <div id="celebrationsContainer" style="display:none;"></div>
       <div class="msg-empty" id="galleryEmptyNote" style="display:none;">
         <div style="font-size:32px; margin-bottom:10px;">&#128247;</div>
         <p>No photos in this category yet.</p>
@@ -163,52 +164,104 @@
     const grid = document.getElementById('mainGalleryGrid');
     if (!grid) return;
     const note = document.getElementById('galleryLoadingNote');
+    const celebContainer = document.getElementById('celebrationsContainer');
     const REPO = 'onefleshcommunity-stack/ofc-website';
-    const CATEGORIES = ['general','hangouts','retreats','bootcamps','lovefeast','celebrations'];
+    const API_BASE = 'https://api.github.com/repos/' + REPO + '/contents/gallery-uploads/';
+    const FLAT_CATEGORIES = ['general','hangouts','retreats','bootcamps','lovefeast'];
+    const imageExt = /\.(jpe?g|png|gif|webp)$/i;
+    const videoExt = /\.(mp4|mov|webm)$/i;
     if (note) note.style.display = 'block';
     initGalleryTabs();
 
+    function prettify(name) {
+      return name.replace(/[_-]/g, ' ').split(' ').filter(Boolean).map(function(w) {
+        return w.charAt(0).toUpperCase() + w.slice(1);
+      }).join(' ');
+    }
+
+    function buildGitem(f, category) {
+      const div = document.createElement('div');
+      div.className = 'gitem';
+      div.dataset.caption = '';
+      div.dataset.category = category;
+      if (imageExt.test(f.name)) {
+        div.dataset.type = 'image';
+        div.dataset.src = f.download_url;
+        const img = document.createElement('img');
+        img.src = f.download_url; img.alt = 'Community photo';
+        div.appendChild(img);
+      } else if (videoExt.test(f.name)) {
+        div.dataset.type = 'video';
+        div.dataset.src = f.download_url;
+        const v = document.createElement('video');
+        v.muted = true; v.preload = 'metadata';
+        const source = document.createElement('source');
+        source.src = f.download_url;
+        v.appendChild(source);
+        const badge = document.createElement('div');
+        badge.className = 'play-badge';
+        badge.innerHTML = '&#9658;';
+        div.appendChild(v);
+        div.appendChild(badge);
+      } else {
+        return null;
+      }
+      return div;
+    }
+
     function fetchFolder(cat) {
-      return fetch('https://api.github.com/repos/' + REPO + '/contents/gallery-uploads/' + cat)
+      return fetch(API_BASE + cat)
         .then(r => r.ok ? r.json() : [])
         .then(files => Array.isArray(files) ? files.map(f => ({ file: f, category: cat })) : [])
         .catch(() => []);
     }
 
-    Promise.all(CATEGORIES.map(fetchFolder)).then(results => {
-      if (note) note.style.display = 'none';
-      const imageExt = /\.(jpe?g|png|gif|webp)$/i;
-      const videoExt = /\.(mp4|mov|webm)$/i;
+    function fetchCelebrations() {
+      return fetch(API_BASE + 'celebrations')
+        .then(r => r.ok ? r.json() : [])
+        .then(entries => {
+          if (!Array.isArray(entries)) return [];
+          const folders = entries.filter(e => e.type === 'dir');
+          return Promise.all(folders.map(folder =>
+            fetch(API_BASE + 'celebrations/' + encodeURIComponent(folder.name))
+              .then(r => r.ok ? r.json() : [])
+              .then(files => ({ name: folder.name, files: Array.isArray(files) ? files.filter(f => f.type === 'file') : [] }))
+              .catch(() => ({ name: folder.name, files: [] }))
+          ));
+        })
+        .catch(() => []);
+    }
+
+    const flatFetch = Promise.all(FLAT_CATEGORIES.map(fetchFolder)).then(results => {
       results.flat().forEach(({ file: f, category }) => {
         if (f.type !== 'file') return;
-        const div = document.createElement('div');
-        div.className = 'gitem';
-        div.dataset.caption = '';
-        div.dataset.category = category;
-        if (imageExt.test(f.name)) {
-          div.dataset.type = 'image';
-          div.dataset.src = f.download_url;
-          const img = document.createElement('img');
-          img.src = f.download_url; img.alt = 'Community photo';
-          div.appendChild(img);
-        } else if (videoExt.test(f.name)) {
-          div.dataset.type = 'video';
-          div.dataset.src = f.download_url;
-          const v = document.createElement('video');
-          v.muted = true; v.preload = 'metadata';
-          const source = document.createElement('source');
-          source.src = f.download_url;
-          v.appendChild(source);
-          const badge = document.createElement('div');
-          badge.className = 'play-badge';
-          badge.innerHTML = '&#9658;';
-          div.appendChild(v);
-          div.appendChild(badge);
-        } else {
-          return;
-        }
-        grid.appendChild(div);
+        const item = buildGitem(f, category);
+        if (item) grid.appendChild(item);
       });
+    });
+
+    const celebFetch = fetchCelebrations().then(groups => {
+      groups.forEach(group => {
+        if (!group.files.length) return;
+        const section = document.createElement('div');
+        section.className = 'celeb-group';
+        const heading = document.createElement('h3');
+        heading.className = 'celeb-title';
+        heading.textContent = prettify(group.name);
+        const groupGrid = document.createElement('div');
+        groupGrid.className = 'gallery-grid celeb-grid';
+        group.files.forEach(f => {
+          const item = buildGitem(f, 'celebrations');
+          if (item) groupGrid.appendChild(item);
+        });
+        section.appendChild(heading);
+        section.appendChild(groupGrid);
+        celebContainer.appendChild(section);
+      });
+    });
+
+    Promise.all([flatFetch, celebFetch]).then(() => {
+      if (note) note.style.display = 'none';
       initGalleryTabs();
     });
 
@@ -219,14 +272,24 @@
 
       function selectCategory(cat) {
         tabs.forEach(t => t.classList.toggle('active', t.dataset.category === cat));
-        const items = Array.from(grid.children);
-        let visibleCount = 0;
-        items.forEach(el => {
-          const show = el.dataset.category === cat;
-          el.style.display = show ? '' : 'none';
-          if (show) visibleCount++;
-        });
-        if (emptyNote) emptyNote.style.display = visibleCount === 0 ? 'block' : 'none';
+
+        if (cat === 'celebrations') {
+          grid.style.display = 'none';
+          celebContainer.style.display = '';
+          const hasGroups = celebContainer.querySelector('.celeb-group') !== null;
+          if (emptyNote) emptyNote.style.display = hasGroups ? 'none' : 'block';
+        } else {
+          celebContainer.style.display = 'none';
+          grid.style.display = '';
+          const items = Array.from(grid.children);
+          let visibleCount = 0;
+          items.forEach(el => {
+            const show = el.dataset.category === cat;
+            el.style.display = show ? '' : 'none';
+            if (show) visibleCount++;
+          });
+          if (emptyNote) emptyNote.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
       }
 
       tabs.forEach(tab => tab.addEventListener('click', () => selectCategory(tab.dataset.category)));
