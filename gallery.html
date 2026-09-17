@@ -238,42 +238,58 @@
       return rootEntries.find(e => e.name.toLowerCase() === wantedName.toLowerCase());
     }
 
-    // recursively walk one category's folder: files sitting directly in it are "flat" items,
-    // any subfolder (however deep) becomes its own labeled group, named after its path
-    function walkCategory(actualName) {
-      const flatFiles = [];
-      const groups = [];
-      function walk(pathSegments, isRoot) {
-        return fetch(apiPath(pathSegments))
-          .then(r => r.ok ? r.json() : [])
-          .then(entries => {
-            if (!Array.isArray(entries)) return;
-            const files = entries.filter(e => e.type === 'file');
-            const dirs = entries.filter(e => e.type === 'dir');
-            if (isRoot) {
-              flatFiles.push.apply(flatFiles, files);
-            } else if (files.length) {
-              const labelParts = pathSegments.slice(1); // drop the category segment itself
-              groups.push({ label: labelParts.map(prettify).join(' / '), files: files });
-            }
-            return Promise.all(dirs.map(d => walk(pathSegments.concat(d.name), false)));
-          })
-          .catch(() => []);
-      }
-      return walk([actualName], true).then(() => ({ flatFiles: flatFiles, groups: groups }));
+    // Walk one category's folder. A direct subfolder is either:
+    //  - a LEAF (it directly contains files) -> becomes its own standalone group
+    //  - a BRANCH (it only contains further subfolders, no files) -> becomes a
+    //    sub-tab (like "Naming Ceremonies"), and ITS children become groups within it
+    function fetchDir(pathSegments) {
+      return fetch(apiPath(pathSegments)).then(r => r.ok ? r.json() : []).catch(() => []);
     }
 
-    function renderCategory(panel, category, data) {
-      if (data.flatFiles.length) {
-        const flatGrid = document.createElement('div');
-        flatGrid.className = 'gallery-grid';
-        data.flatFiles.forEach(f => {
-          const item = buildGitem(f, category);
-          if (item) flatGrid.appendChild(item);
-        });
-        panel.appendChild(flatGrid);
-      }
-      data.groups.forEach(group => {
+    function collectDeepGroups(pathSegments, out) {
+      return fetchDir(pathSegments).then(entries => {
+        if (!Array.isArray(entries)) return;
+        const files = entries.filter(e => e.type === 'file');
+        const dirs = entries.filter(e => e.type === 'dir');
+        if (files.length) out.push({ label: prettify(pathSegments[pathSegments.length - 1]), files: files });
+        return Promise.all(dirs.map(d => collectDeepGroups(pathSegments.concat(d.name), out)));
+      });
+    }
+
+    function walkCategory(actualName) {
+      const flatFiles = [];
+      const leafGroups = [];
+      const branches = [];
+
+      return fetchDir([actualName]).then(rootEntries => {
+        if (!Array.isArray(rootEntries)) return { flatFiles, leafGroups, branches };
+        const rootFiles = rootEntries.filter(e => e.type === 'file');
+        const rootDirs = rootEntries.filter(e => e.type === 'dir');
+        flatFiles.push.apply(flatFiles, rootFiles);
+
+        return Promise.all(rootDirs.map(dir => {
+          const childPath = [actualName, dir.name];
+          return fetchDir(childPath).then(childEntries => {
+            if (!Array.isArray(childEntries)) return;
+            const childFiles = childEntries.filter(e => e.type === 'file');
+            const childDirs = childEntries.filter(e => e.type === 'dir');
+            if (childDirs.length === 0) {
+              if (childFiles.length) leafGroups.push({ label: prettify(dir.name), files: childFiles });
+              return;
+            }
+            const branchGroups = [];
+            const jobs = childDirs.map(gd => collectDeepGroups(childPath.concat(gd.name), branchGroups));
+            if (childFiles.length) branchGroups.push({ label: 'Other', files: childFiles });
+            return Promise.all(jobs).then(() => {
+              branches.push({ name: dir.name, groups: branchGroups });
+            });
+          });
+        })).then(() => ({ flatFiles, leafGroups, branches }));
+      });
+    }
+
+    function renderGroups(container, category, groups) {
+      groups.forEach(group => {
         if (!group.files.length) return;
         const section = document.createElement('div');
         section.className = 'celeb-group';
@@ -288,8 +304,48 @@
         });
         section.appendChild(heading);
         section.appendChild(groupGrid);
-        panel.appendChild(section);
+        container.appendChild(section);
       });
+    }
+
+    function renderCategory(panel, category, data) {
+      if (data.flatFiles.length) {
+        const flatGrid = document.createElement('div');
+        flatGrid.className = 'gallery-grid';
+        data.flatFiles.forEach(f => {
+          const item = buildGitem(f, category);
+          if (item) flatGrid.appendChild(item);
+        });
+        panel.appendChild(flatGrid);
+      }
+
+      renderGroups(panel, category, data.leafGroups);
+
+      if (data.branches.length) {
+        const subtabs = document.createElement('div');
+        subtabs.className = 'msg-tabs gal-subtabs';
+        const branchPanels = [];
+        data.branches.forEach((branch, i) => {
+          const tab = document.createElement('div');
+          tab.className = 'msg-tab gal-subtab' + (i === 0 ? ' active' : '');
+          tab.textContent = prettify(branch.name);
+          subtabs.appendChild(tab);
+
+          const branchPanel = document.createElement('div');
+          branchPanel.className = 'gal-subpanel';
+          branchPanel.style.display = i === 0 ? '' : 'none';
+          renderGroups(branchPanel, category, branch.groups);
+          branchPanels.push(branchPanel);
+
+          tab.addEventListener('click', () => {
+            subtabs.querySelectorAll('.gal-subtab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            branchPanels.forEach((bp, j) => { bp.style.display = (j === i) ? '' : 'none'; });
+          });
+        });
+        panel.appendChild(subtabs);
+        branchPanels.forEach(bp => panel.appendChild(bp));
+      }
     }
 
     fetchRoot().then(rootEntries => {

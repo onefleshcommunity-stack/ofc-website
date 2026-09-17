@@ -344,6 +344,10 @@ footer .bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 22px;
 }
 .celeb-grid { margin-bottom: 0; }
 
+.gal-subtabs { margin: 0 0 28px; justify-content: flex-start; }
+.gal-subtab { font-size: 12px; padding: 8px 18px; }
+.gal-subpanel { margin-bottom: 10px; }
+
 /* ---------- GALLERY ---------- */
 .gallery-grid { display: flex; flex-wrap: wrap; gap: 14px; }
 .gallery-grid .gitem { flex: 1 1 260px; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); cursor: pointer; position: relative; }
