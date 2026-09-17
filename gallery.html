@@ -38,8 +38,14 @@
   <section class="block">
     <div class="wrap">
       <div class="msg-tabs"><div class="msg-tab gallery-tab active" data-category="general">General</div><div class="msg-tab gallery-tab" data-category="hangouts">Hangouts</div><div class="msg-tab gallery-tab" data-category="retreats">Retreats</div><div class="msg-tab gallery-tab" data-category="bootcamps">Boot Camps</div><div class="msg-tab gallery-tab" data-category="lovefeast">Love Feast</div><div class="msg-tab gallery-tab" data-category="celebrations">Celebrations</div></div>
-      <div class="gallery-grid" id="mainGalleryGrid"></div>
-      <div id="celebrationsContainer" style="display:none;"></div>
+      <div id="galCategoryPanels">
+        <div class="gal-panel" data-category="general"></div>
+        <div class="gal-panel" data-category="hangouts" style="display:none;"></div>
+        <div class="gal-panel" data-category="retreats" style="display:none;"></div>
+        <div class="gal-panel" data-category="bootcamps" style="display:none;"></div>
+        <div class="gal-panel" data-category="lovefeast" style="display:none;"></div>
+        <div class="gal-panel" data-category="celebrations" style="display:none;"></div>
+      </div>
       <div class="msg-empty" id="galleryEmptyNote" style="display:none;">
         <div style="font-size:32px; margin-bottom:10px;">&#128247;</div>
         <p>No photos in this category yet.</p>
@@ -98,8 +104,16 @@
     const lbCaption = document.getElementById('lbCaption');
     let current = 0;
 
+    function isVisible(el) {
+      let node = el;
+      while (node && node !== document.body) {
+        if (node.style && node.style.display === 'none') return false;
+        node = node.parentElement;
+      }
+      return true;
+    }
     function getItems() {
-      return Array.from(document.querySelectorAll('.gitem')).filter(el => el.style.display !== 'none');
+      return Array.from(document.querySelectorAll('.gitem')).filter(isVisible);
     }
 
     function render(idx) {
@@ -159,15 +173,14 @@
     });
   })();
 
-  // ---------- auto-fetch new gallery uploads from GitHub, per category subfolder ----------
+  // ---------- auto-fetch new gallery uploads from GitHub, per category, with optional nested groups ----------
   (function() {
-    const grid = document.getElementById('mainGalleryGrid');
-    if (!grid) return;
+    const panels = document.querySelectorAll('.gal-panel');
+    if (!panels.length) return;
     const note = document.getElementById('galleryLoadingNote');
-    const celebContainer = document.getElementById('celebrationsContainer');
     const REPO = 'onefleshcommunity-stack/ofc-website';
     const API_ROOT = 'https://api.github.com/repos/' + REPO + '/contents/gallery-uploads';
-    const FLAT_CATEGORIES = ['general','hangouts','retreats','bootcamps','lovefeast'];
+    const CATEGORIES = ['general','hangouts','retreats','bootcamps','lovefeast','celebrations'];
     const imageExt = /\.(jpe?g|png|gif|webp)$/i;
     const videoExt = /\.(mp4|mov|webm)$/i;
     if (note) note.style.display = 'block';
@@ -214,7 +227,6 @@
     }
 
     // fetch gallery-uploads root once, so we can match folder names case-insensitively
-    // (so "Celebrations" on GitHub still matches our expected "celebrations")
     function fetchRoot() {
       return fetch(API_ROOT)
         .then(r => r.ok ? r.json() : [])
@@ -226,76 +238,69 @@
       return rootEntries.find(e => e.name.toLowerCase() === wantedName.toLowerCase());
     }
 
-    function fetchFlatFolder(actualName, cat) {
-      return fetch(apiPath([actualName]))
-        .then(r => r.ok ? r.json() : [])
-        .then(files => Array.isArray(files) ? files.map(f => ({ file: f, category: cat })) : [])
-        .catch(() => []);
-    }
-
-    // recursively walk the celebrations tree: every folder that directly contains
-    // at least one file becomes its own labeled group, however deep it is nested
-    function walkCelebrations(actualCelebName) {
+    // recursively walk one category's folder: files sitting directly in it are "flat" items,
+    // any subfolder (however deep) becomes its own labeled group, named after its path
+    function walkCategory(actualName) {
+      const flatFiles = [];
       const groups = [];
-      function walk(pathSegments) {
+      function walk(pathSegments, isRoot) {
         return fetch(apiPath(pathSegments))
           .then(r => r.ok ? r.json() : [])
           .then(entries => {
             if (!Array.isArray(entries)) return;
             const files = entries.filter(e => e.type === 'file');
             const dirs = entries.filter(e => e.type === 'dir');
-            if (files.length) {
-              const labelParts = pathSegments.slice(1); // drop the "celebrations" segment itself
-              groups.push({
-                label: labelParts.map(prettify).join(' / '),
-                files: files
-              });
+            if (isRoot) {
+              flatFiles.push.apply(flatFiles, files);
+            } else if (files.length) {
+              const labelParts = pathSegments.slice(1); // drop the category segment itself
+              groups.push({ label: labelParts.map(prettify).join(' / '), files: files });
             }
-            return Promise.all(dirs.map(d => walk(pathSegments.concat(d.name))));
+            return Promise.all(dirs.map(d => walk(pathSegments.concat(d.name), false)));
           })
           .catch(() => []);
       }
-      return walk([actualCelebName]).then(() => groups);
+      return walk([actualName], true).then(() => ({ flatFiles: flatFiles, groups: groups }));
+    }
+
+    function renderCategory(panel, category, data) {
+      if (data.flatFiles.length) {
+        const flatGrid = document.createElement('div');
+        flatGrid.className = 'gallery-grid';
+        data.flatFiles.forEach(f => {
+          const item = buildGitem(f, category);
+          if (item) flatGrid.appendChild(item);
+        });
+        panel.appendChild(flatGrid);
+      }
+      data.groups.forEach(group => {
+        if (!group.files.length) return;
+        const section = document.createElement('div');
+        section.className = 'celeb-group';
+        const heading = document.createElement('h3');
+        heading.className = 'celeb-title';
+        heading.textContent = group.label;
+        const groupGrid = document.createElement('div');
+        groupGrid.className = 'gallery-grid celeb-grid';
+        group.files.forEach(f => {
+          const item = buildGitem(f, category);
+          if (item) groupGrid.appendChild(item);
+        });
+        section.appendChild(heading);
+        section.appendChild(groupGrid);
+        panel.appendChild(section);
+      });
     }
 
     fetchRoot().then(rootEntries => {
-      const flatFetches = FLAT_CATEGORIES.map(cat => {
+      const jobs = CATEGORIES.map(cat => {
         const match = findFolder(rootEntries, cat);
-        return match ? fetchFlatFolder(match.name, cat) : Promise.resolve([]);
+        const panel = document.querySelector('.gal-panel[data-category="' + cat + '"]');
+        if (!match || !panel) return Promise.resolve();
+        return walkCategory(match.name).then(data => renderCategory(panel, cat, data));
       });
 
-      const celebMatch = findFolder(rootEntries, 'celebrations');
-      const celebFetch = celebMatch ? walkCelebrations(celebMatch.name) : Promise.resolve([]);
-
-      const flatDone = Promise.all(flatFetches).then(results => {
-        results.flat().forEach(({ file: f, category }) => {
-          if (f.type !== 'file') return;
-          const item = buildGitem(f, category);
-          if (item) grid.appendChild(item);
-        });
-      });
-
-      const celebDone = celebFetch.then(groups => {
-        groups.forEach(group => {
-          if (!group.files.length) return;
-          const section = document.createElement('div');
-          section.className = 'celeb-group';
-          const heading = document.createElement('h3');
-          heading.className = 'celeb-title';
-          heading.textContent = group.label;
-          const groupGrid = document.createElement('div');
-          groupGrid.className = 'gallery-grid celeb-grid';
-          group.files.forEach(f => {
-            const item = buildGitem(f, 'celebrations');
-            if (item) groupGrid.appendChild(item);
-          });
-          section.appendChild(heading);
-          section.appendChild(groupGrid);
-          celebContainer.appendChild(section);
-        });
-      });
-
-      Promise.all([flatDone, celebDone]).then(() => {
+      Promise.all(jobs).then(() => {
         if (note) note.style.display = 'none';
         initGalleryTabs();
       });
@@ -308,24 +313,10 @@
 
       function selectCategory(cat) {
         tabs.forEach(t => t.classList.toggle('active', t.dataset.category === cat));
-
-        if (cat === 'celebrations') {
-          grid.style.display = 'none';
-          celebContainer.style.display = '';
-          const hasGroups = celebContainer.querySelector('.celeb-group') !== null;
-          if (emptyNote) emptyNote.style.display = hasGroups ? 'none' : 'block';
-        } else {
-          celebContainer.style.display = 'none';
-          grid.style.display = '';
-          const items = Array.from(grid.children);
-          let visibleCount = 0;
-          items.forEach(el => {
-            const show = el.dataset.category === cat;
-            el.style.display = show ? '' : 'none';
-            if (show) visibleCount++;
-          });
-          if (emptyNote) emptyNote.style.display = visibleCount === 0 ? 'block' : 'none';
-        }
+        panels.forEach(p => { p.style.display = (p.dataset.category === cat) ? '' : 'none'; });
+        const activePanel = document.querySelector('.gal-panel[data-category="' + cat + '"]');
+        const hasContent = activePanel && activePanel.children.length > 0;
+        if (emptyNote) emptyNote.style.display = hasContent ? 'none' : 'block';
       }
 
       tabs.forEach(tab => tab.addEventListener('click', () => selectCategory(tab.dataset.category)));
