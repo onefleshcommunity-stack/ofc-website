@@ -37,18 +37,18 @@
 
   <section class="block" style="padding-top:0; padding-bottom:0;">
     <div class="wrap">
-      <div class="next-up">
+      <div class="next-up" id="nextUpBanner" style="display:none;">
         <div class="next-up-badge">
           <span class="pulse-dot"></span> Next Up
         </div>
         <div class="next-up-body">
           <div class="next-up-date">
-            <div class="nu-day">20</div>
-            <div class="nu-mon">SEP</div>
+            <div class="nu-day" id="nuDay"></div>
+            <div class="nu-mon" id="nuMon"></div>
           </div>
           <div class="next-up-info">
-            <h2>Couples Webinar</h2>
-            <p>Sunday, 20th September &middot; Our monthly couples session is coming up this week.</p>
+            <h2 id="nuTitle"></h2>
+            <p id="nuDesc"></p>
           </div>
         </div>
       </div>
@@ -57,55 +57,7 @@
 
   <section class="block">
     <div class="wrap">
-      <div class="grid-2">
-        <div class="card event-card">
-          <div class="date-badge"><div class="day">20</div><div class="mon">Sep</div></div>
-          <div>
-            <h3>Couples Webinar</h3>
-            <p>Monthly couples session, part of our ongoing webinar series.</p>
-            <div class="meta">Sunday, 20th September</div>
-          </div>
-        </div>
-        <div class="card event-card">
-          <div class="date-badge"><div class="day">&#128197;</div><div class="mon">Monthly</div></div>
-          <div>
-            <h3>Monthly Webinars</h3>
-            <p>Singles meet the 1st week, Couples meet the 3rd week of every month.</p>
-          </div>
-        </div>
-        <div class="card event-card">
-          <div class="date-badge"><div class="day">27</div><div class="mon">Sep</div></div>
-          <div>
-            <h3>Community Hangout</h3>
-            <p>A relaxed time of connection for the whole community.</p>
-            <div class="meta">Sunday, 27th September</div>
-          </div>
-        </div>
-        <div class="card event-card">
-          <div class="date-badge"><div class="day">02</div><div class="mon">Nov</div></div>
-          <div>
-            <h3>Boot Camp for Singles</h3>
-            <p>A dedicated training day for singles preparing well for what is ahead.</p>
-            <div class="meta">Saturday, 2nd November</div>
-          </div>
-        </div>
-        <div class="card event-card">
-          <div class="date-badge"><div class="day">19</div><div class="mon">Dec</div></div>
-          <div>
-            <h3>Love Feast</h3>
-            <p>A celebratory close to the year together as a community.</p>
-            <div class="meta">Friday, 19th December</div>
-          </div>
-        </div>
-        <div class="card event-card">
-          <div class="date-badge"><div class="day">2027</div><div class="mon">Paid</div></div>
-          <div>
-            <h3>Couples &amp; Singles Retreat</h3>
-            <p>A structured paid programme, a dedicated getaway experience for couples and singles.</p>
-            <div class="meta">2027, Paid Programme</div>
-          </div>
-        </div>
-      </div>
+      <div class="grid-2" id="eventsGrid"></div>
     </div>
   </section>
 
@@ -530,6 +482,77 @@
       .then(r => r.ok ? r.json() : [])
       .then(items => { render(Array.isArray(items) ? items : []); })
       .catch(() => { render([]); });
+  })();
+
+  // ---------- events page: fetch events-data.json, auto-pick Next Up by real date ----------
+  (function() {
+    const grid = document.getElementById('eventsGrid');
+    const banner = document.getElementById('nextUpBanner');
+    if (!grid || !banner) return;
+
+    const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+
+    function dateParts(iso) {
+      const d = new Date(iso + 'T00:00:00');
+      return { day: String(d.getDate()).padStart(2, '0'), mon: MONTHS[d.getMonth()], dateObj: d };
+    }
+
+    function buildCard(ev) {
+      const card = document.createElement('div');
+      card.className = 'card event-card';
+
+      const badge = document.createElement('div');
+      badge.className = 'date-badge';
+      let dayLabel = ev.dayLabel;
+      let monLabel = ev.monLabel;
+      if (!dayLabel && ev.date) {
+        const p = dateParts(ev.date);
+        dayLabel = p.day; monLabel = p.mon;
+      }
+      badge.innerHTML = '<div class="day">' + (dayLabel || '') + '</div><div class="mon">' + (monLabel || '') + '</div>';
+
+      const info = document.createElement('div');
+      const h3 = document.createElement('h3'); h3.textContent = ev.title || '';
+      const p = document.createElement('p'); p.textContent = ev.description || '';
+      info.appendChild(h3); info.appendChild(p);
+      if (ev.displayDate) {
+        const meta = document.createElement('div');
+        meta.className = 'meta'; meta.textContent = ev.displayDate;
+        info.appendChild(meta);
+      }
+      card.appendChild(badge); card.appendChild(info);
+      return card;
+    }
+
+    function pickNextUp(events) {
+      const today = new Date(); today.setHours(0,0,0,0);
+      const candidates = events
+        .filter(ev => ev.date && !ev.excludeFromNextUp)
+        .map(ev => Object.assign({}, ev, { _d: dateParts(ev.date).dateObj }))
+        .filter(ev => ev._d >= today)
+        .sort((a, b) => a._d - b._d);
+      return candidates.length ? candidates[0] : null;
+    }
+
+    fetch('events-data.json?_=' + Date.now())
+      .then(r => r.ok ? r.json() : [])
+      .then(events => {
+        if (!Array.isArray(events)) events = [];
+
+        events.forEach(ev => grid.appendChild(buildCard(ev)));
+
+        const next = pickNextUp(events);
+        if (next) {
+          const p = next.date ? dateParts(next.date) : null;
+          document.getElementById('nuDay').textContent = next.dayLabel || (p ? p.day : '');
+          document.getElementById('nuMon').textContent = next.monLabel || (p ? p.mon : '');
+          document.getElementById('nuTitle').textContent = next.title || '';
+          document.getElementById('nuDesc').textContent =
+            (next.displayDate ? next.displayDate + '. ' : '') + (next.description || '');
+          banner.style.display = '';
+        }
+      })
+      .catch(() => {});
   })();
 </script>
 </body>

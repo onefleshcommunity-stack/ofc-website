@@ -1,0 +1,43 @@
+[
+  {
+    "title": "Couples Webinar",
+    "date": "2026-09-20",
+    "displayDate": "Sunday, 20th September",
+    "description": "Monthly couples session, part of our ongoing webinar series."
+  },
+  {
+    "title": "Monthly Webinars",
+    "date": null,
+    "dayLabel": "\ud83d\udcc5",
+    "monLabel": "MONTHLY",
+    "displayDate": "",
+    "description": "Singles meet the 1st week, Couples meet the 3rd week of every month.",
+    "excludeFromNextUp": true
+  },
+  {
+    "title": "Community Hangout",
+    "date": "2026-09-27",
+    "displayDate": "Sunday, 27th September",
+    "description": "A relaxed time of connection for the whole community."
+  },
+  {
+    "title": "Boot Camp for Singles",
+    "date": "2026-11-02",
+    "displayDate": "Saturday, 2nd November",
+    "description": "A dedicated training day for singles preparing well for what is ahead."
+  },
+  {
+    "title": "Love Feast",
+    "date": "2026-12-19",
+    "displayDate": "Friday, 19th December",
+    "description": "A celebratory close to the year together as a community."
+  },
+  {
+    "title": "Couples & Singles Retreat",
+    "date": "2027-06-01",
+    "dayLabel": "2027",
+    "monLabel": "PAID",
+    "displayDate": "2027, Paid Programme",
+    "description": "A structured paid programme, a dedicated getaway experience for couples and singles."
+  }
+]

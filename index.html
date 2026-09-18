@@ -84,24 +84,7 @@
         <span class="eyebrow">Upcoming</span>
         <h2>Community Events</h2>
       </div>
-      <div class="grid-2">
-        <div class="card event-card">
-          <div class="date-badge"><div class="day">27</div><div class="mon">Sep</div></div>
-          <div>
-            <h3>Community Hangout</h3>
-            <p>A relaxed time of connection for the whole community.</p>
-            <div class="meta">Sunday, 27th September</div>
-          </div>
-        </div>
-        <div class="card event-card">
-          <div class="date-badge"><div class="day">02</div><div class="mon">Nov</div></div>
-          <div>
-            <h3>Boot Camp for Singles</h3>
-            <p>A dedicated training day for singles preparing well for what is ahead.</p>
-            <div class="meta">Saturday, 2nd November</div>
-          </div>
-        </div>
-      </div>
+      <div class="grid-2" id="homeEventsPreview"></div>
       <div style="text-align:center; margin-top:34px;">
         <a class="btn-secondary" href="events.html">See All Events</a>
       </div>
@@ -530,6 +513,54 @@
       .then(r => r.ok ? r.json() : [])
       .then(items => { render(Array.isArray(items) ? items : []); })
       .catch(() => { render([]); });
+  })();
+
+  // ---------- home page: preview the next 2 upcoming events from events-data.json ----------
+  (function() {
+    const preview = document.getElementById('homeEventsPreview');
+    if (!preview) return;
+
+    const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    function dateParts(iso) {
+      const d = new Date(iso + 'T00:00:00');
+      return { day: String(d.getDate()).padStart(2, '0'), mon: MONTHS[d.getMonth()], dateObj: d };
+    }
+    function buildCard(ev) {
+      const card = document.createElement('div');
+      card.className = 'card event-card';
+      const badge = document.createElement('div');
+      badge.className = 'date-badge';
+      const p = ev.date ? dateParts(ev.date) : null;
+      const dayLabel = ev.dayLabel || (p ? p.day : '');
+      const monLabel = ev.monLabel || (p ? p.mon : '');
+      badge.innerHTML = '<div class="day">' + dayLabel + '</div><div class="mon">' + monLabel + '</div>';
+      const info = document.createElement('div');
+      const h3 = document.createElement('h3'); h3.textContent = ev.title || '';
+      const desc = document.createElement('p'); desc.textContent = ev.description || '';
+      info.appendChild(h3); info.appendChild(desc);
+      if (ev.displayDate) {
+        const meta = document.createElement('div');
+        meta.className = 'meta'; meta.textContent = ev.displayDate;
+        info.appendChild(meta);
+      }
+      card.appendChild(badge); card.appendChild(info);
+      return card;
+    }
+
+    fetch('events-data.json?_=' + Date.now())
+      .then(r => r.ok ? r.json() : [])
+      .then(events => {
+        if (!Array.isArray(events)) events = [];
+        const today = new Date(); today.setHours(0,0,0,0);
+        const upcoming = events
+          .filter(ev => ev.date && !ev.excludeFromNextUp)
+          .map(ev => Object.assign({}, ev, { _d: dateParts(ev.date).dateObj }))
+          .filter(ev => ev._d >= today)
+          .sort((a, b) => a._d - b._d)
+          .slice(0, 2);
+        upcoming.forEach(ev => preview.appendChild(buildCard(ev)));
+      })
+      .catch(() => {});
   })();
 </script>
 </body>
