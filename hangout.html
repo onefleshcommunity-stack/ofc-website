@@ -125,7 +125,7 @@
   #ret-root .pills { display: flex; flex-wrap: wrap; gap: 10px; }
   #ret-root .pill {
     padding: 11px 20px; border-radius: 14px; border: 2px solid var(--line); background: #fff;
-    color: #1f4a5c; font-size: 14.5px; font-weight: 800; cursor: pointer; user-select: none;
+    color: #1f4a5c; font-size: 14.5px; font-weight: 800; cursor: pointer; user-select: none; text-align: center; text-wrap: balance;
     box-shadow: 0 3px 0 var(--line);
     transition: border-color .15s ease, background .15s ease, transform .1s ease, box-shadow .1s ease;
   }
@@ -256,7 +256,7 @@
     <div class="field subfield" data-required="true" id="f-publicMode">
       <label class="q">Which public transport?<span class="req">*</span></label>
       <div class="pills" data-group="publicMode" role="radiogroup" aria-label="Which public transport?">
-        <div class="pill" data-value="Ride-hailing service" role="radio" aria-checked="false" tabindex="0">Ride-hailing service</div>
+        <div class="pill" data-value="Hailing services (Uber, Bolt, etc.)" role="radio" aria-checked="false" tabindex="0">Hailing services (Uber, Bolt, etc.)</div>
         <div class="pill" data-value="Taxi" role="radio" aria-checked="false" tabindex="0">Taxi</div>
         <div class="pill" data-value="Trotro" role="radio" aria-checked="false" tabindex="0">Trotro</div>
       </div>
