@@ -3,7 +3,8 @@
     "title": "Couples Webinar",
     "date": "2026-09-20",
     "displayDate": "Sunday, 20th September",
-    "description": "Monthly couples session, part of our ongoing webinar series."
+    "description": "Monthly couples session, part of our ongoing webinar series.",
+    "flyer": "couples-webinar-flyer.jpg"
   },
   {
     "title": "Monthly Webinars",
@@ -18,7 +19,8 @@
     "title": "Community Hangout",
     "date": "2026-09-27",
     "displayDate": "Sunday, 27th September",
-    "description": "A relaxed time of connection for the whole community."
+    "description": "A relaxed time of connection for the whole community.",
+    "flyer": "hangout-flyer.jpg"
   },
   {
     "title": "Boot Camp for Singles",
