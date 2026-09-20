@@ -13,7 +13,8 @@
     "monLabel": "MONTHLY",
     "displayDate": "",
     "description": "Singles meet the 1st week, Couples meet the 3rd week of every month.",
-    "excludeFromNextUp": true
+    "excludeFromNextUp": true,
+    "placeholder": "Held every month"
   },
   {
     "title": "Community Hangout",
