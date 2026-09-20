@@ -5,11 +5,17 @@
  *     <script src="flyer-popup.js" defer></script>
  * and upload hangout-flyer.jpg next to it.
  *
+ * Info-only version (no Register button), e.g. for events.html:
+ *     <script src="flyer-popup.js" defer data-mode="info"></script>
+ *
  * Testing: open  index.html?flyer=1  to force the popup to show
  * (ignores the "already seen this session" and expiry checks).
  */
 (function () {
   'use strict';
+
+  var me = document.currentScript;
+  var mode = (me && me.getAttribute('data-mode') === 'info') ? 'info' : 'register';
 
   /* ---------------- Settings you may want to change ---------------- */
   var CONFIG = {
@@ -18,12 +24,16 @@
     startDelay: 1000,                    // ms after page load before it pops up
     showUntil: '2026-09-28T00:00:00',    // popup stops appearing after the event day
     showFrom: null,                      // optional, e.g. '2026-09-20T00:00:00'
-    oncePerSession: false,                // false = show on every page load
+    oncePerSession: true,                // false = show on every page load
     storageKey: 'ofc_hangout_flyer_seen_v1',
     alt: 'Community Hangout flyer from One Flesh Community. Food, fun, fellowship. ' +
          'Sunday, September 27 at 2 PM at Sea Breeze, Sakumono. ' +
          'Attendance is strictly by registration.'
   };
+  // Optional: use a different image on a page with  data-image="other-flyer.jpg"
+  if (me && me.getAttribute('data-image')) CONFIG.image = me.getAttribute('data-image');
+  // Each mode remembers separately, so the home popup and the events popup each show once
+  CONFIG.storageKey += '_' + mode;
 
   /* ---------------- Guards ---------------- */
   var force = false;
@@ -93,6 +103,12 @@
     'color:#fff;opacity:.88;text-decoration:underline;text-underline-offset:4px;text-decoration-color:rgba(255,255,255,.45)}',
     '.ofc-fp__later:hover{opacity:1;text-decoration-color:#fff}',
 
+    '.ofc-fp__ok{padding:11px 32px;border:0;border-radius:14px;cursor:pointer;background:#fff;color:#0c536d;',
+    'font-family:"Titan One","Arial Black",Impact,sans-serif;font-weight:400;font-size:17px;letter-spacing:.02em;',
+    'box-shadow:0 4px 0 #a9d6e2,0 10px 18px rgba(0,25,45,.3);transition:transform .12s ease,box-shadow .12s ease}',
+    '.ofc-fp__ok:hover{transform:translateY(-1px)}',
+    '.ofc-fp__ok:active{transform:translateY(3px);box-shadow:0 1px 0 #a9d6e2,0 5px 10px rgba(0,25,45,.3)}',
+
     '.ofc-fp__close{position:absolute;top:-12px;right:-12px;z-index:2;width:42px;height:42px;padding:0;',
     'display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;cursor:pointer;',
     'background:#fff;color:#0c536d;box-shadow:0 6px 16px rgba(0,25,45,.4);',
@@ -140,24 +156,26 @@
           '<path d="M4 4l12 12M16 4L4 16"/></svg>' +
         '</button>' +
         '<div class="ofc-fp__frame"><img class="ofc-fp__img" alt="" decoding="async"></div>' +
-        '<div class="ofc-fp__cta">' +
-          '<a class="ofc-fp__btn" href="#">Register now</a>' +
-          '<button type="button" class="ofc-fp__later">Maybe later</button>' +
+        '<div class="ofc-fp__cta">' + (mode === 'info'
+          ? '<button type="button" class="ofc-fp__ok">Close</button>'
+          : '<a class="ofc-fp__btn" href="#">Register now</a>' +
+            '<button type="button" class="ofc-fp__later">Maybe later</button>') +
         '</div>' +
       '</div>';
 
     card = root.querySelector('.ofc-fp__card');
     frame = root.querySelector('.ofc-fp__frame');
-    primary = root.querySelector('.ofc-fp__btn');
+    primary = root.querySelector('.ofc-fp__btn'); // null in info mode
 
     var img = root.querySelector('.ofc-fp__img');
     img.src = CONFIG.image;
     img.alt = CONFIG.alt;
-    primary.href = CONFIG.link;
-
     root.querySelector('.ofc-fp__close').addEventListener('click', close);
-    root.querySelector('.ofc-fp__later').addEventListener('click', close);
-    primary.addEventListener('click', function () { store(false, '1'); });
+    root.querySelector('.ofc-fp__later, .ofc-fp__ok').addEventListener('click', close);
+    if (primary) {
+      primary.href = CONFIG.link;
+      primary.addEventListener('click', function () { store(false, '1'); });
+    }
     root.addEventListener('click', function (e) { if (e.target === root) close(); });
     document.addEventListener('keydown', onKey);
 
