@@ -14,6 +14,8 @@
  *   a) upload the image (e.g. bootcamp-flyer.jpg) to the repo root
  *   b) in events-data.json add   "flyer": "bootcamp-flyer.jpg"   to that event
  * Optional per event:  "placeholder": "your own short message"
+ * Registration button:   "register": "hangout.html"   (any page or link)
+ *                        "registerLabel": "Register now"  (optional wording)
  * Past events leave the lineup automatically. Undated events (e.g. the
  * monthly webinars) stay at the end of the lineup.
  *
@@ -38,6 +40,7 @@
   /* ---------------- Styles ---------------- */
   var ICON_IMG = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><circle cx="7.2" cy="8" r="1.5"/><path d="M3 15l4.5-4.5 3.5 3.5 2.5-2.5L17 15"/></svg>';
   var ICON_EXPAND = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3h5v5M8 17H3v-5M17 3l-5.5 5.5M3 17l5.5-5.5"/></svg>';
+  var ICON_ARROW = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h11M11 5.5l4.5 4.5-4.5 4.5"/></svg>';
   var ICON_X = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M4 4l12 12M16 4L4 16"/></svg>';
   var ICON_L = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 3.5L6 10l6.5 6.5"/></svg>';
   var ICON_R = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 3.5L14 10l-6.5 6.5"/></svg>';
@@ -83,6 +86,10 @@
     '.ofc-ev-btn{display:inline-flex;align-items:center;gap:9px;padding:13px 24px;border:0;border-radius:12px;cursor:pointer;-webkit-appearance:none;appearance:none;',
     'background:var(--ofc-gold);color:var(--ofc-ink);font:inherit;font-weight:800;font-size:16px;transition:transform .12s ease,filter .15s ease}',
     '.ofc-ev-btn svg{width:18px;height:18px}',
+    '.ofc-ev-hero .ofc-ev-btn,.ofc-ev-hero .ofc-ev-btn:visited,.ofc-ev-hero .ofc-ev-btn:hover{text-decoration:none;color:var(--ofc-ink)}',
+    '.ofc-ev-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}',
+    '.ofc-ev-hero .ofc-ev-btn.is-secondary,.ofc-ev-hero .ofc-ev-btn.is-secondary:hover{background:transparent;color:inherit;box-shadow:inset 0 0 0 2px var(--ofc-gold)}',
+    '.ofc-ev-hero .ofc-ev-btn.is-secondary:hover{background:rgba(200,150,46,.14)}',
     '.ofc-ev-btn:hover{filter:brightness(1.06);transform:translateY(-1px)}',
     '.ofc-ev-btn:active{transform:translateY(1px)}',
 
@@ -124,9 +131,14 @@
     '.ofc-ev-viewer.is-open.is-closing{opacity:0;transition-duration:.24s}',
     '.ofc-ev-vstage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:64px 72px 24px}',
     '.ofc-ev-vfig{margin:0;display:flex;flex-direction:column;align-items:center;gap:12px;max-width:100%;max-height:100%}',
-    '.ofc-ev-vimg{display:block;max-width:100%;max-height:calc(100vh - 150px);max-height:calc(100dvh - 150px);width:auto;height:auto;border-radius:14px;',
+    '.ofc-ev-vimg{display:block;max-width:100%;max-height:calc(100vh - 210px);max-height:calc(100dvh - 210px);width:auto;height:auto;border-radius:14px;',
     'box-shadow:0 0 0 3px rgba(255,255,255,.9),0 24px 60px rgba(0,0,0,.55);animation:ofc-ev-imgin .35s ease both}',
     '.ofc-ev-vcap{color:#fff;font-weight:700;font-size:15px;text-align:center;line-height:1.4}',
+    '.ofc-ev-viewer .ofc-ev-vreg,.ofc-ev-viewer .ofc-ev-vreg:visited,.ofc-ev-viewer .ofc-ev-vreg:hover{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;border-radius:999px;',
+    'background:var(--gold,#c8962e);color:#3d1712;font-weight:800;font-size:15px;text-decoration:none;transition:filter .15s ease,transform .12s ease}',
+    '.ofc-ev-viewer .ofc-ev-vreg:hover{filter:brightness(1.07);transform:translateY(-1px)}',
+    '.ofc-ev-vreg svg{width:16px;height:16px}',
+    '.ofc-ev-viewer a:focus-visible{outline:3px solid #fff;outline-offset:3px}',
     '.ofc-ev-vclose,.ofc-ev-vnav{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:0;border-radius:50%;',
     'background:rgba(255,255,255,.94);color:#3d1712;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.4);transition:transform .2s ease,background .2s ease}',
     '.ofc-ev-vclose{top:14px;right:14px}',
@@ -142,14 +154,15 @@
     '@media (max-width:820px){',
     '.ofc-ev-hero__inner{grid-template-columns:minmax(0,1fr)}',
     '.ofc-ev-stage{aspect-ratio:1/1;border-radius:18px}',
+    '.ofc-ev-actions .ofc-ev-btn{flex:1 1 100%;justify-content:center}',
     '.ofc-ev-tabs{flex-direction:row;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;margin-top:22px}',
     '.ofc-ev-tabs li{flex:0 0 min(72%,250px);scroll-snap-align:start}',
     '.ofc-ev-tab,.ofc-ev-tabs li:last-child .ofc-ev-tab{flex-direction:column;align-items:flex-start;gap:3px;border:1px solid var(--ofc-line);border-radius:12px;padding:13px 14px;overflow:hidden}',
     '.ofc-ev-tab__bar{top:0}',
-    '.ofc-ev-vstage{padding:60px 12px 16px}',
+    '.ofc-ev-vstage{padding:60px 12px 76px}',
     '.ofc-ev-vnav{top:auto;bottom:14px;margin-top:0}',
     '.ofc-ev-vnav.is-prev{left:calc(50% - 56px)}.ofc-ev-vnav.is-next{right:calc(50% - 56px)}',
-    '.ofc-ev-vimg{max-height:calc(100vh - 210px);max-height:calc(100dvh - 210px)}}',
+    '.ofc-ev-vimg{max-height:calc(100vh - 270px);max-height:calc(100dvh - 270px)}}',
 
     '@media (prefers-reduced-motion:reduce){',
     '.ofc-ev-hero *,.ofc-ev-viewer *{animation:none!important;transition:none!important}',
@@ -226,7 +239,7 @@
   var hero = null;
 
   /* ---------------- Viewer (full-size flyer) ---------------- */
-  var vw = null, vImg, vCap, vIdx = 0, vLast = null, vPrevOverflow = '', vClosing = false, touchX = null;
+  var vw = null, vImg, vCap, vReg, vIdx = 0, vLast = null, vPrevOverflow = '', vClosing = false, touchX = null;
 
   function showInViewer(i) {
     var n = flyers.length;
@@ -237,6 +250,13 @@
     vImg.alt = 'Flyer for ' + f.title;
     var d = dateText(f);
     vCap.textContent = f.title + (d ? ' \u00B7 ' + d : '');
+    if (f.ev.register) {
+      vReg.href = f.ev.register;
+      vReg.firstChild.textContent = f.ev.registerLabel || 'Register now';
+      vReg.style.display = '';
+    } else {
+      vReg.style.display = 'none';
+    }
   }
 
   function openViewer(i, trigger) {
@@ -249,13 +269,14 @@
     vw.tabIndex = -1;
     vw.innerHTML =
       '<button type="button" class="ofc-ev-vclose" aria-label="Close flyer">' + ICON_X + '</button>' +
-      '<div class="ofc-ev-vstage"><figure class="ofc-ev-vfig"><img class="ofc-ev-vimg" alt=""><figcaption class="ofc-ev-vcap"></figcaption></figure></div>' +
+      '<div class="ofc-ev-vstage"><figure class="ofc-ev-vfig"><img class="ofc-ev-vimg" alt=""><figcaption class="ofc-ev-vcap"></figcaption><a class="ofc-ev-vreg" href="#"><span></span>' + ICON_ARROW + '</a></figure></div>' +
       (flyers.length > 1
         ? '<button type="button" class="ofc-ev-vnav is-prev" aria-label="Previous flyer">' + ICON_L + '</button>' +
           '<button type="button" class="ofc-ev-vnav is-next" aria-label="Next flyer">' + ICON_R + '</button>'
         : '');
     vImg = vw.querySelector('.ofc-ev-vimg');
     vCap = vw.querySelector('.ofc-ev-vcap');
+    vReg = vw.querySelector('.ofc-ev-vreg');
 
     vw.querySelector('.ofc-ev-vclose').addEventListener('click', closeViewer);
     var prev = vw.querySelector('.is-prev'), next = vw.querySelector('.is-next');
@@ -302,7 +323,7 @@
     if (e.key === 'ArrowLeft' && flyers.length > 1) { showInViewer(vIdx - 1); return; }
     if (e.key === 'ArrowRight' && flyers.length > 1) { showInViewer(vIdx + 1); return; }
     if (e.key !== 'Tab') return;
-    var items = vw.querySelectorAll('button');
+    var items = Array.prototype.filter.call(vw.querySelectorAll('button,a[href]'), function (n) { return getComputedStyle(n).display !== 'none'; });
     var first = items[0], last = items[items.length - 1], a = document.activeElement;
     if (e.shiftKey && (a === first || a === vw)) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && a === last) { e.preventDefault(); first.focus(); }
@@ -358,8 +379,12 @@
     meta.appendChild(chip); meta.appendChild(when);
     var title = el('h2', 'ofc-ev-title');
     var desc = el('p', 'ofc-ev-desc');
+    var actions = el('div', 'ofc-ev-actions');
+    var reg = el('a', 'ofc-ev-btn ofc-ev-reg'); reg.innerHTML = '<span></span>' + ICON_ARROW;
+    var regLabel = reg.firstChild;
     var btn = el('button', 'ofc-ev-btn'); btn.type = 'button'; btn.innerHTML = ICON_IMG + '<span>View full flyer</span>';
-    body.appendChild(meta); body.appendChild(title); body.appendChild(desc); body.appendChild(btn);
+    actions.appendChild(reg); actions.appendChild(btn);
+    body.appendChild(meta); body.appendChild(title); body.appendChild(desc); body.appendChild(actions);
     panel.appendChild(body);
 
     var tabs = [];
@@ -412,6 +437,11 @@
       stage.setAttribute('aria-disabled', isFlyer ? 'false' : 'true');
       stage.setAttribute('aria-label', isFlyer ? 'View full flyer: ' + it.title : it.title + ': ' + placeholderMsg(it));
       btn.style.display = isFlyer ? '' : 'none';
+      var r = it.ev.register;                   // events with a registration link get a Register button
+      reg.style.display = r ? '' : 'none';
+      if (r) { reg.href = r; regLabel.textContent = it.ev.registerLabel || 'Register now'; }
+      btn.classList.toggle('is-secondary', !!r);
+      actions.style.display = (r || isFlyer) ? '' : 'none';
       if (!isFlyer && autoplay) manual();       // never sit on a "coming soon" slide on a timer
       if (animate) { body.classList.remove('is-in'); void body.offsetWidth; body.classList.add('is-in'); }
     }

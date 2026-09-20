@@ -21,7 +21,8 @@
     "date": "2026-09-27",
     "displayDate": "Sunday, 27th September",
     "description": "A relaxed time of connection for the whole community.",
-    "flyer": "hangout-flyer.jpg"
+    "flyer": "hangout-flyer.jpg",
+    "register": "hangout.html"
   },
   {
     "title": "Boot Camp for Singles",
