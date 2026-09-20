@@ -18,7 +18,7 @@
     startDelay: 1000,                    // ms after page load before it pops up
     showUntil: '2026-09-28T00:00:00',    // popup stops appearing after the event day
     showFrom: null,                      // optional, e.g. '2026-09-20T00:00:00'
-    oncePerSession: true,                // false = show on every page load
+    oncePerSession: false,                // false = show on every page load
     storageKey: 'ofc_hangout_flyer_seen_v1',
     alt: 'Community Hangout flyer from One Flesh Community. Food, fun, fellowship. ' +
          'Sunday, September 27 at 2 PM at Sea Breeze, Sakumono. ' +
