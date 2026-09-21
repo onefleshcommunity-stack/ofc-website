@@ -194,3 +194,61 @@ section.block.alt { background: var(--warm-band); }
   .js-reveal .rv.is-in { animation: none; }
   .ofc-stage__slide { transition: none; }
 }
+
+/* ==========================================================================
+   Showcase components (stage + details + lineup), the Events-page pattern
+   used on Gallery, and available to any other page.
+   ========================================================================== */
+.ofc-show {
+  display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: clamp(22px, 4vw, 52px); align-items: center;
+}
+.ofc-show__panel { min-width: 0; }
+.ofc-show__title { font-size: clamp(28px, 3.4vw, 40px); line-height: 1.1; margin: 12px 0 10px; }
+.ofc-show__desc { margin: 0 0 22px; line-height: 1.6; max-width: 46ch; color: var(--muted); }
+.ofc-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+/* gold action button (same look as the Events page) */
+.ofc-btn, .ofc-btn:visited {
+  display: inline-flex; align-items: center; gap: 9px; padding: 13px 24px; border: 0; border-radius: 12px; cursor: pointer;
+  background: var(--gold); color: var(--ink-on-gold); font: inherit; font-weight: 800; font-size: 16px; text-decoration: none;
+  -webkit-appearance: none; appearance: none; transition: transform .12s ease, filter .15s ease;
+}
+.ofc-btn:hover { filter: brightness(1.06); transform: translateY(-1px); color: var(--ink-on-gold); }
+.ofc-btn:active { transform: translateY(1px); }
+.ofc-btn--ghost, .ofc-btn--ghost:visited, .ofc-btn--ghost:hover { background: transparent; color: inherit; box-shadow: inset 0 0 0 2px var(--gold); }
+.ofc-btn--ghost:hover { background: rgba(201, 162, 77, 0.16); }
+.ofc-btn svg { width: 18px; height: 18px; }
+
+/* lineup list (a category / item picker beside the stage) */
+.ofc-lineup { list-style: none; margin: 26px 0 0; padding: 0; display: flex; flex-direction: column; }
+.ofc-lineup__btn {
+  position: relative; display: flex; justify-content: space-between; align-items: baseline; gap: 14px; width: 100%; text-align: left; margin: 0;
+  padding: 13px 4px 14px; border: 0; border-top: 1px solid var(--line); border-radius: 0; background: none; color: inherit; font: inherit;
+  cursor: pointer; opacity: 0.62; transition: opacity .2s ease; -webkit-appearance: none; appearance: none;
+}
+.ofc-lineup li:last-child .ofc-lineup__btn { border-bottom: 1px solid var(--line); }
+.ofc-lineup__btn:hover, .ofc-lineup__btn[aria-pressed="true"] { opacity: 1; }
+.ofc-lineup__btn[aria-pressed="true"]::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 3px; background: var(--gold); }
+.ofc-lineup__btn[data-empty="1"]:not([aria-pressed="true"]) { opacity: 0.45; }
+.ofc-lineup__name { font-weight: 700; }
+.ofc-lineup__meta { font-size: 14px; color: var(--muted); white-space: nowrap; }
+
+/* "not ready yet" state: OFC logo + a short message */
+.ofc-ph {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 20px; text-align: center;
+  background: radial-gradient(circle at 50% 36%, #fdf7e8 0%, #f3e6c9 58%, #e8d6ae 100%);
+}
+.ofc-ph img { width: 92px; height: 92px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.85), 0 12px 28px rgba(90, 40, 10, 0.25); }
+.ofc-ph p { font-family: 'Fraunces', serif; font-weight: 700; font-size: clamp(18px, 2.4vw, 26px); color: var(--rust); max-width: 22ch; line-height: 1.3; text-wrap: balance; }
+
+@media (max-width: 860px) {
+  .ofc-show { grid-template-columns: minmax(0, 1fr); }
+  .ofc-actions .ofc-btn { flex: 1 1 100%; justify-content: center; }
+  .ofc-lineup { flex-direction: row; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; margin-top: 22px; }
+  .ofc-lineup li { flex: 0 0 min(48%, 190px); scroll-snap-align: start; }
+  .ofc-lineup__btn, .ofc-lineup li:last-child .ofc-lineup__btn {
+    flex-direction: column; align-items: flex-start; gap: 3px; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: #fff; overflow: hidden;
+  }
+  .ofc-lineup__btn[aria-pressed="true"]::before { top: 0; }
+}

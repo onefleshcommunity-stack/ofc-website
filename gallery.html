@@ -7,533 +7,601 @@
 <meta name="description" content="Photos from life together at One Flesh Community.">
 <link rel="icon" href="logo.jpg">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="ofc-polish.css">
+<style>
+/* Gallery page */
+.msg-tab { font-family: inherit; line-height: 1.2; }
+
+/* the stage (highlights of the selected category) */
+.ofc-gal .ofc-show { margin-bottom: 60px; }
+.ofc-gal.is-empty .ofc-show { margin-bottom: 0; }   /* nothing to show below, so no big gap */
+.ofc-gstage { cursor: default; }
+.ofc-gstage.has-photos { cursor: zoom-in; }
+.ofc-gslides { position: absolute; inset: 0; }
+.ofc-gstage .ofc-stage__cap, .ofc-gstage .ofc-stage__dots { display: none; }
+.ofc-gstage.has-photos .ofc-stage__cap { display: block; }
+.ofc-gstage.has-photos.multi .ofc-stage__dots { display: flex; }
+.ofc-gstage .ofc-stage__slide img { min-width: 0; }
+
+/* the full set of photos: keeps each photo's own shape (no cropping of faces) */
+.ofc-glabel { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line); scroll-margin-top: 90px; }
+.ofc-glabel h3 { font-size: 24px; }
+.ofc-glabel span { font-size: 14px; color: var(--muted); font-weight: 600; }
+.gal-panel .gallery-grid { display: block; column-count: 3; column-gap: 16px; }
+.gal-panel .gallery-grid .gitem {
+  display: block; break-inside: avoid; margin: 0 0 16px; border: 0; border-radius: 18px; background: #e6dcc8;
+  box-shadow: 0 10px 26px rgba(60, 25, 10, 0.13); flex: none;
+}
+.gal-panel .gallery-grid .gitem img { width: 100%; height: auto; min-height: 110px; }
+.gal-panel .gallery-grid .gitem video { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.gal-panel .celeb-group { margin-bottom: 36px; }
+.gal-panel .celeb-title { font-size: 21px; }
+.gal-subtabs { margin: 0 0 26px; }
+@media (max-width: 900px) { .gal-panel .gallery-grid { column-count: 2; column-gap: 12px; } .gal-panel .gallery-grid .gitem { margin-bottom: 12px; border-radius: 14px; } }
+</style>
 </head>
 <body>
 <header class="site-nav">
-    <div class="wrap">
-      <a class="brand" href="index.html">
-        <img src="logo.jpg" alt="One Flesh Community logo">
-        <span class="word">One Flesh Community</span>
-      </a>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">&#9776;</button>
-      <nav id="navLinks">
-        <a class="" href="index.html">Home</a>
-      <a class="" href="about.html">About</a>
-      <a class="" href="values.html">Values</a>
-      <a class="" href="events.html">Events</a>
-      <a class="active" href="gallery.html">Gallery</a>
-      <a class="" href="messages.html">Messages</a>
-      <a class="" href="contact.html">Contact</a>
-      <a class="join-btn" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Join OFC</a>
-      </nav>
-    </div>
-  </header>
+<div class="wrap">
+<a class="brand" href="index.html">
+<img src="logo.jpg" alt="One Flesh Community logo">
+<span class="word">One Flesh Community</span>
+</a>
+<button class="nav-toggle" id="navToggle" aria-label="Toggle menu">&#9776;</button>
+<nav id="navLinks">
+<a class="" href="index.html">Home</a>
+<a class="" href="about.html">About</a>
+<a class="" href="values.html">Values</a>
+<a class="" href="events.html">Events</a>
+<a class="active" href="gallery.html">Gallery</a>
+<a class="" href="messages.html">Messages</a>
+<a class="" href="contact.html">Contact</a>
+<a class="join-btn" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Join OFC</a>
+</nav>
+</div>
+</header>
 
-  <div class="page-header wrap">
-    <span class="eyebrow">Life Together, In Pictures</span>
-    <h1>Gallery</h1>
-    <p>Moments from hangouts, retreats, boot camps, and time spent together as a community.</p>
-  </div>
+<div class="page-header wrap">
+<span class="eyebrow">Life Together, In Pictures</span>
+<h1>Gallery</h1>
+<p>Moments from hangouts, retreats, boot camps, and time spent together as a community.</p>
+</div>
 
-  <section class="block">
-    <div class="wrap">
-      <div class="msg-tabs"><div class="msg-tab gallery-tab active" data-category="general">General</div><div class="msg-tab gallery-tab" data-category="hangouts">Hangouts</div><div class="msg-tab gallery-tab" data-category="retreats">Retreats</div><div class="msg-tab gallery-tab" data-category="bootcamps">Boot Camps</div><div class="msg-tab gallery-tab" data-category="lovefeast">Love Feast</div><div class="msg-tab gallery-tab" data-category="celebrations">Celebrations</div></div>
-      <div id="galCategoryPanels">
-        <div class="gal-panel" data-category="general"></div>
-        <div class="gal-panel" data-category="hangouts" style="display:none;"></div>
-        <div class="gal-panel" data-category="retreats" style="display:none;"></div>
-        <div class="gal-panel" data-category="bootcamps" style="display:none;"></div>
-        <div class="gal-panel" data-category="lovefeast" style="display:none;"></div>
-        <div class="gal-panel" data-category="celebrations" style="display:none;"></div>
-      </div>
-      <div class="msg-empty" id="galleryEmptyNote" style="display:none;">
-        <div style="font-size:32px; margin-bottom:10px;">&#128247;</div>
-        <p>No photos in this category yet.</p>
-      </div>
-      <p id="galleryLoadingNote" style="text-align:center; color:var(--muted); font-size:12.5px; margin-top:18px; display:none;">Loading more from the community folder...</p>
-    </div>
-  </section>
+<section class="block ofc-gal">
+<div class="wrap">
 
-  <section class="cta-band">
-    <div class="wrap">
-      <h2>Want moments like these of your own?</h2>
-      <p>Join the community and be part of what happens next.</p>
-      <a class="btn-primary" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Join One Flesh Community</a>
-    </div>
-  </section>
+<div class="ofc-show">
+<div class="ofc-stage ofc-gstage" id="galStage">
+<div class="ofc-gslides" id="galSlides"></div>
+<span class="ofc-stage__cap" id="galCap"></span>
+<div class="ofc-stage__dots" id="galDots"></div>
+</div>
+<div class="ofc-show__panel">
+<span class="ofc-chip" id="galChip">Loading&hellip;</span>
+<h2 class="ofc-show__title" id="galTitle">General</h2>
+<p class="ofc-show__desc" id="galDesc"></p>
+<div class="ofc-actions" id="galActions" style="display:none;">
+<button type="button" class="ofc-btn" id="galOpen"><span>View full size</span></button>
+<a class="ofc-btn ofc-btn--ghost" href="#galAll" id="galAllLink"><span>See all photos</span></a>
+</div>
+<ul class="ofc-lineup" id="galLineup">
+<li><button type="button" class="gallery-tab ofc-lineup__btn active" data-category="general" aria-pressed="true"><span class="ofc-lineup__name">General</span><span class="ofc-lineup__meta"></span></button></li>
+<li><button type="button" class="gallery-tab ofc-lineup__btn" data-category="hangouts" aria-pressed="false"><span class="ofc-lineup__name">Hangouts</span><span class="ofc-lineup__meta"></span></button></li>
+<li><button type="button" class="gallery-tab ofc-lineup__btn" data-category="retreats" aria-pressed="false"><span class="ofc-lineup__name">Retreats</span><span class="ofc-lineup__meta"></span></button></li>
+<li><button type="button" class="gallery-tab ofc-lineup__btn" data-category="bootcamps" aria-pressed="false"><span class="ofc-lineup__name">Boot Camps</span><span class="ofc-lineup__meta"></span></button></li>
+<li><button type="button" class="gallery-tab ofc-lineup__btn" data-category="lovefeast" aria-pressed="false"><span class="ofc-lineup__name">Love Feast</span><span class="ofc-lineup__meta"></span></button></li>
+<li><button type="button" class="gallery-tab ofc-lineup__btn" data-category="celebrations" aria-pressed="false"><span class="ofc-lineup__name">Celebrations</span><span class="ofc-lineup__meta"></span></button></li>
+</ul>
+</div>
+</div>
+
+<div class="ofc-glabel" id="galAll" style="display:none;"><h3 id="galLabel"></h3><span id="galLabelCount"></span></div>
+
+<div id="galCategoryPanels">
+<div class="gal-panel" data-category="general"></div>
+<div class="gal-panel" data-category="hangouts" style="display:none;"></div>
+<div class="gal-panel" data-category="retreats" style="display:none;"></div>
+<div class="gal-panel" data-category="bootcamps" style="display:none;"></div>
+<div class="gal-panel" data-category="lovefeast" style="display:none;"></div>
+<div class="gal-panel" data-category="celebrations" style="display:none;"></div>
+</div>
+
+<p id="galleryLoadingNote" style="text-align:center; color:var(--muted); font-size:13px; margin-top:18px; display:none;">Loading more from the community folder...</p>
+
+</div>
+</section>
+
+<section class="cta-band">
+<div class="wrap">
+<h2>Want moments like these of your own?</h2>
+<p>Join the community and be part of what happens next.</p>
+<a class="btn-primary" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Join One Flesh Community</a>
+</div>
+</section>
 
 <footer>
-    <div class="wrap">
-      <div class="foot-top">
-        <div class="brand">
-          <img src="logo.jpg" alt="One Flesh Community logo">
-          <span class="word">One Flesh Community</span>
-        </div>
-        <nav>
-          <a href="index.html">Home</a>
-          <a href="about.html">About</a>
-          <a href="values.html">Values</a>
-          <a href="events.html">Events</a>
-          <a href="gallery.html">Gallery</a>
-          <a href="messages.html">Messages</a>
-          <a href="contact.html">Contact</a>
-        </nav>
-      </div>
-      <div class="bottom">Growing in oneness. Building Kingdom marriages. &nbsp;|&nbsp; onefleshcommunity@gmail.com</div>
-    </div>
-  </footer>
-<div class="lightbox" id="lightbox">
-  <button class="lb-close" id="lbClose" aria-label="Close">&times;</button>
-  <button class="lb-prev" id="lbPrev" aria-label="Previous">&#10094;</button>
-  <div class="lb-content" id="lbContent"></div>
-  <button class="lb-next" id="lbNext" aria-label="Next">&#10095;</button>
-  <div class="lb-caption" id="lbCaption"></div>
+<div class="wrap">
+<div class="foot-top">
+<div class="brand">
+<img src="logo.jpg" alt="One Flesh Community logo">
+<span class="word">One Flesh Community</span>
 </div>
+<nav>
+<a href="index.html">Home</a>
+<a href="about.html">About</a>
+<a href="values.html">Values</a>
+<a href="events.html">Events</a>
+<a href="gallery.html">Gallery</a>
+<a href="messages.html">Messages</a>
+<a href="contact.html">Contact</a>
+</nav>
+</div>
+<div class="bottom">Growing in oneness. Building Kingdom marriages. &nbsp;|&nbsp; onefleshcommunity@gmail.com</div>
+</div>
+</footer>
+
+<div class="lightbox" id="lightbox">
+<button class="lb-close" id="lbClose" aria-label="Close">&times;</button>
+<button class="lb-prev" id="lbPrev" aria-label="Previous">&#10094;</button>
+<div class="lb-content" id="lbContent"></div>
+<button class="lb-next" id="lbNext" aria-label="Next">&#10095;</button>
+<div class="lb-caption" id="lbCaption"></div>
+</div>
+
 <script>
-  const toggle = document.getElementById('navToggle');
-  const links = document.getElementById('navLinks');
-  if (toggle) {
-    toggle.addEventListener('click', () => links.classList.toggle('open'));
+const toggle = document.getElementById('navToggle');
+const links = document.getElementById('navLinks');
+if (toggle) {
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+}
+
+// ---------- lightbox (event delegation so it works with dynamically added items too) ----------
+(function() {
+  const lb = document.getElementById('lightbox');
+  if (!lb) return;
+  const lbContent = document.getElementById('lbContent');
+  const lbCaption = document.getElementById('lbCaption');
+  let current = 0;
+  function isVisible(el) {
+    let node = el;
+    while (node && node !== document.body) {
+      if (node.style && node.style.display === 'none') return false;
+      node = node.parentElement;
+    }
+    return true;
+  }
+  function getItems() {
+    return Array.from(document.querySelectorAll('.gitem')).filter(isVisible);
+  }
+  function render(idx) {
+    const items = getItems();
+    if (!items.length) return;
+    current = (idx + items.length) % items.length;
+    const el = items[current];
+    const type = el.dataset.type;
+    const src = el.dataset.src;
+    const caption = el.dataset.caption || '';
+    lbContent.innerHTML = '';
+    if (type === 'video') {
+      const v = document.createElement('video');
+      v.src = src; v.controls = true; v.autoplay = true;
+      lbContent.appendChild(v);
+    } else if (type === 'youtube') {
+      const iframe = document.createElement('iframe');
+      iframe.src = 'https://www.youtube.com/embed/' + src + '?autoplay=1';
+      iframe.setAttribute('frameborder','0');
+      iframe.setAttribute('allow','autoplay; encrypted-media; picture-in-picture');
+      iframe.setAttribute('allowfullscreen','');
+      lbContent.appendChild(iframe);
+    } else {
+      const img = document.createElement('img');
+      img.src = src; img.alt = caption;
+      lbContent.appendChild(img);
+    }
+    lbCaption.textContent = caption;
+  }
+  function open(idx) {
+    render(idx);
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    lb.classList.remove('open');
+    lbContent.innerHTML = '';
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('click', (e) => {
+    const item = e.target.closest('.gitem');
+    if (!item) return;
+    const items = getItems();
+    open(items.indexOf(item));
+  });
+  document.getElementById('lbClose').addEventListener('click', close);
+  document.getElementById('lbPrev').addEventListener('click', () => render(current - 1));
+  document.getElementById('lbNext').addEventListener('click', () => render(current + 1));
+  lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+  document.addEventListener('keydown', (e) => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') render(current - 1);
+    if (e.key === 'ArrowRight') render(current + 1);
+  });
+})();
+
+// ---------- gallery: load photos per category from GitHub (with optional nested groups) + the showcase ----------
+(function() {
+  const panels = document.querySelectorAll('.gal-panel');
+  if (!panels.length) return;
+  const note = document.getElementById('galleryLoadingNote');
+  const REPO = 'onefleshcommunity-stack/ofc-website';
+  const API_ROOT = 'https://api.github.com/repos/' + REPO + '/contents/gallery-uploads';
+  const CATEGORIES = ['general','hangouts','retreats','bootcamps','lovefeast','celebrations'];
+  const LABELS = { general: 'General', hangouts: 'Hangouts', retreats: 'Retreats', bootcamps: 'Boot Camps', lovefeast: 'Love Feast', celebrations: 'Celebrations' };
+  const imageExt = /\.(jpe?g|png|gif|webp)$/i;
+  const videoExt = /\.(mp4|mov|webm)$/i;
+  const calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const tabs = Array.from(document.querySelectorAll('.gallery-tab'));
+  const stage = document.getElementById('galStage');
+  const slidesBox = document.getElementById('galSlides');
+  const capEl = document.getElementById('galCap');
+  const dotsEl = document.getElementById('galDots');
+  const chipEl = document.getElementById('galChip');
+  const titleEl = document.getElementById('galTitle');
+  const descEl = document.getElementById('galDesc');
+  const actionsEl = document.getElementById('galActions');
+  const openBtn = document.getElementById('galOpen');
+  const allBox = document.getElementById('galAll');
+  const labelEl = document.getElementById('galLabel');
+  const labelCountEl = document.getElementById('galLabelCount');
+
+  let apiProblem = false;   // true when GitHub refuses or cannot be reached (for example the hourly limit)
+  let loaded = false;
+  let userPicked = false;
+  let activeCat = 'general';
+  let slideItems = [], slideIdx = 0, timer = null, manual = false;
+
+  if (note) note.style.display = 'block';
+
+  function prettify(name) {
+    return name.replace(/[_-]/g, ' ').split(' ').filter(Boolean).map(function(w) {
+      return w.charAt(0).toUpperCase() + w.slice(1);
+    }).join(' ');
+  }
+  function apiPath(segments) {
+    return API_ROOT + '/' + segments.map(encodeURIComponent).join('/');
+  }
+  function isVisible(el) {
+    let node = el;
+    while (node && node !== document.body) {
+      if (node.style && node.style.display === 'none') return false;
+      node = node.parentElement;
+    }
+    return true;
+  }
+  function getJson(url) {
+    return fetch(url).then(r => {
+      if (!r.ok) { if (r.status === 403 || r.status === 429) apiProblem = true; return []; }
+      return r.json();
+    }).catch(() => { apiProblem = true; return []; });
   }
 
-  // ---------- lightbox (event delegation so it works with dynamically added items too) ----------
-  (function() {
-    const lb = document.getElementById('lightbox');
-    if (!lb) return;
-    const lbContent = document.getElementById('lbContent');
-    const lbCaption = document.getElementById('lbCaption');
-    let current = 0;
-
-    function isVisible(el) {
-      let node = el;
-      while (node && node !== document.body) {
-        if (node.style && node.style.display === 'none') return false;
-        node = node.parentElement;
-      }
-      return true;
-    }
-    function getItems() {
-      return Array.from(document.querySelectorAll('.gitem')).filter(isVisible);
-    }
-
-    function render(idx) {
-      const items = getItems();
-      if (!items.length) return;
-      current = (idx + items.length) % items.length;
-      const el = items[current];
-      const type = el.dataset.type;
-      const src = el.dataset.src;
-      const caption = el.dataset.caption || '';
-      lbContent.innerHTML = '';
-      if (type === 'video') {
-        const v = document.createElement('video');
-        v.src = src; v.controls = true; v.autoplay = true;
-        lbContent.appendChild(v);
-      } else if (type === 'youtube') {
-        const iframe = document.createElement('iframe');
-        iframe.src = 'https://www.youtube.com/embed/' + src + '?autoplay=1';
-        iframe.setAttribute('frameborder','0');
-        iframe.setAttribute('allow','autoplay; encrypted-media; picture-in-picture');
-        iframe.setAttribute('allowfullscreen','');
-        lbContent.appendChild(iframe);
-      } else {
-        const img = document.createElement('img');
-        img.src = src; img.alt = caption;
-        lbContent.appendChild(img);
-      }
-      lbCaption.textContent = caption;
-    }
-
-    function open(idx) {
-      render(idx);
-      lb.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function close() {
-      lb.classList.remove('open');
-      lbContent.innerHTML = '';
-      document.body.style.overflow = '';
-    }
-
-    document.addEventListener('click', (e) => {
-      const item = e.target.closest('.gitem');
-      if (!item) return;
-      const items = getItems();
-      open(items.indexOf(item));
-    });
-    document.getElementById('lbClose').addEventListener('click', close);
-    document.getElementById('lbPrev').addEventListener('click', () => render(current - 1));
-    document.getElementById('lbNext').addEventListener('click', () => render(current + 1));
-    lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
-    document.addEventListener('keydown', (e) => {
-      if (!lb.classList.contains('open')) return;
-      if (e.key === 'Escape') close();
-      if (e.key === 'ArrowLeft') render(current - 1);
-      if (e.key === 'ArrowRight') render(current + 1);
-    });
-  })();
-
-  // ---------- auto-fetch new gallery uploads from GitHub, per category, with optional nested groups ----------
-  (function() {
-    const panels = document.querySelectorAll('.gal-panel');
-    if (!panels.length) return;
-    const note = document.getElementById('galleryLoadingNote');
-    const REPO = 'onefleshcommunity-stack/ofc-website';
-    const API_ROOT = 'https://api.github.com/repos/' + REPO + '/contents/gallery-uploads';
-    const CATEGORIES = ['general','hangouts','retreats','bootcamps','lovefeast','celebrations'];
-    const imageExt = /\.(jpe?g|png|gif|webp)$/i;
-    const videoExt = /\.(mp4|mov|webm)$/i;
-    if (note) note.style.display = 'block';
-    initGalleryTabs();
-
-    function prettify(name) {
-      return name.replace(/[_-]/g, ' ').split(' ').filter(Boolean).map(function(w) {
-        return w.charAt(0).toUpperCase() + w.slice(1);
-      }).join(' ');
-    }
-
-    function apiPath(segments) {
-      return API_ROOT + '/' + segments.map(encodeURIComponent).join('/');
-    }
-
-    function buildGitem(f, category) {
-      const div = document.createElement('div');
-      div.className = 'gitem';
-      div.dataset.caption = '';
-      div.dataset.category = category;
-      if (imageExt.test(f.name)) {
-        div.dataset.type = 'image';
-        div.dataset.src = f.download_url;
-        const img = document.createElement('img');
-        img.src = f.download_url; img.alt = 'Community photo';
-        div.appendChild(img);
-      } else if (videoExt.test(f.name)) {
-        div.dataset.type = 'video';
-        div.dataset.src = f.download_url;
-        const v = document.createElement('video');
-        v.muted = true; v.preload = 'metadata';
-        const source = document.createElement('source');
-        source.src = f.download_url;
-        v.appendChild(source);
-        const badge = document.createElement('div');
-        badge.className = 'play-badge';
-        badge.innerHTML = '&#9658;';
-        div.appendChild(v);
-        div.appendChild(badge);
-      } else {
-        return null;
-      }
-      return div;
-    }
-
-    // fetch gallery-uploads root once, so we can match folder names case-insensitively
-    function fetchRoot() {
-      return fetch(API_ROOT)
-        .then(r => r.ok ? r.json() : [])
-        .then(entries => Array.isArray(entries) ? entries.filter(e => e.type === 'dir') : [])
-        .catch(() => []);
-    }
-
-    function findFolder(rootEntries, wantedName) {
-      return rootEntries.find(e => e.name.toLowerCase() === wantedName.toLowerCase());
-    }
-
-    // Walk one category's folder. A direct subfolder is either:
-    //  - a LEAF (it directly contains files) -> becomes its own standalone group
-    //  - a BRANCH (it only contains further subfolders, no files) -> becomes a
-    //    sub-tab (like "Naming Ceremonies"), and ITS children become groups within it
-    function fetchDir(pathSegments) {
-      return fetch(apiPath(pathSegments)).then(r => r.ok ? r.json() : []).catch(() => []);
-    }
-
-    function collectDeepGroups(pathSegments, out) {
-      return fetchDir(pathSegments).then(entries => {
-        if (!Array.isArray(entries)) return;
-        const files = entries.filter(e => e.type === 'file');
-        const dirs = entries.filter(e => e.type === 'dir');
-        if (files.length) out.push({ label: prettify(pathSegments[pathSegments.length - 1]), files: files });
-        return Promise.all(dirs.map(d => collectDeepGroups(pathSegments.concat(d.name), out)));
-      });
-    }
-
-    function walkCategory(actualName) {
-      const flatFiles = [];
-      const leafGroups = [];
-      const branches = [];
-
-      return fetchDir([actualName]).then(rootEntries => {
-        if (!Array.isArray(rootEntries)) return { flatFiles, leafGroups, branches };
-        const rootFiles = rootEntries.filter(e => e.type === 'file');
-        const rootDirs = rootEntries.filter(e => e.type === 'dir');
-        flatFiles.push.apply(flatFiles, rootFiles);
-
-        return Promise.all(rootDirs.map(dir => {
-          const childPath = [actualName, dir.name];
-          return fetchDir(childPath).then(childEntries => {
-            if (!Array.isArray(childEntries)) return;
-            const childFiles = childEntries.filter(e => e.type === 'file');
-            const childDirs = childEntries.filter(e => e.type === 'dir');
-            if (childDirs.length === 0) {
-              if (childFiles.length) leafGroups.push({ label: prettify(dir.name), files: childFiles });
-              return;
-            }
-            const branchGroups = [];
-            const jobs = childDirs.map(gd => collectDeepGroups(childPath.concat(gd.name), branchGroups));
-            if (childFiles.length) branchGroups.push({ label: 'Other', files: childFiles });
-            return Promise.all(jobs).then(() => {
-              branches.push({ name: dir.name, groups: branchGroups });
-            });
-          });
-        })).then(() => ({ flatFiles, leafGroups, branches }));
-      });
-    }
-
-    function renderGroups(container, category, groups) {
-      groups.forEach(group => {
-        if (!group.files.length) return;
-        const section = document.createElement('div');
-        section.className = 'celeb-group';
-        const heading = document.createElement('h3');
-        heading.className = 'celeb-title';
-        heading.textContent = group.label;
-        const groupGrid = document.createElement('div');
-        groupGrid.className = 'gallery-grid celeb-grid';
-        group.files.forEach(f => {
-          const item = buildGitem(f, category);
-          if (item) groupGrid.appendChild(item);
-        });
-        section.appendChild(heading);
-        section.appendChild(groupGrid);
-        container.appendChild(section);
-      });
-    }
-
-    function renderCategory(panel, category, data) {
-      if (data.flatFiles.length) {
-        const flatGrid = document.createElement('div');
-        flatGrid.className = 'gallery-grid';
-        data.flatFiles.forEach(f => {
-          const item = buildGitem(f, category);
-          if (item) flatGrid.appendChild(item);
-        });
-        panel.appendChild(flatGrid);
-      }
-
-      renderGroups(panel, category, data.leafGroups);
-
-      if (data.branches.length) {
-        const subtabs = document.createElement('div');
-        subtabs.className = 'msg-tabs gal-subtabs';
-        const branchPanels = [];
-        data.branches.forEach((branch, i) => {
-          const tab = document.createElement('div');
-          tab.className = 'msg-tab gal-subtab' + (i === 0 ? ' active' : '');
-          tab.textContent = prettify(branch.name);
-          subtabs.appendChild(tab);
-
-          const branchPanel = document.createElement('div');
-          branchPanel.className = 'gal-subpanel';
-          branchPanel.style.display = i === 0 ? '' : 'none';
-          renderGroups(branchPanel, category, branch.groups);
-          branchPanels.push(branchPanel);
-
-          tab.addEventListener('click', () => {
-            subtabs.querySelectorAll('.gal-subtab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            branchPanels.forEach((bp, j) => { bp.style.display = (j === i) ? '' : 'none'; });
-          });
-        });
-        panel.appendChild(subtabs);
-        branchPanels.forEach(bp => panel.appendChild(bp));
-      }
-    }
-
-    fetchRoot().then(rootEntries => {
-      const jobs = CATEGORIES.map(cat => {
-        const match = findFolder(rootEntries, cat);
-        const panel = document.querySelector('.gal-panel[data-category="' + cat + '"]');
-        if (!match || !panel) return Promise.resolve();
-        return walkCategory(match.name).then(data => renderCategory(panel, cat, data));
-      });
-
-      Promise.all(jobs).then(() => {
-        if (note) note.style.display = 'none';
-        initGalleryTabs();
-      });
-    });
-
-    function initGalleryTabs() {
-      const tabs = document.querySelectorAll('.gallery-tab');
-      const emptyNote = document.getElementById('galleryEmptyNote');
-      if (!tabs.length) return;
-
-      function selectCategory(cat) {
-        tabs.forEach(t => t.classList.toggle('active', t.dataset.category === cat));
-        panels.forEach(p => { p.style.display = (p.dataset.category === cat) ? '' : 'none'; });
-        const activePanel = document.querySelector('.gal-panel[data-category="' + cat + '"]');
-        const hasContent = activePanel && activePanel.children.length > 0;
-        if (emptyNote) emptyNote.style.display = hasContent ? 'none' : 'block';
-      }
-
-      tabs.forEach(tab => tab.addEventListener('click', () => selectCategory(tab.dataset.category)));
-      const activeTab = document.querySelector('.gallery-tab.active');
-      selectCategory(activeTab ? activeTab.dataset.category : 'general');
-    }
-  })();
-
-  // ---------- messages page: fetch messages-data.json and render everything ----------
-  (function() {
-    const tabs = document.querySelectorAll('.msg-tab');
-    const list = document.getElementById('msgList');
-    if (!tabs.length || !list) return;
-
-    const frame = document.getElementById('msgFrame');
-    const playerWrap = document.getElementById('msgPlayerWrap');
-    const playerEmpty = document.getElementById('msgPlayerEmpty');
-    const nowPlaying = document.getElementById('msgNowPlaying');
-    const shareBtn = document.getElementById('msgShareBtn');
-
-    const TAB_LABELS = { audio: 'audios', reel: 'reels', video: 'videos' };
-    let allItems = [];
-
-    function embedSrc(item) {
-      if (item.type === 'youtube') return 'https://www.youtube.com/embed/' + item.id;
-      if (item.type === 'drive') return 'https://drive.google.com/file/d/' + item.id + '/preview';
-      return '';
-    }
-    function thumbUrl(item) {
-      if (item.type === 'youtube') return 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
-      return '';
-    }
-
-    function buildCard(item, isActive) {
-      const div = document.createElement('div');
-      div.className = 'msg-card' + (isActive ? ' active' : '');
-      div.dataset.category = item.category;
-      div.dataset.id = item.id;
-      div.dataset.src = embedSrc(item);
-      div.dataset.title = item.title || '';
-      div.dataset.meta = (item.speaker || '') + (item.date ? ' ' + item.date : '');
-
-      const thumbDiv = document.createElement('div');
-      thumbDiv.className = 'msg-thumb';
-      const thumb = thumbUrl(item);
-      if (thumb) {
-        const img = document.createElement('img');
-        img.src = thumb; img.alt = item.title || '';
-        thumbDiv.appendChild(img);
-      } else {
-        const icon = document.createElement('div');
-        icon.className = 'audio-icon'; icon.innerHTML = '&#127925;';
-        thumbDiv.appendChild(icon);
-      }
+  function buildGitem(f, category) {
+    const div = document.createElement('div');
+    div.className = 'gitem';
+    div.dataset.caption = '';
+    div.dataset.category = category;
+    div.tabIndex = 0;
+    div.setAttribute('role', 'button');
+    div.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); div.click(); } });
+    if (imageExt.test(f.name)) {
+      div.dataset.type = 'image';
+      div.dataset.src = f.download_url;
+      div.setAttribute('aria-label', 'Open photo full size');
+      const img = document.createElement('img');
+      img.src = f.download_url; img.alt = 'Community photo';
+      img.loading = 'lazy'; img.decoding = 'async';
+      div.appendChild(img);
+    } else if (videoExt.test(f.name)) {
+      div.dataset.type = 'video';
+      div.dataset.src = f.download_url;
+      div.setAttribute('aria-label', 'Play video');
+      const v = document.createElement('video');
+      v.muted = true; v.preload = 'metadata';
+      const source = document.createElement('source');
+      source.src = f.download_url;
+      v.appendChild(source);
       const badge = document.createElement('div');
-      badge.className = 'play-badge'; badge.innerHTML = '&#9658;';
-      thumbDiv.appendChild(badge);
-
-      const infoDiv = document.createElement('div');
-      infoDiv.className = 'msg-info';
-      const h4 = document.createElement('h4'); h4.textContent = item.title || '';
-      const p = document.createElement('p');
-      p.textContent = (item.speaker || '') + (item.date ? ' · ' + item.date : '');
-      infoDiv.appendChild(h4); infoDiv.appendChild(p);
-
-      div.appendChild(thumbDiv); div.appendChild(infoDiv);
-      return div;
+      badge.className = 'play-badge';
+      badge.innerHTML = '&#9658;';
+      div.appendChild(v);
+      div.appendChild(badge);
+    } else {
+      return null;
     }
+    return div;
+  }
 
-    function buildEmpty(cat) {
-      const div = document.createElement('div');
-      div.className = 'msg-empty';
-      div.dataset.category = cat;
-      div.innerHTML = '<div style="font-size:32px; margin-bottom:10px;">&#127925;</div><p>No ' + TAB_LABELS[cat] + ' yet. Check back soon.</p>';
-      return div;
-    }
+  // fetch gallery-uploads root once, so we can match folder names case-insensitively
+  function fetchRoot() {
+    return getJson(API_ROOT).then(entries => Array.isArray(entries) ? entries.filter(e => e.type === 'dir') : []);
+  }
+  function findFolder(rootEntries, wantedName) {
+    return rootEntries.find(e => e.name.toLowerCase() === wantedName.toLowerCase());
+  }
 
-    function loadCard(card) {
-      list.querySelectorAll('.msg-card').forEach(c => c.classList.remove('active'));
-      card.classList.add('active');
-      const src = card.dataset.src;
-      if (src && frame) {
-        frame.src = src;
-        playerWrap.style.display = '';
-        playerEmpty.style.display = 'none';
-      }
-      if (nowPlaying) {
-        nowPlaying.querySelector('h3').textContent = card.dataset.title;
-        nowPlaying.querySelector('p').textContent = card.dataset.meta;
-      }
-      const url = new URL(window.location.href);
-      url.searchParams.set('v', card.dataset.id);
-      try { window.history.replaceState(null, '', url.toString()); } catch(e) {}
-      if (shareBtn) shareBtn.dataset.shareUrl = url.toString();
-    }
-
-    if (shareBtn) {
-      shareBtn.addEventListener('click', () => {
-        const url = shareBtn.dataset.shareUrl || window.location.href;
-        const done = () => {
-          const original = shareBtn.textContent;
-          shareBtn.textContent = 'Link Copied!';
-          setTimeout(() => { shareBtn.textContent = original; }, 1800);
-        };
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(url).then(done).catch(() => { window.prompt('Copy this link:', url); });
-        } else {
-          window.prompt('Copy this link:', url);
-        }
-      });
-    }
-
-    function selectCategory(cat, preferredCard) {
-      tabs.forEach(t => t.classList.toggle('active', t.dataset.category === cat));
-      Array.from(list.children).forEach(c => { c.style.display = (c.dataset.category === cat) ? '' : 'none'; });
-      const target = preferredCard || list.querySelector('.msg-card[data-category="' + cat + '"]');
-      if (target) {
-        loadCard(target);
-      } else {
-        if (frame) frame.src = '';
-        playerWrap.style.display = 'none';
-        playerEmpty.style.display = '';
-        playerEmpty.querySelector('p').textContent = 'No ' + TAB_LABELS[cat] + ' yet.';
-        if (nowPlaying) { nowPlaying.querySelector('h3').textContent = ''; nowPlaying.querySelector('p').textContent = ''; }
-      }
-    }
-
-    function render(items) {
-      allItems = items;
-      list.innerHTML = '';
-      ['audio','reel','video'].forEach(cat => {
-        const inCat = items.filter(m => m.category === cat);
-        inCat.forEach((m, i) => list.appendChild(buildCard(m, false)));
-        if (!inCat.length) list.appendChild(buildEmpty(cat));
-      });
-      list.querySelectorAll('.msg-card').forEach(card => {
-        card.addEventListener('click', () => {
-          loadCard(card);
-          if (frame && typeof frame.scrollIntoView === 'function') {
-            try { frame.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(e) {}
+  // Walk one category's folder. A direct subfolder is either:
+  //  - a LEAF (it directly contains files)  -> becomes its own standalone group
+  //  - a BRANCH (it only contains further subfolders, no files) -> becomes a
+  //    sub-tab (like "Naming Ceremonies"), and ITS children become groups within it
+  function fetchDir(pathSegments) {
+    return getJson(apiPath(pathSegments));
+  }
+  function collectDeepGroups(pathSegments, out) {
+    return fetchDir(pathSegments).then(entries => {
+      if (!Array.isArray(entries)) return;
+      const files = entries.filter(e => e.type === 'file');
+      const dirs = entries.filter(e => e.type === 'dir');
+      if (files.length) out.push({ label: prettify(pathSegments[pathSegments.length - 1]), files: files });
+      return Promise.all(dirs.map(d => collectDeepGroups(pathSegments.concat(d.name), out)));
+    });
+  }
+  function walkCategory(actualName) {
+    const flatFiles = [];
+    const leafGroups = [];
+    const branches = [];
+    return fetchDir([actualName]).then(rootEntries => {
+      if (!Array.isArray(rootEntries)) return { flatFiles, leafGroups, branches };
+      const rootFiles = rootEntries.filter(e => e.type === 'file');
+      const rootDirs = rootEntries.filter(e => e.type === 'dir');
+      flatFiles.push.apply(flatFiles, rootFiles);
+      return Promise.all(rootDirs.map(dir => {
+        const childPath = [actualName, dir.name];
+        return fetchDir(childPath).then(childEntries => {
+          if (!Array.isArray(childEntries)) return;
+          const childFiles = childEntries.filter(e => e.type === 'file');
+          const childDirs = childEntries.filter(e => e.type === 'dir');
+          if (childDirs.length === 0) {
+            if (childFiles.length) leafGroups.push({ label: prettify(dir.name), files: childFiles });
+            return;
           }
+          const branchGroups = [];
+          const jobs = childDirs.map(gd => collectDeepGroups(childPath.concat(gd.name), branchGroups));
+          if (childFiles.length) branchGroups.push({ label: 'Other', files: childFiles });
+          return Promise.all(jobs).then(() => {
+            branches.push({ name: dir.name, groups: branchGroups });
+          });
+        });
+      })).then(() => ({ flatFiles, leafGroups, branches }));
+    });
+  }
+
+  function renderGroups(container, category, groups) {
+    groups.forEach(group => {
+      if (!group.files.length) return;
+      const section = document.createElement('div');
+      section.className = 'celeb-group';
+      const heading = document.createElement('h3');
+      heading.className = 'celeb-title';
+      heading.textContent = group.label;
+      const groupGrid = document.createElement('div');
+      groupGrid.className = 'gallery-grid celeb-grid';
+      group.files.forEach(f => {
+        const item = buildGitem(f, category);
+        if (item) groupGrid.appendChild(item);
+      });
+      section.appendChild(heading);
+      section.appendChild(groupGrid);
+      container.appendChild(section);
+    });
+  }
+
+  function renderCategory(panel, category, data) {
+    if (data.flatFiles.length) {
+      const flatGrid = document.createElement('div');
+      flatGrid.className = 'gallery-grid';
+      data.flatFiles.forEach(f => {
+        const item = buildGitem(f, category);
+        if (item) flatGrid.appendChild(item);
+      });
+      panel.appendChild(flatGrid);
+    }
+    renderGroups(panel, category, data.leafGroups);
+    if (data.branches.length) {
+      const subtabs = document.createElement('div');
+      subtabs.className = 'msg-tabs gal-subtabs';
+      const branchPanels = [];
+      data.branches.forEach((branch, i) => {
+        const tab = document.createElement('button');
+        tab.type = 'button';
+        tab.className = 'msg-tab gal-subtab' + (i === 0 ? ' active' : '');
+        tab.textContent = prettify(branch.name);
+        subtabs.appendChild(tab);
+        const branchPanel = document.createElement('div');
+        branchPanel.className = 'gal-subpanel';
+        branchPanel.style.display = i === 0 ? '' : 'none';
+        renderGroups(branchPanel, category, branch.groups);
+        branchPanels.push(branchPanel);
+        tab.addEventListener('click', () => {
+          subtabs.querySelectorAll('.gal-subtab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          branchPanels.forEach((bp, j) => { bp.style.display = (j === i) ? '' : 'none'; });
+          renderShowcase();   // the stage follows whichever sub-tab is showing
         });
       });
-
-      const params = new URLSearchParams(window.location.search);
-      const wantedId = params.get('v');
-      const deepLinkCard = wantedId ? list.querySelector('.msg-card[data-id="' + wantedId + '"]') : null;
-      if (deepLinkCard) {
-        selectCategory(deepLinkCard.dataset.category, deepLinkCard);
-      } else {
-        selectCategory('video');
-      }
+      panel.appendChild(subtabs);
+      branchPanels.forEach(bp => panel.appendChild(bp));
     }
+  }
 
-    tabs.forEach(tab => tab.addEventListener('click', () => selectCategory(tab.dataset.category)));
+  // ---------- showcase (stage + details + lineup) ----------
+  function panelOf(cat) { return document.querySelector('.gal-panel[data-category="' + cat + '"]'); }
+  function counts(cat) {
+    const p = panelOf(cat);
+    const items = p ? Array.from(p.querySelectorAll('.gitem')) : [];
+    const photos = items.filter(i => i.dataset.type === 'image').length;
+    return { total: items.length, photos: photos, videos: items.length - photos };
+  }
+  function countText(c) {
+    const parts = [];
+    if (c.photos) parts.push(c.photos + (c.photos === 1 ? ' photo' : ' photos'));
+    if (c.videos) parts.push(c.videos + (c.videos === 1 ? ' video' : ' videos'));
+    return parts.join(' \u00B7 ');
+  }
+  function totalAll() { return CATEGORIES.reduce((n, c) => n + counts(c).total, 0); }
 
-    fetch('messages-data.json?_=' + Date.now())
-      .then(r => r.ok ? r.json() : [])
-      .then(items => { render(Array.isArray(items) ? items : []); })
-      .catch(() => { render([]); });
-  })();
+  function updateLineup() {
+    tabs.forEach(btn => {
+      const c = counts(btn.dataset.category);
+      const meta = btn.querySelector('.ofc-lineup__meta');
+      meta.textContent = !loaded ? '' : (c.total ? c.total : 'Soon');
+      btn.dataset.empty = (loaded && !c.total) ? '1' : '';
+    });
+  }
+
+  function stopRotation() { if (timer) { clearInterval(timer); timer = null; } }
+  function startRotation() {
+    stopRotation();
+    if (slideItems.length < 2 || calm || manual) return;
+    timer = setInterval(() => activate(slideIdx + 1), 5500);
+  }
+  function ensureLoaded(x) {
+    if (!x.im.getAttribute('src')) {
+      x.im.src = x.g.dataset.src;
+      x.s.style.setProperty('--bg', 'url("' + x.g.dataset.src + '")');
+    }
+  }
+  function activate(i) {
+    const n = slideItems.length;
+    if (!n) return;
+    slideIdx = (i + n) % n;
+    slideItems.forEach((x, k) => {
+      if (k === slideIdx) ensureLoaded(x);
+      x.s.classList.toggle('is-active', k === slideIdx);
+    });
+    ensureLoaded(slideItems[(slideIdx + 1) % n]);   // get the next one ready
+    Array.from(dotsEl.children).forEach((d, k) => d.classList.toggle('is-active', k === slideIdx));
+  }
+
+  function showPlaceholder(text) {
+    stopRotation();
+    slideItems = [];
+    slidesBox.innerHTML = '';
+    dotsEl.innerHTML = '';
+    stage.classList.remove('has-photos', 'multi');
+    const ph = document.createElement('div');
+    ph.className = 'ofc-ph';
+    const logo = document.createElement('img');
+    logo.src = 'logo.jpg'; logo.alt = '';
+    logo.onerror = function() { logo.style.display = 'none'; };
+    const p = document.createElement('p');
+    p.textContent = text;
+    ph.appendChild(logo); ph.appendChild(p);
+    slidesBox.appendChild(ph);
+    actionsEl.style.display = 'none';
+  }
+
+  function renderShowcase() {
+    const cat = activeCat;
+    const label = LABELS[cat] || prettify(cat);
+    const c = counts(cat);
+    titleEl.textContent = label;
+    labelEl.textContent = label;
+    labelCountEl.textContent = countText(c);
+    allBox.style.display = c.total ? '' : 'none';
+    const galSection = document.querySelector('.ofc-gal');
+    if (galSection) galSection.classList.toggle('is-empty', !c.total);
+
+    if (!loaded) {
+      chipEl.textContent = 'Loading\u2026';
+      descEl.textContent = '';
+      showPlaceholder('Loading photos\u2026');
+      return;
+    }
+    if (!c.total) {
+      const trouble = apiProblem && totalAll() === 0;
+      chipEl.textContent = trouble ? 'Please try again soon' : 'Coming soon';
+      descEl.textContent = '';
+      showPlaceholder(trouble ? 'Photos are taking a moment to load. Please refresh in a few minutes.' : 'Photos will be shared soon');
+      return;
+    }
+    chipEl.textContent = countText(c);
+    descEl.textContent = 'Select a photo to see it full size.';
+
+    const p = panelOf(cat);
+    const imgs = Array.from(p.querySelectorAll('.gitem')).filter(g => g.dataset.type === 'image' && isVisible(g)).slice(0, 6);
+    if (!imgs.length) {
+      showPlaceholder('Videos from this album are just below');
+      actionsEl.style.display = '';
+      return;
+    }
+    stopRotation();
+    slidesBox.innerHTML = '';
+    dotsEl.innerHTML = '';
+    slideItems = imgs.map((g, i) => {
+      const s = document.createElement('div');
+      s.className = 'ofc-stage__slide';
+      const im = new Image();
+      im.alt = 'Photo from ' + label; im.decoding = 'async';
+      s.appendChild(im);
+      slidesBox.appendChild(s);
+      const d = document.createElement('button');
+      d.type = 'button'; d.setAttribute('aria-label', 'Show photo ' + (i + 1));
+      d.addEventListener('click', (e) => { e.stopPropagation(); manual = true; stopRotation(); activate(i); });
+      dotsEl.appendChild(d);
+      return { s: s, im: im, g: g };
+    });
+    capEl.textContent = label;
+    stage.classList.add('has-photos');
+    stage.classList.toggle('multi', slideItems.length > 1);
+    actionsEl.style.display = '';
+    slideIdx = 0;
+    activate(0);
+    startRotation();
+  }
+
+  function selectCategory(cat, byUser) {
+    if (byUser) { userPicked = true; manual = false; }
+    activeCat = cat;
+    tabs.forEach(t => {
+      const on = t.dataset.category === cat;
+      t.classList.toggle('active', on);
+      t.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    panels.forEach(p => { p.style.display = (p.dataset.category === cat) ? '' : 'none'; });
+    renderShowcase();
+  }
+
+  tabs.forEach(tab => tab.addEventListener('click', () => selectCategory(tab.dataset.category, true)));
+  stage.addEventListener('mouseenter', stopRotation);
+  stage.addEventListener('mouseleave', startRotation);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) stopRotation(); else startRotation(); });
+  stage.addEventListener('click', () => { if (slideItems.length) slideItems[slideIdx].g.click(); });
+  openBtn.addEventListener('click', () => { if (slideItems.length) slideItems[slideIdx].g.click(); });
+
+  selectCategory(activeCat);   // show the loading state right away
+
+  fetchRoot().then(rootEntries => {
+    const jobs = CATEGORIES.map(cat => {
+      const match = findFolder(rootEntries, cat);
+      const panel = document.querySelector('.gal-panel[data-category="' + cat + '"]');
+      if (!match || !panel) return Promise.resolve();
+      return walkCategory(match.name).then(data => renderCategory(panel, cat, data));
+    });
+    return Promise.all(jobs);
+  }).then(() => {
+    loaded = true;
+    if (note) note.style.display = 'none';
+    updateLineup();
+    // if the first tab has nothing yet, open the first one that does
+    if (!userPicked && counts(activeCat).total === 0) {
+      const first = CATEGORIES.find(c => counts(c).total > 0);
+      if (first) activeCat = first;
+    }
+    selectCategory(activeCat);
+  });
+})();
 </script>
+<script src="ofc-polish.js" defer></script>
 </body>
 </html>
