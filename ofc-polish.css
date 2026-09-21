@@ -1,0 +1,196 @@
+/* ==========================================================================
+   One Flesh Community - shared polish layer
+   Load AFTER styles.css on every page:
+     <link rel="stylesheet" href="styles.css">
+     <link rel="stylesheet" href="ofc-polish.css">
+   Carries the warm, clear look of the Events page across the whole site:
+   readable text colours, warmer section bands, soft "stage" cards for
+   photos and flyers, gold chips, gentle entrance motion.
+   ========================================================================== */
+
+:root {
+  --gold-ink: #7F5C0F;      /* gold that is readable as TEXT on light backgrounds */
+  --muted: #6B5D4E;         /* darker than before (was #8B7C6B) for comfortable reading */
+  --warm-band: #F3E9D2;     /* richer alternate section background */
+  --ink-on-gold: #3d1712;
+}
+
+/* ---------- readability ---------- */
+.eyebrow { color: var(--gold-ink); }
+.card .num, .person-card .role, .event-card .meta { color: var(--gold-ink); }
+.card p { font-size: 15px; }
+.event-card p { font-size: 14.5px; }
+.timeline .note { font-size: 13.5px; }
+.pillar p { font-size: 13.5px; }
+.msg-info p { font-size: 13px; }
+
+/* ---------- warmer sections ---------- */
+section.block.alt { background: var(--warm-band); }
+.section-head p { font-size: 16px; line-height: 1.7; }
+
+/* ---------- page headers on inner pages (also fixes the phone side-padding) ---------- */
+.page-header {
+  padding: 64px 28px 26px;
+  background: radial-gradient(70% 120% at 50% 0%, rgba(201,162,77,0.16) 0%, transparent 70%);
+}
+.page-header p { font-size: 16px; }
+
+/* ---------- cards ---------- */
+.card { border-radius: 20px; box-shadow: 0 10px 28px rgba(90, 50, 30, 0.06); }
+.card:hover { box-shadow: 0 18px 40px rgba(110, 21, 32, 0.12); }
+
+/* ---------- gold chip (same as the Events page) ---------- */
+.ofc-chip {
+  display: inline-block; padding: 6px 14px; border-radius: 999px;
+  background: var(--gold); color: var(--ink-on-gold);
+  font-weight: 800; font-size: 12.5px; letter-spacing: 0.06em; text-transform: uppercase;
+}
+
+/* ---------- home hero: text + soft photo stage ---------- */
+.ofc-hero {
+  position: relative; overflow: hidden;
+  padding: clamp(36px, 6vw, 72px) 0 clamp(44px, 6vw, 78px);
+  background:
+    radial-gradient(60% 90% at 0% 0%, rgba(161, 51, 39, 0.11) 0%, transparent 62%),
+    radial-gradient(55% 80% at 100% 100%, rgba(30, 111, 82, 0.13) 0%, transparent 62%),
+    var(--cream);
+}
+/* the two-circle "one flesh" motif, very quiet, behind the photo */
+.ofc-hero::before {
+  content: ""; position: absolute; right: -150px; top: -70px; width: 700px; height: 390px; pointer-events: none; opacity: 0.6;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='390' viewBox='0 0 700 390' fill='none'%3E%3Ccircle cx='265' cy='195' r='170' stroke='%23C9A24D' stroke-width='1.6' opacity='.55'/%3E%3Ccircle cx='435' cy='195' r='170' stroke='%23C9A24D' stroke-width='1.6' opacity='.55'/%3E%3C/svg%3E") no-repeat center / contain;
+}
+.ofc-hero__grid {
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(26px, 5vw, 68px); align-items: center;
+}
+.ofc-hero__copy { min-width: 0; }
+.ofc-hero__title {
+  font-family: 'Fraunces', serif; font-weight: 700; color: var(--rust);
+  font-size: clamp(32px, 4.5vw, 52px); line-height: 1.08; margin: 18px 0 16px;
+}
+.ofc-hero__title em { display: block; font-weight: 500; color: var(--green-deep); }
+.ofc-hero__sub { font-size: 17.5px; color: #4d4036; max-width: 46ch; margin-bottom: 26px; }
+.ofc-hero .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* "Next gathering" pill (filled from events-data.json) */
+.ofc-next {
+  display: none; align-items: center; gap: 12px; margin-top: 28px; max-width: 100%;
+  padding: 10px 16px 10px 12px; border-radius: 16px; background: #fff; border: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgba(60, 25, 10, 0.08); transition: transform .15s ease, box-shadow .15s ease;
+}
+.ofc-next.is-on { display: inline-flex; }
+.ofc-next:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(60, 25, 10, 0.12); }
+.ofc-next__body { display: flex; flex-direction: column; min-width: 0; line-height: 1.3; }
+.ofc-next__label { font-size: 11px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: var(--gold-ink); }
+.ofc-next__title { font-weight: 700; color: var(--text-dark); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ofc-next__date { font-size: 13px; color: var(--muted); }
+.ofc-next svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--rust); }
+
+/* ---------- stage: photo on a soft blurred backdrop of its own colours ---------- */
+.ofc-stage {
+  position: relative; aspect-ratio: 6 / 5; border-radius: 24px; overflow: hidden; background: #ece3cf;
+  box-shadow: 0 22px 50px rgba(60, 25, 10, 0.22);
+}
+.ofc-stage__slide {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  padding: clamp(12px, 3%, 24px); opacity: 0; transition: opacity .9s ease;
+}
+.ofc-stage__slide.is-active { opacity: 1; }
+.ofc-stage__slide::before {
+  content: ""; position: absolute; inset: -40px; background: var(--bg) center / cover no-repeat;
+  filter: blur(30px) saturate(1.15); opacity: 0.9;
+}
+.ofc-stage__slide img {
+  position: relative; display: block; max-width: 100%; max-height: 100%; width: auto; height: auto;
+  border-radius: 14px; box-shadow: 0 14px 34px rgba(0, 0, 0, 0.3);
+}
+.ofc-stage__cap {
+  position: absolute; left: 16px; bottom: 16px; max-width: calc(100% - 96px);
+  padding: 8px 14px; border-radius: 999px; background: rgba(255, 255, 255, 0.92);
+  font-size: 13.5px; font-weight: 700; color: var(--text-dark);
+}
+.ofc-stage__dots { position: absolute; right: 16px; bottom: 20px; display: flex; gap: 8px; }
+.ofc-stage__dots button {
+  width: 10px; height: 10px; padding: 0; border-radius: 50%; border: 0; cursor: pointer;
+  background: rgba(255, 255, 255, 0.6); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.18); transition: transform .2s ease, background .2s ease;
+}
+.ofc-stage__dots button.is-active { background: var(--gold); transform: scale(1.25); }
+
+/* entrance for the hero */
+.ofc-hero .ofc-hero__copy > * { animation: ofc-rise .7s cubic-bezier(.2,.8,.3,1) backwards; }
+.ofc-hero .ofc-hero__copy > *:nth-child(2) { animation-delay: .08s; }
+.ofc-hero .ofc-hero__copy > *:nth-child(3) { animation-delay: .16s; }
+.ofc-hero .ofc-hero__copy > *:nth-child(4) { animation-delay: .24s; }
+.ofc-hero .ofc-hero__copy > *:nth-child(5) { animation-delay: .32s; }
+.ofc-hero .ofc-stage { animation: ofc-rise .85s cubic-bezier(.2,.8,.3,1) .12s backwards; }
+@keyframes ofc-rise { from { opacity: 0; transform: translateY(18px); } }
+
+/* ---------- three pillars on the home page ---------- */
+.ofc-pillar { border-top: 4px solid var(--accent, var(--gold)); padding-top: 28px; background: #fff; }
+.ofc-pillar { background: linear-gradient(180deg, rgba(200, 160, 80, 0.10) 0%, #fff 58%); }
+.ofc-pillar--rust  { --accent: var(--rust);  background: linear-gradient(180deg, rgba(161, 51, 39, 0.07) 0%, #fff 58%); }
+.ofc-pillar--green { --accent: var(--green); background: linear-gradient(180deg, rgba(30, 111, 82, 0.09) 0%, #fff 58%); }
+.ofc-pillar--gold  { --accent: var(--gold);  background: linear-gradient(180deg, rgba(201, 162, 77, 0.16) 0%, #fff 58%); }
+.ofc-pillar .num { font-size: 30px; color: var(--accent); line-height: 1; }
+.ofc-pillar h3 { font-size: 21px; }
+
+/* ---------- upcoming events as flyer cards (home) ---------- */
+.ofc-evcard {
+  display: flex; flex-direction: column; overflow: hidden; background: #fff; border: 1px solid var(--line);
+  border-radius: 22px; box-shadow: 0 10px 28px rgba(90, 50, 30, 0.08); transition: transform .2s ease, box-shadow .2s ease;
+}
+.ofc-evcard:hover { transform: translateY(-4px); box-shadow: 0 20px 44px rgba(110, 21, 32, 0.14); }
+.ofc-evcard__media {
+  position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: #ece3cf; padding: 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+.ofc-evcard__media::before {
+  content: ""; position: absolute; inset: -30px; background: var(--bg) center / cover no-repeat; filter: blur(26px) saturate(1.15); opacity: 0.9;
+}
+.ofc-evcard__media img.ofc-flyer {
+  position: relative; display: block; max-width: 100%; max-height: 100%; width: auto; height: auto;
+  border-radius: 10px; box-shadow: 0 10px 26px rgba(0, 0, 0, 0.3);
+}
+.ofc-evcard__media.is-ph {
+  flex-direction: column; gap: 12px; text-align: center;
+  background: radial-gradient(circle at 50% 36%, #fdf7e8 0%, #f3e6c9 58%, #e8d6ae 100%);
+}
+.ofc-evcard__media.is-ph::before { display: none; }
+.ofc-evcard__media.is-ph img.ofc-logo {
+  position: relative; width: 76px; height: 76px; border-radius: 50%; object-fit: cover;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.85), 0 10px 24px rgba(90, 40, 10, 0.25);
+}
+.ofc-evcard__media.is-ph p { position: relative; font-family: 'Fraunces', serif; font-weight: 700; font-size: 17px; color: var(--rust); line-height: 1.3; }
+.ofc-evcard__body { padding: 20px 24px 24px; }
+.ofc-evcard__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: 13.5px; font-weight: 700; color: var(--text-dark); }
+.ofc-evcard h3 { font-size: 21px; margin: 10px 0 6px; }
+.ofc-evcard p.d { font-size: 14.5px; color: var(--muted); }
+
+/* ---------- "life together" photos ---------- */
+.ofc-life .gallery-grid { gap: 18px; }
+.ofc-life .gallery-grid .gitem { border: 0; border-radius: 22px; box-shadow: 0 14px 34px rgba(60, 25, 10, 0.16); }
+.ofc-life .gallery-grid .gitem img { height: 320px; }
+.ofc-life .gallery-grid .gitem::after {
+  content: attr(data-caption); position: absolute; left: 0; right: 0; bottom: 0; padding: 44px 18px 16px;
+  background: linear-gradient(transparent, rgba(30, 15, 10, 0.74)); color: #fff; font-weight: 600; font-size: 14px; pointer-events: none;
+}
+
+/* ---------- gentle entrance on scroll (added by ofc-polish.js) ---------- */
+.js-reveal .rv:not(.is-in) { opacity: 0; transform: translateY(18px); }
+.js-reveal .rv.is-in { animation: ofc-rv .65s cubic-bezier(.2,.8,.3,1) var(--rv-d, 0ms) backwards; }
+@keyframes ofc-rv { from { opacity: 0; transform: translateY(18px); } }
+
+/* ---------- phones ---------- */
+@media (max-width: 860px) {
+  .ofc-hero__grid { grid-template-columns: minmax(0, 1fr); }
+  .ofc-stage { aspect-ratio: 1 / 1; border-radius: 20px; }
+  .ofc-hero::before { opacity: 0.35; right: -300px; }
+  .ofc-life .gallery-grid .gitem img { height: 280px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ofc-hero .ofc-hero__copy > *, .ofc-hero .ofc-stage { animation: none; }
+  .js-reveal .rv:not(.is-in) { opacity: 1; transform: none; }
+  .js-reveal .rv.is-in { animation: none; }
+  .ofc-stage__slide { transition: none; }
+}
