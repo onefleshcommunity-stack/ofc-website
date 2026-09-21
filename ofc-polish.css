@@ -252,3 +252,33 @@ section.block.alt { background: var(--warm-band); }
   }
   .ofc-lineup__btn[aria-pressed="true"]::before { top: 0; }
 }
+
+/* ==========================================================================
+   Auto-advancing lineup (progress line on the selected item), used on About
+   ========================================================================== */
+@keyframes ofc-prog { to { transform: scaleX(1); } }
+.ofc-lineup--auto .ofc-lineup__btn[aria-pressed="true"]::before {
+  transform: scaleX(0); transform-origin: left; animation: ofc-prog var(--ofc-dur, 6.5s) linear forwards;
+}
+.ofc-show.is-manual .ofc-lineup--auto .ofc-lineup__btn[aria-pressed="true"]::before { animation: none; transform: scaleX(1); }
+.ofc-show:hover .ofc-lineup--auto .ofc-lineup__btn[aria-pressed="true"]::before,
+.ofc-show:focus-within .ofc-lineup--auto .ofc-lineup__btn[aria-pressed="true"]::before { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .ofc-lineup--auto .ofc-lineup__btn[aria-pressed="true"]::before { animation: none; transform: scaleX(1); }
+}
+
+/* ==========================================================================
+   Messages page: same soft, rounded look as the other pages
+   ========================================================================== */
+.msg-player { border-radius: 22px; box-shadow: 0 22px 50px rgba(60, 25, 10, 0.2); }
+.msg-now-playing h3 { font-size: clamp(22px, 3vw, 30px); }
+.msg-card { border-radius: 18px; box-shadow: 0 8px 22px rgba(90, 50, 30, 0.07); }
+.msg-card:hover { box-shadow: 0 14px 32px rgba(110, 21, 32, 0.12); }
+.msg-tab.active { box-shadow: 0 6px 16px rgba(161, 51, 39, 0.28); }
+
+/* small "swap" animation used when a showcase changes its text */
+.ofc-swap { animation: ofc-swap .45s ease both; }
+@keyframes ofc-swap { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .ofc-swap { animation: none; } }
+
+.ofc-show[hidden] { display: none; }

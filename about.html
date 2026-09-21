@@ -7,424 +7,404 @@
 <meta name="description" content="Learn the story and founding couples behind One Flesh Community.">
 <link rel="icon" href="logo.jpg">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="ofc-polish.css">
+<style>
+/* ---------- About page ---------- */
+.msg-tab { font-family: inherit; }
+.ofc-show--top { align-items: start; }
+.ofc-show--top .ofc-stage { position: sticky; top: 96px; }
+
+/* story: the year on a colour stage */
+.ofc-ystage { position: relative; aspect-ratio: 6 / 5; border-radius: 24px; overflow: hidden; background: #7F241B; box-shadow: 0 22px 50px rgba(60, 25, 10, 0.22); }
+.ofc-yslide {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end;
+  padding: clamp(24px, 5%, 44px); color: #fff; opacity: 0; transition: opacity .8s ease;
+}
+.ofc-yslide.is-active { opacity: 1; }
+.ofc-yslide.t-rust  { background: linear-gradient(140deg, #A13327 0%, #7F241B 100%); }
+.ofc-yslide.t-green { background: linear-gradient(140deg, #1E6F52 0%, #164F39 100%); }
+.ofc-yslide.t-gold  { background: linear-gradient(140deg, #8A6512 0%, #5E430A 100%); }
+.ofc-yslide::before {
+  content: ""; position: absolute; right: -60px; top: -30px; width: 520px; height: 300px; pointer-events: none; opacity: .3;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='300' viewBox='0 0 520 300' fill='none'%3E%3Ccircle cx='200' cy='150' r='130' stroke='%23F4E9D8' stroke-width='1.6'/%3E%3Ccircle cx='320' cy='150' r='130' stroke='%23F4E9D8' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat center / contain;
+}
+.ofc-yslide__n { position: absolute; top: clamp(22px, 5%, 40px); left: clamp(24px, 5%, 44px); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: rgba(255,255,255,.78); }
+.ofc-yslide__label { position: relative; font-size: 14px; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; color: #F3E2B0; margin-bottom: 2px; min-height: 1em; }
+.ofc-yslide__year { position: relative; font-family: 'Fraunces', serif; font-weight: 700; font-size: clamp(64px, 11vw, 132px); line-height: 1; color: #fff; }
+.ofc-story-note { font-family: 'Fraunces', serif; font-weight: 600; font-size: clamp(22px, 2.6vw, 30px); line-height: 1.3; color: var(--rust); margin: 14px 0 0; max-width: 24ch; }
+.ofc-story-src { list-style: none; margin: 0; padding: 0; max-width: 640px; margin-inline: auto; }
+.ofc-story-src li { padding: 14px 0 14px 18px; border-left: 3px solid var(--gold); margin-bottom: 8px; }
+.ofc-story-src li::before { content: attr(data-year); display: block; font-weight: 800; color: var(--rust); }
+
+/* founding couples: full photo on a soft backdrop, nothing cropped */
+.ofc-photo { position: relative; aspect-ratio: 4 / 3; border-radius: 16px; overflow: hidden; background: #e6dcc8; display: flex; align-items: center; justify-content: center; padding: 10px; }
+.ofc-photo::before { content: ""; position: absolute; inset: -30px; background: var(--bg) center / cover no-repeat; filter: blur(26px) saturate(1.15); opacity: .9; }
+.ofc-photo img { position: relative; display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; border-radius: 10px; box-shadow: 0 10px 26px rgba(0,0,0,.28); }
+
+/* nine mission pillars: three brand colours */
+.pillars-wrap .pillar .circle { transition: transform .2s ease; }
+.pillars-wrap .pillar:hover .circle { transform: translateY(-3px) scale(1.04); }
+.pillars-wrap .pillar:nth-child(3n+2) .circle { background: var(--rust); color: #fff; }
+.pillars-wrap .pillar:nth-child(3n) .circle { background: var(--gold-ink); color: #fff; }
+
+/* leaders */
+.ofc-leaders-src .leader-card { margin-bottom: 24px; }
+.ofc-lead-role { font-size: 15px; font-weight: 700; color: var(--gold-ink); margin: -2px 0 14px; }
+.ofc-bio { margin: 0; padding: 0 0 0 20px; }
+.ofc-bio li { margin-bottom: 10px; line-height: 1.65; font-size: 15.5px; color: #4d4036; }
+.ofc-bio li::marker { color: var(--rust); }
+.ofc-lineup__btn--person { align-items: center; justify-content: flex-start; gap: 14px; }
+.ofc-lineup__btn--person img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex-shrink: 0; box-shadow: 0 0 0 2px #fff, 0 2px 8px rgba(0,0,0,.2); }
+.ofc-lineup__btn--person .t { display: flex; flex-direction: column; min-width: 0; line-height: 1.3; }
+.ofc-lineup__btn--person .t b { font-weight: 700; }
+.ofc-lineup__btn--person .t small { font-size: 13px; color: var(--muted); }
+@media (max-width: 860px) {
+  .ofc-show--top .ofc-stage { position: relative; top: 0; }
+  .ofc-lineup__btn--person, .ofc-lineup li:last-child .ofc-lineup__btn--person { flex-direction: row; align-items: center; }
+  .ofc-lineup li:has(.ofc-lineup__btn--person) { flex-basis: min(78%, 250px); }
+  #ofcLeaders .ofc-show__panel { display: flex; flex-direction: column; }
+  #ofcLeaders .ofc-lineup { order: -1; margin: 0 0 20px; }   /* pick a leader first, then read */
+}
+</style>
 </head>
 <body>
 <header class="site-nav">
-    <div class="wrap">
-      <a class="brand" href="index.html">
-        <img src="logo.jpg" alt="One Flesh Community logo">
-        <span class="word">One Flesh Community</span>
-      </a>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">&#9776;</button>
-      <nav id="navLinks">
-        <a class="" href="index.html">Home</a>
-      <a class="active" href="about.html">About</a>
-      <a class="" href="values.html">Values</a>
-      <a class="" href="events.html">Events</a>
-      <a class="" href="gallery.html">Gallery</a>
-      <a class="" href="messages.html">Messages</a>
-      <a class="" href="contact.html">Contact</a>
-      <a class="join-btn" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Join OFC</a>
-      </nav>
-    </div>
-  </header>
+<div class="wrap">
+<a class="brand" href="index.html">
+<img src="logo.jpg" alt="One Flesh Community logo">
+<span class="word">One Flesh Community</span>
+</a>
+<button class="nav-toggle" id="navToggle" aria-label="Toggle menu">&#9776;</button>
+<nav id="navLinks">
+<a class="" href="index.html">Home</a>
+<a class="active" href="about.html">About</a>
+<a class="" href="values.html">Values</a>
+<a class="" href="events.html">Events</a>
+<a class="" href="gallery.html">Gallery</a>
+<a class="" href="messages.html">Messages</a>
+<a class="" href="contact.html">Contact</a>
+<a class="join-btn" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Join OFC</a>
+</nav>
+</div>
+</header>
 
-  <div class="page-header wrap">
-    <span class="eyebrow">Our Story</span>
-    <h1>How We Got Here</h1>
-    <p>Two couples, one shared conviction, and a vision that grew into a community.</p>
-  </div>
+<div class="page-header wrap">
+<span class="eyebrow">Our Story</span>
+<h1>How We Got Here</h1>
+<p>Two couples, one shared conviction, and a vision that grew into a community.</p>
+</div>
 
-  <section class="block">
-    <div class="wrap">
-      <div class="timeline">
-        <div class="track"></div>
-        <div class="points">
-      <div class="point">
-        <div class="dot"></div>
-        <div class="year">2018</div>
-        <div class="note">Founding Couples got married in July, three weeks apart.</div>
-      </div>
-      <div class="point">
-        <div class="dot"></div>
-        <div class="year">2020</div>
-        <div class="note">Marriage Boot Camps at the Edu-Ansah home.</div>
-      </div>
-      <div class="point">
-        <div class="dot"></div>
-        <div class="year">2022</div>
-        <div class="note">Prophecy about a marriage community, Jesus in tones.</div>
-      </div>
-      <div class="point">
-        <div class="dot"></div>
-        <div class="year">July 2026</div>
-        <div class="note">The Quarshies introduced the vision to the Edu-Ansahs. First marriage retreat.</div>
-      </div>
-      <div class="point">
-        <div class="dot"></div>
-        <div class="year">August 2026</div>
-        <div class="note">OFC Launch.</div>
-      </div></div>
-      </div>
-    </div>
-  </section>
+<!-- OUR STORY. Edit the milestones here: one line per year. -->
+<section class="block">
+<div class="wrap">
+<ol class="ofc-story-src" id="ofcStorySrc">
+<li data-year="2018">Founding Couples got married in July, three weeks apart.</li>
+<li data-year="2020">Marriage Boot Camps at the Edu-Ansah home.</li>
+<li data-year="2022">Prophecy about a marriage community, Jesus in tones.</li>
+<li data-year="July 2026">The Quarshies introduced the vision to the Edu-Ansahs. First marriage retreat.</li>
+<li data-year="August 2026">OFC Launch.</li>
+</ol>
+<div class="ofc-show" id="ofcStory" hidden></div>
+</div>
+</section>
 
-  <section class="block alt">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="eyebrow">Founding Couples</span>
-        <h2>Where it began</h2>
-      </div>
-      <div class="grid-2">
-        <div class="card" style="text-align:center;">
-          <img class="couple-photo" src="couple_eduansah.jpg" alt="Mr and Mrs Edu-Ansah">
-          <h3 style="margin-top:16px;">Mr &amp; Mrs Edu-Ansah</h3>
-          <p style="color:var(--muted); font-size:13.5px;">8+ Years of Marriage, Two Sons</p>
-        </div>
-        <div class="card" style="text-align:center;">
-          <img class="couple-photo" src="couple_quarshie.jpg" alt="Mr and Mrs Quarshie">
-          <h3 style="margin-top:16px;">Mr &amp; Mrs Quarshie</h3>
-          <p style="color:var(--muted); font-size:13.5px;">8+ Years in Marriage, Two Sons &amp; a Daughter</p>
-        </div>
-      </div>
-    </div>
-  </section>
+<section class="block alt">
+<div class="wrap">
+<div class="section-head">
+<span class="eyebrow">Founding Couples</span>
+<h2>Where it began</h2>
+</div>
+<div class="grid-2">
+<div class="card" style="text-align:center;">
+<div class="ofc-photo" style="--bg:url('couple_eduansah.jpg')"><img src="couple_eduansah.jpg" alt="Mr and Mrs Edu-Ansah"></div>
+<h3 style="margin-top:18px;">Mr &amp; Mrs Edu-Ansah</h3>
+<p style="color:var(--muted); font-size:14px;">8+ Years of Marriage, Two Sons</p>
+</div>
+<div class="card" style="text-align:center;">
+<div class="ofc-photo" style="--bg:url('couple_quarshie.jpg')"><img src="couple_quarshie.jpg" alt="Mr and Mrs Quarshie"></div>
+<h3 style="margin-top:18px;">Mr &amp; Mrs Quarshie</h3>
+<p style="color:var(--muted); font-size:14px;">8+ Years in Marriage, Two Sons &amp; a Daughter</p>
+</div>
+</div>
+</div>
+</section>
 
-  <section class="block">
-    <div class="wrap">
-      <div class="vision-block">
-        <span class="eyebrow">Our Vision</span>
-        <p class="big">To see couples living as one flesh in Christ, united in purpose, grounded in Kingdom principles, and equipped to build marriages that are strong, purposeful, and life-giving, becoming places of refuge, strength, and lasting Kingdom legacy.</p>
-      </div>
-    </div>
-  </section>
+<section class="block">
+<div class="wrap">
+<div class="vision-block">
+<span class="eyebrow">Our Vision</span>
+<p class="big">To see couples living as one flesh in Christ, united in purpose, grounded in Kingdom principles, and equipped to build marriages that are strong, purposeful, and life-giving, becoming places of refuge, strength, and lasting Kingdom legacy.</p>
+</div>
+</div>
+</section>
 
-  <section class="block alt">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="eyebrow">Our Mission</span>
-        <h2>What we are here to offer</h2>
-        <p>At One Flesh Community (OFC), we exist to build a Christ-centered community where singles and couples are equipped to grow in Christ, build healthy relationships, strengthen marriages, and establish homes that reflect God's design and influence generations. OFC is a community where singles prepare, individuals grow, couples strengthen, families flourish, and generations are impacted, all while pursuing God's purposes together with Jesus Christ at the center.</p>
-      </div>
-      <div class="divider-motif"><svg width="70" height="46" viewBox="0 0 70 46" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <path d="M 35.0,1.3112932612384647 A 23.8,23.8 0 0,0 35.0,44.68870673876154 A 23.8,23.8 0 0,0 35.0,1.3112932612384647 Z" fill="var(--gold)" opacity="0.55"/>
+<section class="block alt">
+<div class="wrap">
+<div class="section-head">
+<span class="eyebrow">Our Mission</span>
+<h2>What we are here to offer</h2>
+<p>At One Flesh Community (OFC), we exist to build a Christ-centered community where singles and couples are equipped to grow in Christ, build healthy relationships, strengthen marriages, and establish homes that reflect God's design and influence generations. OFC is a community where singles prepare, individuals grow, couples strengthen, families flourish, and generations are impacted, all while pursuing God's purposes together with Jesus Christ at the center.</p>
+</div>
+<div class="divider-motif"><svg width="70" height="46" viewBox="0 0 70 46" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path d="M 35.0,1.3112932612384647 A 23.8,23.8 0 0,0 35.0,44.68870673876154 A 23.8,23.8 0 0,0 35.0,1.3112932612384647 Z" fill="var(--gold)" opacity="0.55"/>
 </svg></div>
-      <div class="pillars-wrap">
-      <div class="pillar">
-        <div class="circle">1</div>
-        <p>Walk With One Another</p>
-      </div>
-      <div class="pillar">
-        <div class="circle">2</div>
-        <p>Grow in Christ</p>
-      </div>
-      <div class="pillar">
-        <div class="circle">3</div>
-        <p>Build Healthy Relationships</p>
-      </div>
-      <div class="pillar">
-        <div class="circle">4</div>
-        <p>Prepare for Marriage</p>
-      </div>
-      <div class="pillar">
-        <div class="circle">5</div>
-        <p>Strengthen Marriages</p>
-      </div>
-      <div class="pillar">
-        <div class="circle">6</div>
-        <p>Build Christ-Centered Homes</p>
-      </div>
-      <div class="pillar">
-        <div class="circle">7</div>
-        <p>Connect, Celebrate & Belong</p>
-      </div>
-      <div class="pillar">
-        <div class="circle">8</div>
-        <p>Support When More Is Needed</p>
-      </div>
-      <div class="pillar">
-        <div class="circle">9</div>
-        <p>Live With Purpose & Build Legacy</p>
-      </div></div>
-    </div>
-  </section>
+<div class="pillars-wrap">
+<div class="pillar"><div class="circle">1</div><p>Walk With One Another</p></div>
+<div class="pillar"><div class="circle">2</div><p>Grow in Christ</p></div>
+<div class="pillar"><div class="circle">3</div><p>Build Healthy Relationships</p></div>
+<div class="pillar"><div class="circle">4</div><p>Prepare for Marriage</p></div>
+<div class="pillar"><div class="circle">5</div><p>Strengthen Marriages</p></div>
+<div class="pillar"><div class="circle">6</div><p>Build Christ-Centered Homes</p></div>
+<div class="pillar"><div class="circle">7</div><p>Connect, Celebrate &amp; Belong</p></div>
+<div class="pillar"><div class="circle">8</div><p>Support When More Is Needed</p></div>
+<div class="pillar"><div class="circle">9</div><p>Live With Purpose &amp; Build Legacy</p></div>
+</div>
+</div>
+</section>
 
-  <section class="block">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="eyebrow">Leadership Structure</span>
-        <h2>Two Founding Couples, Collective Authority</h2>
-        <p>Vision, doctrine, and major decisions rest with the founding couples together.</p>
-      </div>
-      <div class="orgchart">
-        <div class="org-top">
-          <h3>The Founding Couples</h3>
-          <p>Two Founding Couples &middot; Collective Authority &middot; Vision, Doctrine &amp; Major Decisions</p>
-        </div>
-        <div class="org-mid-wrap"><div class="org-connector"></div></div>
-        <div class="org-mid-wrap">
-          <div class="org-mid"><h3>President</h3><p>Mr. Kofi Edu-Ansah</p></div>
-        </div>
-        <div class="org-bottom-grid">
-          <div class="org-card"><div class="tag">COO</div><h3>Mr. Joseph Quarshie</h3><p>Operations &amp; Strategy</p></div>
-          <div class="org-card"><div class="tag">CPO</div><h3>Mrs. Dorcas Quarshie</h3><p>People, Community &amp; Care</p></div>
-          <div class="org-card"><div class="tag">CFO</div><h3>Mrs. Robertha Edu-Ansah</h3><p>Finance &amp; Admin</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
+<section class="block">
+<div class="wrap">
+<div class="section-head">
+<span class="eyebrow">Leadership Structure</span>
+<h2>Two Founding Couples, Collective Authority</h2>
+<p>Vision, doctrine, and major decisions rest with the founding couples together.</p>
+</div>
+<div class="orgchart">
+<div class="org-top">
+<h3>The Founding Couples</h3>
+<p>Two Founding Couples &middot; Collective Authority &middot; Vision, Doctrine &amp; Major Decisions</p>
+</div>
+<div class="org-mid-wrap"><div class="org-connector"></div></div>
+<div class="org-mid-wrap">
+<div class="org-mid"><h3>President</h3><p>Mr. Kofi Edu-Ansah</p></div>
+</div>
+<div class="org-bottom-grid">
+<div class="org-card"><div class="tag">COO</div><h3>Mr. Joseph Quarshie</h3><p>Operations &amp; Strategy</p></div>
+<div class="org-card"><div class="tag">CPO</div><h3>Mrs. Dorcas Quarshie</h3><p>People, Community &amp; Care</p></div>
+<div class="org-card"><div class="tag">CFO</div><h3>Mrs. Robertha Edu-Ansah</h3><p>Finance &amp; Admin</p></div>
+</div>
+</div>
+</div>
+</section>
 
-  <section class="block alt">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="eyebrow">Leadership Profiles</span>
-        <h2>Meet the team</h2>
-      </div>
-      <div style="display:flex; flex-direction:column; gap:24px;">
-        
-      <div class="card leader-card">
-        <img class="photo" src="leader_kofi.jpg" alt="Mr. Kofi Edu-Ansah">
-        <div>
-          <h3>Mr. Kofi Edu-Ansah</h3>
-          <div class="role">President, First Among Equals</div>
-          <ul><li>Founding Member of One Flesh Community (OFC) and passionate about building strong, purposeful, and Christ-centered marriages and families.</li><li>Husband and Father, married to Mrs. Robertha Edu-Ansah, with whom he is raising two children.</li><li>Clinical Psychologist with over eight years of experience at Korle-Bu Teaching Hospital, spanning marriage and couples counseling, sexual and relational counseling, psychotherapy, and adherence counseling.</li><li>Highly Qualified Professional, holding an MPhil and BSc in Psychology from the University of Ghana, Legon, and an MA in Conflict, Peace and Security from the Kofi Annan International Peacekeeping Training Centre.</li></ul>
-        </div>
-      </div>
-      <div class="card leader-card">
-        <img class="photo" src="leader_joseph.jpg" alt="Mr. Joseph Quarshie">
-        <div>
-          <h3>Mr. Joseph Quarshie</h3>
-          <div class="role">Chief Operating Officer, Operations & Strategy</div>
-          <ul><li>Founding Member of One Flesh Community (OFC) and Nee Joe Ministries, building faith-centered communities through music, teaching, and creative platforms.</li><li>Christian leader and community builder, passionate about strengthening relationships and creating meaningful communities.</li><li>Technology professional experienced in AI training, data annotation, and model evaluation, bringing both music and technology to serve the ministry.</li></ul>
-        </div>
-      </div>
-      <div class="card leader-card">
-        <img class="photo" src="leader_dorcas.jpg" alt="Mrs. Dorcas Quarshie">
-        <div>
-          <h3>Mrs. Dorcas Quarshie</h3>
-          <div class="role">Chief People Officer, People, Community & Care</div>
-          <ul><li>Mother of 3, deeply passionate about people and committed to serving, inspiring, and making a meaningful difference wherever she finds herself.</li><li>Professional teacher and Education Professional by training, passionate about learning, growth, and positively impacting lives.</li><li>AI Trainer, bringing the same care for growth and development into her technology work.</li><li>Vice President of Nee Joe Ministries, actively involved in outreaches to young people, mentoring, and empowering the next generation.</li></ul>
-        </div>
-      </div>
-      <div class="card leader-card">
-        <img class="photo" src="leader_robertha.jpg" alt="Mrs. Robertha Edu-Ansah">
-        <div>
-          <h3>Mrs. Robertha Edu-Ansah</h3>
-          <div class="role">Chief Financial Officer, Finance & Admin</div>
-          <ul><li>Wife and mother, married to her best friend Mr. Edu-Ansah for 8 years and counting, and blessed with two children.</li><li>Founding Member of One Flesh Community (OFC), passionate about building a Christ-centered community that strengthens marriages, families, and individuals.</li><li>AI Trainer and Earth Science Researcher currently pursuing a PhD at the University of Ghana, with a background in geophysics and scientific research.</li><li>Community Builder and Initiator, having started book clubs that encourage women to read, grow, learn, and invest intentionally in themselves.</li></ul>
-        </div>
-      </div>
-      </div>
-    </div>
-  </section>
+<!-- LEADERSHIP PROFILES. Edit or add a leader by editing/copying one "leader-card" block below. -->
+<section class="block alt">
+<div class="wrap">
+<div class="section-head">
+<span class="eyebrow">Leadership Profiles</span>
+<h2>Meet the team</h2>
+</div>
+<div class="ofc-leaders-src" id="ofcLeadersSrc">
+<div class="card leader-card">
+<img class="photo" src="leader_kofi.jpg" alt="Mr. Kofi Edu-Ansah">
+<div>
+<h3>Mr. Kofi Edu-Ansah</h3>
+<div class="role">President, First Among Equals</div>
+<ul><li>Founding Member of One Flesh Community (OFC) and passionate about building strong, purposeful, and Christ-centered marriages and families.</li><li>Husband and Father, married to Mrs. Robertha Edu-Ansah, with whom he is raising two children.</li><li>Clinical Psychologist with over eight years of experience at Korle-Bu Teaching Hospital, spanning marriage and couples counseling, sexual and relational counseling, psychotherapy, and adherence counseling.</li><li>Highly Qualified Professional, holding an MPhil and BSc in Psychology from the University of Ghana, Legon, and an MA in Conflict, Peace and Security from the Kofi Annan International Peacekeeping Training Centre.</li></ul>
+</div>
+</div>
+<div class="card leader-card">
+<img class="photo" src="leader_joseph.jpg" alt="Mr. Joseph Quarshie">
+<div>
+<h3>Mr. Joseph Quarshie</h3>
+<div class="role">Chief Operating Officer, Operations &amp; Strategy</div>
+<ul><li>Founding Member of One Flesh Community (OFC) and Nee Joe Ministries, building faith-centered communities through music, teaching, and creative platforms.</li><li>Christian leader and community builder, passionate about strengthening relationships and creating meaningful communities.</li><li>Technology professional experienced in AI training, data annotation, and model evaluation, bringing both music and technology to serve the ministry.</li></ul>
+</div>
+</div>
+<div class="card leader-card">
+<img class="photo" src="leader_dorcas.jpg" alt="Mrs. Dorcas Quarshie">
+<div>
+<h3>Mrs. Dorcas Quarshie</h3>
+<div class="role">Chief People Officer, People, Community &amp; Care</div>
+<ul><li>Mother of 3, deeply passionate about people and committed to serving, inspiring, and making a meaningful difference wherever she finds herself.</li><li>Professional teacher and Education Professional by training, passionate about learning, growth, and positively impacting lives.</li><li>AI Trainer, bringing the same care for growth and development into her technology work.</li><li>Vice President of Nee Joe Ministries, actively involved in outreaches to young people, mentoring, and empowering the next generation.</li></ul>
+</div>
+</div>
+<div class="card leader-card">
+<img class="photo" src="leader_robertha.jpg" alt="Mrs. Robertha Edu-Ansah">
+<div>
+<h3>Mrs. Robertha Edu-Ansah</h3>
+<div class="role">Chief Financial Officer, Finance &amp; Admin</div>
+<ul><li>Wife and mother, married to her best friend Mr. Edu-Ansah for 8 years and counting, and blessed with two children.</li><li>Founding Member of One Flesh Community (OFC), passionate about building a Christ-centered community that strengthens marriages, families, and individuals.</li><li>AI Trainer and Earth Science Researcher currently pursuing a PhD at the University of Ghana, with a background in geophysics and scientific research.</li><li>Community Builder and Initiator, having started book clubs that encourage women to read, grow, learn, and invest intentionally in themselves.</li></ul>
+</div>
+</div>
+</div>
+<div class="ofc-show ofc-show--top" id="ofcLeaders" hidden></div>
+</div>
+</section>
 
-  <section class="cta-band">
-    <div class="wrap">
-      <h2>Want to be part of this story?</h2>
-      <p>Every member's journey starts with a simple form.</p>
-      <a class="btn-primary" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Join One Flesh Community</a>
-    </div>
-  </section>
+<section class="cta-band">
+<div class="wrap">
+<h2>Want to be part of this story?</h2>
+<p>Every member's journey starts with a simple form.</p>
+<a class="btn-primary" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Join One Flesh Community</a>
+</div>
+</section>
 
 <footer>
-    <div class="wrap">
-      <div class="foot-top">
-        <div class="brand">
-          <img src="logo.jpg" alt="One Flesh Community logo">
-          <span class="word">One Flesh Community</span>
-        </div>
-        <nav>
-          <a href="index.html">Home</a>
-          <a href="about.html">About</a>
-          <a href="values.html">Values</a>
-          <a href="events.html">Events</a>
-          <a href="gallery.html">Gallery</a>
-          <a href="messages.html">Messages</a>
-          <a href="contact.html">Contact</a>
-        </nav>
-      </div>
-      <div class="bottom">Growing in oneness. Building Kingdom marriages. &nbsp;|&nbsp; onefleshcommunity@gmail.com</div>
-    </div>
-  </footer>
-<div class="lightbox" id="lightbox">
-  <button class="lb-close" id="lbClose" aria-label="Close">&times;</button>
-  <button class="lb-prev" id="lbPrev" aria-label="Previous">&#10094;</button>
-  <div class="lb-content" id="lbContent"></div>
-  <button class="lb-next" id="lbNext" aria-label="Next">&#10095;</button>
-  <div class="lb-caption" id="lbCaption"></div>
+<div class="wrap">
+<div class="foot-top">
+<div class="brand">
+<img src="logo.jpg" alt="One Flesh Community logo">
+<span class="word">One Flesh Community</span>
 </div>
+<nav>
+<a href="index.html">Home</a>
+<a href="about.html">About</a>
+<a href="values.html">Values</a>
+<a href="events.html">Events</a>
+<a href="gallery.html">Gallery</a>
+<a href="messages.html">Messages</a>
+<a href="contact.html">Contact</a>
+</nav>
+</div>
+<div class="bottom">Growing in oneness. Building Kingdom marriages. &nbsp;|&nbsp; onefleshcommunity@gmail.com</div>
+</div>
+</footer>
+
 <script>
-  const toggle = document.getElementById('navToggle');
-  const links = document.getElementById('navLinks');
-  if (toggle) {
-    toggle.addEventListener('click', () => links.classList.toggle('open'));
+const toggle = document.getElementById('navToggle');
+const links = document.getElementById('navLinks');
+if (toggle) {
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+}
+
+const calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function el(tag, cls, text) {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  return n;
+}
+function retrigger(node, cls) { node.classList.remove(cls); void node.offsetWidth; node.classList.add(cls); }
+
+// ---------- our story: each milestone on a colour stage, advancing by itself ----------
+(function() {
+  const src = document.getElementById('ofcStorySrc');
+  const host = document.getElementById('ofcStory');
+  if (!src || !host) return;
+  const items = Array.from(src.querySelectorAll('li')).map(li => ({ year: li.dataset.year || '', note: li.textContent.trim() }));
+  if (!items.length) return;
+  const THEMES = ['t-rust', 't-green', 't-gold', 't-rust', 't-green'];
+  const n = items.length;
+  let idx = 0, manual = calm;
+
+  const stage = el('div', 'ofc-ystage');
+  stage.setAttribute('aria-hidden', 'true');   // the same words are in the panel, so screen readers do not hear it twice
+  const slides = items.map((it, i) => {
+    const s = el('div', 'ofc-yslide ' + THEMES[i % THEMES.length]);
+    const m = /^(.*?)\s*(\d{4})$/.exec(it.year);
+    s.appendChild(el('span', 'ofc-yslide__n', 'Milestone ' + (i + 1) + ' of ' + n));
+    s.appendChild(el('div', 'ofc-yslide__label', m ? m[1] : ''));
+    s.appendChild(el('div', 'ofc-yslide__year', m ? m[2] : it.year));
+    stage.appendChild(s);
+    return s;
+  });
+
+  const panel = el('div', 'ofc-show__panel');
+  const chip = el('span', 'ofc-chip');
+  const note = el('h2', 'ofc-story-note');
+  note.setAttribute('aria-live', 'polite');
+  const list = el('ul', 'ofc-lineup ofc-lineup--auto');
+  const btns = items.map((it, i) => {
+    const li = el('li');
+    const b = el('button', 'ofc-lineup__btn'); b.type = 'button';
+    b.appendChild(el('span', 'ofc-lineup__name', it.year));
+    b.appendChild(el('span', 'ofc-lineup__meta', String(i + 1) + ' / ' + n));
+    b.addEventListener('click', () => { manual = true; host.classList.add('is-manual'); setActive(i); });
+    li.appendChild(b); list.appendChild(li);
+    return b;
+  });
+  panel.appendChild(chip); panel.appendChild(note); panel.appendChild(list);
+  host.appendChild(stage); host.appendChild(panel);
+  if (manual) host.classList.add('is-manual');
+
+  function setActive(i) {
+    idx = i;
+    slides.forEach((s, k) => s.classList.toggle('is-active', k === i));
+    btns.forEach((b, k) => b.setAttribute('aria-pressed', k === i ? 'true' : 'false'));
+    chip.textContent = items[i].year;
+    note.textContent = items[i].note;
+    retrigger(note, 'ofc-swap');
   }
+  list.addEventListener('animationend', (e) => {
+    if (e.animationName === 'ofc-prog' && !manual) setActive((idx + 1) % n);
+  });
 
-  // ---------- lightbox (event delegation so it works with dynamically added items too) ----------
-  (function() {
-    const lb = document.getElementById('lightbox');
-    if (!lb) return;
-    const lbContent = document.getElementById('lbContent');
-    const lbCaption = document.getElementById('lbCaption');
-    let current = 0;
+  setActive(0);
+  host.hidden = false;
+  src.style.display = 'none';
+})();
 
-    function getItems() { return Array.from(document.querySelectorAll('.gitem')); }
+// ---------- leadership profiles: photo stage + details + lineup (built from the cards above) ----------
+(function() {
+  const srcBox = document.getElementById('ofcLeadersSrc');
+  const host = document.getElementById('ofcLeaders');
+  if (!srcBox || !host) return;
+  const people = Array.from(srcBox.querySelectorAll('.leader-card')).map(c => {
+    const role = (c.querySelector('.role') ? c.querySelector('.role').textContent : '').trim();
+    const cut = role.indexOf(',');
+    const img = c.querySelector('img');
+    return {
+      photo: img ? img.getAttribute('src') : '',
+      alt: img ? img.getAttribute('alt') : '',
+      name: (c.querySelector('h3') ? c.querySelector('h3').textContent : '').trim(),
+      shortRole: cut > -1 ? role.slice(0, cut).trim() : role,
+      detail: cut > -1 ? role.slice(cut + 1).trim() : '',
+      bullets: Array.from(c.querySelectorAll('li')).map(li => li.textContent.trim())
+    };
+  });
+  if (!people.length) return;
+  let idx = 0;
 
-    function render(idx) {
-      const items = getItems();
-      if (!items.length) return;
-      current = (idx + items.length) % items.length;
-      const el = items[current];
-      const type = el.dataset.type;
-      const src = el.dataset.src;
-      const caption = el.dataset.caption || '';
-      lbContent.innerHTML = '';
-      if (type === 'video') {
-        const v = document.createElement('video');
-        v.src = src; v.controls = true; v.autoplay = true;
-        lbContent.appendChild(v);
-      } else if (type === 'youtube') {
-        const iframe = document.createElement('iframe');
-        iframe.src = 'https://www.youtube.com/embed/' + src + '?autoplay=1';
-        iframe.setAttribute('frameborder','0');
-        iframe.setAttribute('allow','autoplay; encrypted-media; picture-in-picture');
-        iframe.setAttribute('allowfullscreen','');
-        lbContent.appendChild(iframe);
-      } else {
-        const img = document.createElement('img');
-        img.src = src; img.alt = caption;
-        lbContent.appendChild(img);
-      }
-      lbCaption.textContent = caption;
-    }
+  const stage = el('div', 'ofc-stage');
+  const slides = people.map(p => {
+    const s = el('div', 'ofc-stage__slide');
+    s.style.setProperty('--bg', 'url("' + p.photo + '")');
+    const im = new Image(); im.src = p.photo; im.alt = p.alt || p.name; im.decoding = 'async';
+    s.appendChild(im); stage.appendChild(s);
+    return s;
+  });
+  const cap = el('span', 'ofc-stage__cap'); stage.appendChild(cap);
 
-    function open(idx) {
-      render(idx);
-      lb.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function close() {
-      lb.classList.remove('open');
-      lbContent.innerHTML = '';
-      document.body.style.overflow = '';
-    }
+  const panel = el('div', 'ofc-show__panel');
+  const body = el('div', 'ofc-leader-body');
+  const chip = el('span', 'ofc-chip');
+  const name = el('h2', 'ofc-show__title');
+  const detail = el('p', 'ofc-lead-role');
+  const bio = el('ul', 'ofc-bio');
+  body.appendChild(chip); body.appendChild(name); body.appendChild(detail); body.appendChild(bio);
+  const list = el('ul', 'ofc-lineup');
+  const btns = people.map((p, i) => {
+    const li = el('li');
+    const b = el('button', 'ofc-lineup__btn ofc-lineup__btn--person'); b.type = 'button';
+    const av = new Image(); av.src = p.photo; av.alt = ''; av.loading = 'lazy';
+    const t = el('span', 't'); t.appendChild(el('b', '', p.name)); t.appendChild(el('small', '', p.shortRole));
+    b.appendChild(av); b.appendChild(t);
+    b.addEventListener('click', () => setActive(i));
+    li.appendChild(b); list.appendChild(li);
+    return b;
+  });
+  panel.appendChild(body); panel.appendChild(list);
+  host.appendChild(stage); host.appendChild(panel);
 
-    document.addEventListener('click', (e) => {
-      const item = e.target.closest('.gitem');
-      if (!item) return;
-      const items = getItems();
-      open(items.indexOf(item));
-    });
-    document.getElementById('lbClose').addEventListener('click', close);
-    document.getElementById('lbPrev').addEventListener('click', () => render(current - 1));
-    document.getElementById('lbNext').addEventListener('click', () => render(current + 1));
-    lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
-    document.addEventListener('keydown', (e) => {
-      if (!lb.classList.contains('open')) return;
-      if (e.key === 'Escape') close();
-      if (e.key === 'ArrowLeft') render(current - 1);
-      if (e.key === 'ArrowRight') render(current + 1);
-    });
-  })();
-
-  // ---------- auto-fetch new gallery uploads from GitHub (no code update needed) ----------
-  (function() {
-    const grid = document.getElementById('mainGalleryGrid');
-    if (!grid) return;
-    const note = document.getElementById('galleryLoadingNote');
-    const REPO = 'onefleshcommunity-stack/ofc-website';
-    const FOLDER = 'gallery-uploads';
-    if (note) note.style.display = 'block';
-
-    fetch('https://api.github.com/repos/' + REPO + '/contents/' + FOLDER)
-      .then(r => r.ok ? r.json() : [])
-      .then(files => {
-        if (note) note.style.display = 'none';
-        if (!Array.isArray(files)) return;
-        const imageExt = /\.(jpe?g|png|gif|webp)$/i;
-        const videoExt = /\.(mp4|mov|webm)$/i;
-        files.forEach(f => {
-          if (f.type !== 'file') return;
-          const caption = f.name.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ');
-          const div = document.createElement('div');
-          div.className = 'gitem';
-          div.dataset.caption = caption;
-          if (imageExt.test(f.name)) {
-            div.dataset.type = 'image';
-            div.dataset.src = f.download_url;
-            const img = document.createElement('img');
-            img.src = f.download_url; img.alt = caption;
-            div.appendChild(img);
-          } else if (videoExt.test(f.name)) {
-            div.dataset.type = 'video';
-            div.dataset.src = f.download_url;
-            const v = document.createElement('video');
-            v.muted = true; v.preload = 'metadata';
-            const source = document.createElement('source');
-            source.src = f.download_url;
-            v.appendChild(source);
-            const badge = document.createElement('div');
-            badge.className = 'play-badge';
-            badge.innerHTML = '&#9658;';
-            div.appendChild(v);
-            div.appendChild(badge);
-          } else {
-            return;
-          }
-          grid.appendChild(div);
-        });
-      })
-      .catch(() => { if (note) note.style.display = 'none'; });
-  })();
-
-  // ---------- messages page: tabs + player ----------
-  (function() {
-    const frame = document.getElementById('msgFrame');
-    const tabs = document.querySelectorAll('.msg-tab');
-    if (!tabs.length) return;
-    const nowPlaying = document.getElementById('msgNowPlaying');
-    const cards = document.querySelectorAll('.msg-card, .msg-empty');
-    const playerEmpty = document.getElementById('msgPlayerEmpty');
-
-    function selectCategory(cat) {
-      tabs.forEach(t => t.classList.toggle('active', t.dataset.category === cat));
-      cards.forEach(c => { c.style.display = (c.dataset.category === cat) ? '' : 'none'; });
-      const firstInCat = document.querySelector('.msg-card[data-category="' + cat + '"]');
-      if (firstInCat) {
-        loadCard(firstInCat);
-      } else if (frame) {
-        frame.src = '';
-        if (nowPlaying) { nowPlaying.querySelector('h3').textContent = ''; nowPlaying.querySelector('p').textContent = ''; }
-      }
-    }
-
-    function loadCard(card) {
-      document.querySelectorAll('.msg-card').forEach(c => c.classList.remove('active'));
-      card.classList.add('active');
-      if (frame) frame.src = card.dataset.src;
-      if (nowPlaying) {
-        nowPlaying.querySelector('h3').textContent = card.dataset.title;
-        nowPlaying.querySelector('p').textContent = card.dataset.meta;
-      }
-    }
-
-    tabs.forEach(tab => tab.addEventListener('click', () => selectCategory(tab.dataset.category)));
-
-    document.querySelectorAll('.msg-card').forEach(card => {
-      card.addEventListener('click', () => {
-        loadCard(card);
-        if (frame && typeof frame.scrollIntoView === 'function') {
-          try { frame.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(e) {}
-        }
-      });
-    });
-
-    // initialize: hide cards not matching the already-active tab
-    const activeTab = document.querySelector('.msg-tab.active');
-    if (activeTab) {
-      cards.forEach(c => { c.style.display = (c.dataset.category === activeTab.dataset.category) ? '' : 'none'; });
-    }
-  })();
+  function setActive(i) {
+    idx = i;
+    const p = people[i];
+    slides.forEach((s, k) => s.classList.toggle('is-active', k === i));
+    btns.forEach((b, k) => b.setAttribute('aria-pressed', k === i ? 'true' : 'false'));
+    cap.textContent = p.name;
+    chip.textContent = p.shortRole;
+    name.textContent = p.name;
+    detail.textContent = p.detail; detail.style.display = p.detail ? '' : 'none';
+    bio.innerHTML = '';
+    p.bullets.forEach(t => bio.appendChild(el('li', '', t)));
+    retrigger(body, 'ofc-swap');
+  }
+  setActive(0);
+  host.hidden = false;
+  srcBox.style.display = 'none';
+})();
 </script>
+<script src="ofc-polish.js" defer></script>
 </body>
 </html>

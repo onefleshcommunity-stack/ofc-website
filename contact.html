@@ -7,295 +7,230 @@
 <meta name="description" content="Get in touch with One Flesh Community.">
 <link rel="icon" href="logo.jpg">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="ofc-polish.css">
+<style>
+/* ---------- Contact page ---------- */
+.contact-grid { align-items: start; gap: clamp(24px, 4vw, 48px); }
+.contact-item {
+  background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 18px 20px; margin-bottom: 16px;
+  box-shadow: 0 8px 22px rgba(90, 50, 30, 0.07);
+}
+.contact-item .ic { background: var(--gold); color: var(--ink-on-gold); }
+.contact-item h3 { font-size: 18px; margin-bottom: 4px; }
+.contact-item a { color: var(--rust); font-weight: 700; word-break: break-word; }
+.contact-item p { color: var(--muted); }
+.ofc-formcard { background: #fff; border: 1px solid var(--line); border-radius: 22px; padding: clamp(22px, 3vw, 32px); box-shadow: 0 14px 36px rgba(90, 50, 30, 0.10); }
+.ofc-formcard h2 { font-size: 24px; margin-bottom: 4px; }
+.ofc-formcard .lead { color: var(--muted); font-size: 14.5px; margin-bottom: 18px; }
+.ofc-form-status { margin-top: 16px; padding: 14px 16px; border-radius: 14px; font-size: 15px; line-height: 1.55; display: none; }
+.ofc-form-status.is-ok { display: block; background: rgba(30, 111, 82, 0.12); color: var(--green-deep); }
+.ofc-form-status.is-err { display: block; background: rgba(161, 51, 39, 0.10); color: var(--rust-deep); }
+.ofc-form-status a { color: inherit; font-weight: 800; text-decoration: underline; }
+.form-basic button[disabled] { opacity: .65; cursor: progress; }
+.support-card .price-tag {
+  display: inline-block; padding: 5px 13px; border-radius: 999px; background: var(--gold); color: var(--ink-on-gold);
+  font-weight: 800; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 12px;
+}
+</style>
 </head>
 <body>
 <header class="site-nav">
-    <div class="wrap">
-      <a class="brand" href="index.html">
-        <img src="logo.jpg" alt="One Flesh Community logo">
-        <span class="word">One Flesh Community</span>
-      </a>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">&#9776;</button>
-      <nav id="navLinks">
-        <a class="" href="index.html">Home</a>
-      <a class="" href="about.html">About</a>
-      <a class="" href="values.html">Values</a>
-      <a class="" href="events.html">Events</a>
-      <a class="" href="gallery.html">Gallery</a>
-      <a class="" href="messages.html">Messages</a>
-      <a class="active" href="contact.html">Contact</a>
-      <a class="join-btn" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Join OFC</a>
-      </nav>
-    </div>
-  </header>
+<div class="wrap">
+<a class="brand" href="index.html">
+<img src="logo.jpg" alt="One Flesh Community logo">
+<span class="word">One Flesh Community</span>
+</a>
+<button class="nav-toggle" id="navToggle" aria-label="Toggle menu">&#9776;</button>
+<nav id="navLinks">
+<a class="" href="index.html">Home</a>
+<a class="" href="about.html">About</a>
+<a class="" href="values.html">Values</a>
+<a class="" href="events.html">Events</a>
+<a class="" href="gallery.html">Gallery</a>
+<a class="" href="messages.html">Messages</a>
+<a class="active" href="contact.html">Contact</a>
+<a class="join-btn" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Join OFC</a>
+</nav>
+</div>
+</header>
 
-  <div class="page-header wrap">
-    <span class="eyebrow">Get In Touch</span>
-    <h1>Contact One Flesh Community</h1>
-    <p>Questions before you apply? Reach out, we would love to hear from you.</p>
-  </div>
+<div class="page-header wrap">
+<span class="eyebrow">Get In Touch</span>
+<h1>Contact One Flesh Community</h1>
+<p>Questions before you apply? Reach out, we would love to hear from you.</p>
+</div>
 
-  <section class="block">
-    <div class="wrap contact-grid">
-      <div>
-        <div class="contact-item">
-          <div class="ic">&#9993;</div>
-          <div>
-            <h3>Email</h3>
-            <a href="mailto:onefleshcommunity@gmail.com">onefleshcommunity@gmail.com</a>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="ic">&#128172;</div>
-          <div>
-            <h3>WhatsApp</h3>
-            <p>[Add your WhatsApp contact number here]</p>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="ic">&#128205;</div>
-          <div>
-            <h3>Location</h3>
-            <p>Accra, Ghana</p>
-          </div>
-        </div>
-      </div>
-      <div>
-        <form class="form-basic" onsubmit="event.preventDefault(); alert('This form is a placeholder. Ask Claude to connect it to a real backend.');">
-          <label for="cName">Name</label>
-          <input type="text" id="cName" placeholder="Your name">
-          <label for="cEmail">Email</label>
-          <input type="email" id="cEmail" placeholder="you@example.com">
-          <label for="cMsg">Message</label>
-          <textarea id="cMsg" placeholder="How can we help?"></textarea>
-          <button class="btn-primary" type="submit" style="border:none; cursor:pointer;">Send Message</button>
-        </form>
-      </div>
-    </div>
-  </section>
+<section class="block">
+<div class="wrap contact-grid">
+<div>
+<div class="contact-item">
+<div class="ic">&#9993;</div>
+<div>
+<h3>Email</h3>
+<a href="mailto:onefleshcommunity@gmail.com">onefleshcommunity@gmail.com</a>
+</div>
+</div>
+<!-- Shown only once a WhatsApp number is set in the script at the bottom of this page -->
+<div class="contact-item" id="ofcWa" style="display:none;">
+<div class="ic">&#128172;</div>
+<div>
+<h3>WhatsApp</h3>
+<a id="ofcWaLink" href="#" target="_blank" rel="noopener">Chat with us on WhatsApp</a>
+</div>
+</div>
+<div class="contact-item">
+<div class="ic">&#128205;</div>
+<div>
+<h3>Location</h3>
+<p>Accra, Ghana</p>
+</div>
+</div>
+</div>
 
-  <section class="block alt">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="eyebrow">Not Ready For Community Yet?</span>
-        <h2>Other Ways We Can Help</h2>
-        <p>You do not need to join OFC to get support. These two options are open to anyone.</p>
-      </div>
-      <div class="grid-2">
-        <div class="card support-card">
-          <span class="price-tag">One-Time Session</span>
-          <h3>Individual or Couples Counseling</h3>
-          <p>Need to talk to someone but not ready to be part of a community? We offer a one-time counseling session for individuals or couples who just need support, no membership required.</p>
-        </div>
-        <div class="card support-card">
-          <span class="price-tag">Coaching</span>
-          <h3>Financial Coaching for Couples</h3>
-          <p>Practical, biblically grounded guidance on handling finances as a couple or individual, available as a standalone session outside full membership.</p>
-        </div>
-      </div>
-      <p style="text-align:center; color:var(--muted); font-size:13.5px; margin-top:24px;">To request either option, reach out by email or WhatsApp above.</p>
-    </div>
-  </section>
+<div class="ofc-formcard">
+<h2>Send us a message</h2>
+<p class="lead">We read every message and reply as soon as we can.</p>
+<form class="form-basic" id="ofcContactForm" novalidate>
+<label for="cName">Name</label>
+<input type="text" id="cName" name="name" placeholder="Your name" autocomplete="name" required>
+<label for="cEmail">Email</label>
+<input type="email" id="cEmail" name="email" placeholder="you@example.com" autocomplete="email" required>
+<label for="cMsg">Message</label>
+<textarea id="cMsg" name="message" placeholder="How can we help?" required></textarea>
+<button class="btn-primary" type="submit" id="ofcSend" style="border:none; cursor:pointer;">Send Message</button>
+</form>
+<div class="ofc-form-status" id="ofcFormStatus" role="status" aria-live="polite"></div>
+</div>
+</div>
+</section>
+
+<section class="block alt">
+<div class="wrap">
+<div class="section-head">
+<span class="eyebrow">Not Ready For Community Yet?</span>
+<h2>Other Ways We Can Help</h2>
+<p>You do not need to join OFC to get support. These two options are open to anyone.</p>
+</div>
+<div class="grid-2">
+<div class="card support-card">
+<span class="price-tag">One-Time Session</span>
+<h3>Individual or Couples Counseling</h3>
+<p>Need to talk to someone but not ready to be part of a community? We offer a one-time counseling session for individuals or couples who just need support, no membership required.</p>
+</div>
+<div class="card support-card">
+<span class="price-tag">Coaching</span>
+<h3>Financial Coaching for Couples</h3>
+<p>Practical, biblically grounded guidance on handling finances as a couple or individual, available as a standalone session outside full membership.</p>
+</div>
+</div>
+<p id="ofcSupportNote" style="text-align:center; color:var(--muted); font-size:14px; margin-top:24px;">To request either option, reach out by email above.</p>
+</div>
+</section>
 
 <footer>
-    <div class="wrap">
-      <div class="foot-top">
-        <div class="brand">
-          <img src="logo.jpg" alt="One Flesh Community logo">
-          <span class="word">One Flesh Community</span>
-        </div>
-        <nav>
-          <a href="index.html">Home</a>
-          <a href="about.html">About</a>
-          <a href="values.html">Values</a>
-          <a href="events.html">Events</a>
-          <a href="gallery.html">Gallery</a>
-          <a href="messages.html">Messages</a>
-          <a href="contact.html">Contact</a>
-        </nav>
-      </div>
-      <div class="bottom">Growing in oneness. Building Kingdom marriages. &nbsp;|&nbsp; onefleshcommunity@gmail.com</div>
-    </div>
-  </footer>
-<div class="lightbox" id="lightbox">
-  <button class="lb-close" id="lbClose" aria-label="Close">&times;</button>
-  <button class="lb-prev" id="lbPrev" aria-label="Previous">&#10094;</button>
-  <div class="lb-content" id="lbContent"></div>
-  <button class="lb-next" id="lbNext" aria-label="Next">&#10095;</button>
-  <div class="lb-caption" id="lbCaption"></div>
+<div class="wrap">
+<div class="foot-top">
+<div class="brand">
+<img src="logo.jpg" alt="One Flesh Community logo">
+<span class="word">One Flesh Community</span>
 </div>
+<nav>
+<a href="index.html">Home</a>
+<a href="about.html">About</a>
+<a href="values.html">Values</a>
+<a href="events.html">Events</a>
+<a href="gallery.html">Gallery</a>
+<a href="messages.html">Messages</a>
+<a href="contact.html">Contact</a>
+</nav>
+</div>
+<div class="bottom">Growing in oneness. Building Kingdom marriages. &nbsp;|&nbsp; onefleshcommunity@gmail.com</div>
+</div>
+</footer>
+
 <script>
-  const toggle = document.getElementById('navToggle');
-  const links = document.getElementById('navLinks');
-  if (toggle) {
-    toggle.addEventListener('click', () => links.classList.toggle('open'));
+const toggle = document.getElementById('navToggle');
+const links = document.getElementById('navLinks');
+if (toggle) {
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+}
+
+// ============================================================
+//  CONTACT SETTINGS: the only things you need to change
+// ============================================================
+const CONTACT = {
+  email: 'onefleshcommunity@gmail.com',
+  // WhatsApp number with country code, digits only, e.g. '233241234567'.
+  // Leave empty ('') and the WhatsApp card stays hidden until you have one.
+  whatsapp: '',
+  // Optional: web address of a form handler (for example a Google Apps Script or Formspree link).
+  // Leave empty ('') and the form opens the visitor's email app with the message ready to send.
+  formEndpoint: ''
+};
+
+(function() {
+  // WhatsApp card + wording that mentions it
+  const digits = (CONTACT.whatsapp || '').replace(/\D/g, '');
+  if (digits.length >= 8) {
+    const wa = document.getElementById('ofcWa');
+    document.getElementById('ofcWaLink').href = 'https://wa.me/' + digits;
+    wa.style.display = '';
+    document.getElementById('ofcSupportNote').textContent = 'To request either option, reach out by email or WhatsApp above.';
   }
 
-  // ---------- lightbox (event delegation so it works with dynamically added items too) ----------
-  (function() {
-    const lb = document.getElementById('lightbox');
-    if (!lb) return;
-    const lbContent = document.getElementById('lbContent');
-    const lbCaption = document.getElementById('lbCaption');
-    let current = 0;
+  const form = document.getElementById('ofcContactForm');
+  const status = document.getElementById('ofcFormStatus');
+  const send = document.getElementById('ofcSend');
+  if (!form) return;
 
-    function getItems() { return Array.from(document.querySelectorAll('.gitem')); }
+  function show(kind, html) {
+    status.className = 'ofc-form-status ' + (kind === 'ok' ? 'is-ok' : 'is-err');
+    status.innerHTML = html;
+  }
+  function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+  function openMail(url) {
+    const a = document.createElement('a');
+    a.href = url; a.style.display = 'none';
+    document.body.appendChild(a); a.click(); a.remove();
+  }
 
-    function render(idx) {
-      const items = getItems();
-      if (!items.length) return;
-      current = (idx + items.length) % items.length;
-      const el = items[current];
-      const type = el.dataset.type;
-      const src = el.dataset.src;
-      const caption = el.dataset.caption || '';
-      lbContent.innerHTML = '';
-      if (type === 'video') {
-        const v = document.createElement('video');
-        v.src = src; v.controls = true; v.autoplay = true;
-        lbContent.appendChild(v);
-      } else if (type === 'youtube') {
-        const iframe = document.createElement('iframe');
-        iframe.src = 'https://www.youtube.com/embed/' + src + '?autoplay=1';
-        iframe.setAttribute('frameborder','0');
-        iframe.setAttribute('allow','autoplay; encrypted-media; picture-in-picture');
-        iframe.setAttribute('allowfullscreen','');
-        lbContent.appendChild(iframe);
-      } else {
-        const img = document.createElement('img');
-        img.src = src; img.alt = caption;
-        lbContent.appendChild(img);
-      }
-      lbCaption.textContent = caption;
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    status.className = 'ofc-form-status';
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    const data = {
+      name: form.elements.name.value.trim(),
+      email: form.elements.email.value.trim(),
+      message: form.elements.message.value.trim()
+    };
+    const mailLink = '<a href="mailto:' + CONTACT.email + '">' + CONTACT.email + '</a>';
+
+    if (CONTACT.formEndpoint) {
+      send.disabled = true; send.textContent = 'Sending...';
+      const body = new URLSearchParams(Object.assign({ page: window.location.href }, data));
+      fetch(CONTACT.formEndpoint, { method: 'POST', mode: 'no-cors', body: body })
+        .then(() => {
+          show('ok', 'Thank you, ' + esc(data.name) + '. Your message has been sent and we will reply to you at ' + esc(data.email) + '.');
+          form.reset();
+        })
+        .catch(() => {
+          show('err', 'We could not send that just now. Please try again, or write to us at ' + mailLink + '.');
+        })
+        .then(() => { send.disabled = false; send.textContent = 'Send Message'; });
+      return;
     }
 
-    function open(idx) {
-      render(idx);
-      lb.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function close() {
-      lb.classList.remove('open');
-      lbContent.innerHTML = '';
-      document.body.style.overflow = '';
-    }
-
-    document.addEventListener('click', (e) => {
-      const item = e.target.closest('.gitem');
-      if (!item) return;
-      const items = getItems();
-      open(items.indexOf(item));
-    });
-    document.getElementById('lbClose').addEventListener('click', close);
-    document.getElementById('lbPrev').addEventListener('click', () => render(current - 1));
-    document.getElementById('lbNext').addEventListener('click', () => render(current + 1));
-    lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
-    document.addEventListener('keydown', (e) => {
-      if (!lb.classList.contains('open')) return;
-      if (e.key === 'Escape') close();
-      if (e.key === 'ArrowLeft') render(current - 1);
-      if (e.key === 'ArrowRight') render(current + 1);
-    });
-  })();
-
-  // ---------- auto-fetch new gallery uploads from GitHub (no code update needed) ----------
-  (function() {
-    const grid = document.getElementById('mainGalleryGrid');
-    if (!grid) return;
-    const note = document.getElementById('galleryLoadingNote');
-    const REPO = 'onefleshcommunity-stack/ofc-website';
-    const FOLDER = 'gallery-uploads';
-    if (note) note.style.display = 'block';
-
-    fetch('https://api.github.com/repos/' + REPO + '/contents/' + FOLDER)
-      .then(r => r.ok ? r.json() : [])
-      .then(files => {
-        if (note) note.style.display = 'none';
-        if (!Array.isArray(files)) return;
-        const imageExt = /\.(jpe?g|png|gif|webp)$/i;
-        const videoExt = /\.(mp4|mov|webm)$/i;
-        files.forEach(f => {
-          if (f.type !== 'file') return;
-          const caption = f.name.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ');
-          const div = document.createElement('div');
-          div.className = 'gitem';
-          div.dataset.caption = caption;
-          if (imageExt.test(f.name)) {
-            div.dataset.type = 'image';
-            div.dataset.src = f.download_url;
-            const img = document.createElement('img');
-            img.src = f.download_url; img.alt = caption;
-            div.appendChild(img);
-          } else if (videoExt.test(f.name)) {
-            div.dataset.type = 'video';
-            div.dataset.src = f.download_url;
-            const v = document.createElement('video');
-            v.muted = true; v.preload = 'metadata';
-            const source = document.createElement('source');
-            source.src = f.download_url;
-            v.appendChild(source);
-            const badge = document.createElement('div');
-            badge.className = 'play-badge';
-            badge.innerHTML = '&#9658;';
-            div.appendChild(v);
-            div.appendChild(badge);
-          } else {
-            return;
-          }
-          grid.appendChild(div);
-        });
-      })
-      .catch(() => { if (note) note.style.display = 'none'; });
-  })();
-
-  // ---------- messages page: tabs + player ----------
-  (function() {
-    const frame = document.getElementById('msgFrame');
-    const tabs = document.querySelectorAll('.msg-tab');
-    if (!tabs.length) return;
-    const nowPlaying = document.getElementById('msgNowPlaying');
-    const cards = document.querySelectorAll('.msg-card, .msg-empty');
-    const playerEmpty = document.getElementById('msgPlayerEmpty');
-
-    function selectCategory(cat) {
-      tabs.forEach(t => t.classList.toggle('active', t.dataset.category === cat));
-      cards.forEach(c => { c.style.display = (c.dataset.category === cat) ? '' : 'none'; });
-      const firstInCat = document.querySelector('.msg-card[data-category="' + cat + '"]');
-      if (firstInCat) {
-        loadCard(firstInCat);
-      } else if (frame) {
-        frame.src = '';
-        if (nowPlaying) { nowPlaying.querySelector('h3').textContent = ''; nowPlaying.querySelector('p').textContent = ''; }
-      }
-    }
-
-    function loadCard(card) {
-      document.querySelectorAll('.msg-card').forEach(c => c.classList.remove('active'));
-      card.classList.add('active');
-      if (frame) frame.src = card.dataset.src;
-      if (nowPlaying) {
-        nowPlaying.querySelector('h3').textContent = card.dataset.title;
-        nowPlaying.querySelector('p').textContent = card.dataset.meta;
-      }
-    }
-
-    tabs.forEach(tab => tab.addEventListener('click', () => selectCategory(tab.dataset.category)));
-
-    document.querySelectorAll('.msg-card').forEach(card => {
-      card.addEventListener('click', () => {
-        loadCard(card);
-        if (frame && typeof frame.scrollIntoView === 'function') {
-          try { frame.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(e) {}
-        }
-      });
-    });
-
-    // initialize: hide cards not matching the already-active tab
-    const activeTab = document.querySelector('.msg-tab.active');
-    if (activeTab) {
-      cards.forEach(c => { c.style.display = (c.dataset.category === activeTab.dataset.category) ? '' : 'none'; });
-    }
-  })();
+    // No form handler set up yet: open the visitor's email app with everything filled in
+    const subject = 'Message from ' + data.name + ' (website)';
+    const text = data.message + '\n\n' + data.name + '\n' + data.email;
+    openMail('mailto:' + CONTACT.email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(text));
+    show('ok', 'Your email app should open with your message ready to send. If nothing opens, please write to us directly at ' + mailLink + '.');
+  });
+})();
 </script>
+<script src="ofc-polish.js" defer></script>
 </body>
 </html>
