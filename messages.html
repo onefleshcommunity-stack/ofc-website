@@ -7,386 +7,416 @@
 <meta name="description" content="Watch and listen to teachings from One Flesh Community.">
 <link rel="icon" href="logo.jpg">
 <link rel="stylesheet" href="styles.css">
+<style>
+/* Messages page additions */
+.msg-tab { font-family: inherit; line-height: 1.2; }
+.msg-thumb.is-icon { background: linear-gradient(135deg, var(--green-deep) 0%, var(--green) 100%); }
+.msg-thumb.is-icon .audio-icon svg { width: 30px; height: 30px; display: block; }
+.msg-soon { display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 20px; text-align: center; }
+.msg-soon img { width: 92px; height: 92px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 4px rgba(255,255,255,0.85), 0 14px 30px rgba(0,0,0,0.3); }
+.msg-soon p { font-family: 'Fraunces', serif; font-size: clamp(18px, 3vw, 26px); color: #F3E7D8; line-height: 1.3; }
+@media (max-width: 480px) { .msg-soon img { width: 68px; height: 68px; } }
+</style>
 </head>
 <body>
 <header class="site-nav">
-    <div class="wrap">
-      <a class="brand" href="index.html">
-        <img src="logo.jpg" alt="One Flesh Community logo">
-        <span class="word">One Flesh Community</span>
-      </a>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">&#9776;</button>
-      <nav id="navLinks">
-        <a class="" href="index.html">Home</a>
-      <a class="" href="about.html">About</a>
-      <a class="" href="values.html">Values</a>
-      <a class="" href="events.html">Events</a>
-      <a class="" href="gallery.html">Gallery</a>
-      <a class="active" href="messages.html">Messages</a>
-      <a class="" href="contact.html">Contact</a>
-      <a class="join-btn" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Join OFC</a>
-      </nav>
-    </div>
-  </header>
-
-  <div class="page-header wrap">
-    <span class="eyebrow">Teaching &amp; Messages</span>
-    <h1>Messages</h1>
-    <p>Watch and listen to teachings from One Flesh Community, right here on the site.</p>
-  </div>
-
-  <section class="block">
-    <div class="wrap">
-      <div class="msg-tabs"><div class="msg-tab" data-category="audio">Audios</div><div class="msg-tab" data-category="reel">Reels</div><div class="msg-tab active" data-category="video">Videos</div></div>
-      <div class="msg-player msg-player-empty" id="msgPlayerEmpty"><p>Loading messages...</p></div>
-      <div class="msg-player" id="msgPlayerWrap" style="display:none;">
-        <iframe id="msgFrame" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-      </div>
-      <div class="msg-now-playing" id="msgNowPlaying"><h3></h3><p></p><button type="button" id="msgShareBtn" class="msg-share-btn">&#128279; Copy Link</button></div>
-      <div class="msg-list" id="msgList"></div>
-    </div>
-  </section>
-
-  <section class="cta-band">
-    <div class="wrap">
-      <h2>Want to grow with us?</h2>
-      <p>Join the community for ongoing teaching, prayer, and support.</p>
-      <a class="btn-primary" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Join One Flesh Community</a>
-    </div>
-  </section>
-
+<div class="wrap">
+<a class="brand" href="index.html">
+<img src="logo.jpg" alt="One Flesh Community logo">
+<span class="word">One Flesh Community</span>
+</a>
+<button class="nav-toggle" id="navToggle" aria-label="Toggle menu">&#9776;</button>
+<nav id="navLinks">
+<a class="" href="index.html">Home</a>
+<a class="" href="about.html">About</a>
+<a class="" href="values.html">Values</a>
+<a class="" href="events.html">Events</a>
+<a class="" href="gallery.html">Gallery</a>
+<a class="active" href="messages.html">Messages</a>
+<a class="" href="contact.html">Contact</a>
+<a class="join-btn" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Join OFC</a>
+</nav>
+</div>
+</header>
+<div class="page-header wrap">
+<span class="eyebrow">Teaching &amp; Messages</span>
+<h1>Messages</h1>
+<p>Watch and listen to teachings from One Flesh Community, right here on the site.</p>
+</div>
+<section class="block">
+<div class="wrap">
+<div class="msg-tabs" role="group" aria-label="Type of message"><button type="button" class="msg-tab active" data-category="video" aria-pressed="true">Videos</button><button type="button" class="msg-tab" data-category="audio" aria-pressed="false">Audios</button><button type="button" class="msg-tab" data-category="reel" aria-pressed="false">Reels</button></div>
+<div class="msg-player msg-player-empty" id="msgPlayerEmpty"><p>Loading messages...</p></div>
+<div class="msg-player" id="msgPlayerWrap" style="display:none;">
+<iframe id="msgFrame" title="Message player" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div>
+<div class="msg-now-playing" id="msgNowPlaying" style="display:none;"><h3></h3><p></p><button type="button" id="msgShareBtn" class="msg-share-btn">&#128279; Copy Link</button></div>
+<div class="msg-list" id="msgList"></div>
+</div>
+</section>
+<section class="cta-band">
+<div class="wrap">
+<h2>Want to grow with us?</h2>
+<p>Join the community for ongoing teaching, prayer, and support.</p>
+<a class="btn-primary" href="https://ofcmembershipform.vercel.app" target="_blank" rel="noopener">Join One Flesh Community</a>
+</div>
+</section>
 <footer>
-    <div class="wrap">
-      <div class="foot-top">
-        <div class="brand">
-          <img src="logo.jpg" alt="One Flesh Community logo">
-          <span class="word">One Flesh Community</span>
-        </div>
-        <nav>
-          <a href="index.html">Home</a>
-          <a href="about.html">About</a>
-          <a href="values.html">Values</a>
-          <a href="events.html">Events</a>
-          <a href="gallery.html">Gallery</a>
-          <a href="messages.html">Messages</a>
-          <a href="contact.html">Contact</a>
-        </nav>
-      </div>
-      <div class="bottom">Growing in oneness. Building Kingdom marriages. &nbsp;|&nbsp; onefleshcommunity@gmail.com</div>
-    </div>
-  </footer>
+<div class="wrap">
+<div class="foot-top">
+<div class="brand">
+<img src="logo.jpg" alt="One Flesh Community logo">
+<span class="word">One Flesh Community</span>
+</div>
+<nav>
+<a href="index.html">Home</a>
+<a href="about.html">About</a>
+<a href="values.html">Values</a>
+<a href="events.html">Events</a>
+<a href="gallery.html">Gallery</a>
+<a href="messages.html">Messages</a>
+<a href="contact.html">Contact</a>
+</nav>
+</div>
+<div class="bottom">Growing in oneness. Building Kingdom marriages. &nbsp;|&nbsp; onefleshcommunity@gmail.com</div>
+</div>
+</footer>
 <div class="lightbox" id="lightbox">
-  <button class="lb-close" id="lbClose" aria-label="Close">&times;</button>
-  <button class="lb-prev" id="lbPrev" aria-label="Previous">&#10094;</button>
-  <div class="lb-content" id="lbContent"></div>
-  <button class="lb-next" id="lbNext" aria-label="Next">&#10095;</button>
-  <div class="lb-caption" id="lbCaption"></div>
+<button class="lb-close" id="lbClose" aria-label="Close">&times;</button>
+<button class="lb-prev" id="lbPrev" aria-label="Previous">&#10094;</button>
+<div class="lb-content" id="lbContent"></div>
+<button class="lb-next" id="lbNext" aria-label="Next">&#10095;</button>
+<div class="lb-caption" id="lbCaption"></div>
 </div>
 <script>
-  const toggle = document.getElementById('navToggle');
-  const links = document.getElementById('navLinks');
-  if (toggle) {
-    toggle.addEventListener('click', () => links.classList.toggle('open'));
-  }
-
-  // ---------- lightbox (event delegation so it works with dynamically added items too) ----------
-  (function() {
-    const lb = document.getElementById('lightbox');
-    if (!lb) return;
-    const lbContent = document.getElementById('lbContent');
-    const lbCaption = document.getElementById('lbCaption');
-    let current = 0;
-
-    function getItems() { return Array.from(document.querySelectorAll('.gitem')); }
-
-    function render(idx) {
-      const items = getItems();
-      if (!items.length) return;
-      current = (idx + items.length) % items.length;
-      const el = items[current];
-      const type = el.dataset.type;
-      const src = el.dataset.src;
-      const caption = el.dataset.caption || '';
-      lbContent.innerHTML = '';
-      if (type === 'video') {
-        const v = document.createElement('video');
-        v.src = src; v.controls = true; v.autoplay = true;
-        lbContent.appendChild(v);
-      } else if (type === 'youtube') {
-        const iframe = document.createElement('iframe');
-        iframe.src = 'https://www.youtube.com/embed/' + src + '?autoplay=1';
-        iframe.setAttribute('frameborder','0');
-        iframe.setAttribute('allow','autoplay; encrypted-media; picture-in-picture');
-        iframe.setAttribute('allowfullscreen','');
-        lbContent.appendChild(iframe);
-      } else {
-        const img = document.createElement('img');
-        img.src = src; img.alt = caption;
-        lbContent.appendChild(img);
-      }
-      lbCaption.textContent = caption;
-    }
-
-    function open(idx) {
-      render(idx);
-      lb.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function close() {
-      lb.classList.remove('open');
-      lbContent.innerHTML = '';
-      document.body.style.overflow = '';
-    }
-
-    document.addEventListener('click', (e) => {
-      const item = e.target.closest('.gitem');
-      if (!item) return;
-      const items = getItems();
-      open(items.indexOf(item));
-    });
-    document.getElementById('lbClose').addEventListener('click', close);
-    document.getElementById('lbPrev').addEventListener('click', () => render(current - 1));
-    document.getElementById('lbNext').addEventListener('click', () => render(current + 1));
-    lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
-    document.addEventListener('keydown', (e) => {
-      if (!lb.classList.contains('open')) return;
-      if (e.key === 'Escape') close();
-      if (e.key === 'ArrowLeft') render(current - 1);
-      if (e.key === 'ArrowRight') render(current + 1);
-    });
-  })();
-
-  // ---------- auto-fetch new gallery uploads from GitHub, per category subfolder ----------
-  (function() {
-    const grid = document.getElementById('mainGalleryGrid');
-    if (!grid) return;
-    const note = document.getElementById('galleryLoadingNote');
-    const REPO = 'onefleshcommunity-stack/ofc-website';
-    const CATEGORIES = ['general','hangouts','retreats','bootcamps','lovefeast'];
-    if (note) note.style.display = 'block';
-    initGalleryTabs();
-
-    function fetchFolder(cat) {
-      return fetch('https://api.github.com/repos/' + REPO + '/contents/gallery-uploads/' + cat)
-        .then(r => r.ok ? r.json() : [])
-        .then(files => Array.isArray(files) ? files.map(f => ({ file: f, category: cat })) : [])
-        .catch(() => []);
-    }
-
-    Promise.all(CATEGORIES.map(fetchFolder)).then(results => {
-      if (note) note.style.display = 'none';
-      const imageExt = /\.(jpe?g|png|gif|webp)$/i;
-      const videoExt = /\.(mp4|mov|webm)$/i;
-      results.flat().forEach(({ file: f, category }) => {
-        if (f.type !== 'file') return;
-        const caption = f.name.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ');
-        const div = document.createElement('div');
-        div.className = 'gitem';
-        div.dataset.caption = caption;
-        div.dataset.category = category;
-        if (imageExt.test(f.name)) {
-          div.dataset.type = 'image';
-          div.dataset.src = f.download_url;
-          const img = document.createElement('img');
-          img.src = f.download_url; img.alt = caption;
-          div.appendChild(img);
-        } else if (videoExt.test(f.name)) {
-          div.dataset.type = 'video';
-          div.dataset.src = f.download_url;
-          const v = document.createElement('video');
-          v.muted = true; v.preload = 'metadata';
-          const source = document.createElement('source');
-          source.src = f.download_url;
-          v.appendChild(source);
-          const badge = document.createElement('div');
-          badge.className = 'play-badge';
-          badge.innerHTML = '&#9658;';
-          div.appendChild(v);
-          div.appendChild(badge);
-        } else {
-          return;
-        }
-        grid.appendChild(div);
-      });
-      initGalleryTabs();
-    });
-
-    function initGalleryTabs() {
-      const tabs = document.querySelectorAll('.gallery-tab');
-      const emptyNote = document.getElementById('galleryEmptyNote');
-      if (!tabs.length) return;
-
-      function selectCategory(cat) {
-        tabs.forEach(t => t.classList.toggle('active', t.dataset.category === cat));
-        const items = Array.from(grid.children);
-        let visibleCount = 0;
-        items.forEach(el => {
-          const show = el.dataset.category === cat;
-          el.style.display = show ? '' : 'none';
-          if (show) visibleCount++;
-        });
-        if (emptyNote) emptyNote.style.display = visibleCount === 0 ? 'block' : 'none';
-      }
-
-      tabs.forEach(tab => tab.addEventListener('click', () => selectCategory(tab.dataset.category)));
-      const activeTab = document.querySelector('.gallery-tab.active');
-      selectCategory(activeTab ? activeTab.dataset.category : 'general');
-    }
-  })();
-
-  // ---------- messages page: fetch messages-data.json and render everything ----------
-  (function() {
-    const tabs = document.querySelectorAll('.msg-tab');
-    const list = document.getElementById('msgList');
-    if (!tabs.length || !list) return;
-
-    const frame = document.getElementById('msgFrame');
-    const playerWrap = document.getElementById('msgPlayerWrap');
-    const playerEmpty = document.getElementById('msgPlayerEmpty');
-    const nowPlaying = document.getElementById('msgNowPlaying');
-    const shareBtn = document.getElementById('msgShareBtn');
-
-    const TAB_LABELS = { audio: 'audios', reel: 'reels', video: 'videos' };
-    let allItems = [];
-
-    function embedSrc(item) {
-      if (item.type === 'youtube') return 'https://www.youtube.com/embed/' + item.id;
-      if (item.type === 'drive') return 'https://drive.google.com/file/d/' + item.id + '/preview';
-      return '';
-    }
-    function thumbUrl(item) {
-      if (item.type === 'youtube') return 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
-      return '';
-    }
-
-    function buildCard(item, isActive) {
-      const div = document.createElement('div');
-      div.className = 'msg-card' + (isActive ? ' active' : '');
-      div.dataset.category = item.category;
-      div.dataset.id = item.id;
-      div.dataset.src = embedSrc(item);
-      div.dataset.title = item.title || '';
-      div.dataset.meta = (item.speaker || '') + (item.date ? ' ' + item.date : '');
-
-      const thumbDiv = document.createElement('div');
-      thumbDiv.className = 'msg-thumb';
-      const thumb = thumbUrl(item);
-      if (thumb) {
-        const img = document.createElement('img');
-        img.src = thumb; img.alt = item.title || '';
-        thumbDiv.appendChild(img);
-      } else {
-        const icon = document.createElement('div');
-        icon.className = 'audio-icon'; icon.innerHTML = '&#127925;';
-        thumbDiv.appendChild(icon);
-      }
-      const badge = document.createElement('div');
-      badge.className = 'play-badge'; badge.innerHTML = '&#9658;';
-      thumbDiv.appendChild(badge);
-
-      const infoDiv = document.createElement('div');
-      infoDiv.className = 'msg-info';
-      const h4 = document.createElement('h4'); h4.textContent = item.title || '';
-      const p = document.createElement('p');
-      p.textContent = (item.speaker || '') + (item.date ? ' · ' + item.date : '');
-      infoDiv.appendChild(h4); infoDiv.appendChild(p);
-
-      div.appendChild(thumbDiv); div.appendChild(infoDiv);
-      return div;
-    }
-
-    function buildEmpty(cat) {
-      const div = document.createElement('div');
-      div.className = 'msg-empty';
-      div.dataset.category = cat;
-      div.innerHTML = '<div style="font-size:32px; margin-bottom:10px;">&#127925;</div><p>No ' + TAB_LABELS[cat] + ' yet. Check back soon.</p>';
-      return div;
-    }
-
-    function loadCard(card) {
-      list.querySelectorAll('.msg-card').forEach(c => c.classList.remove('active'));
-      card.classList.add('active');
-      const src = card.dataset.src;
-      if (src && frame) {
-        frame.src = src;
-        playerWrap.style.display = '';
-        playerEmpty.style.display = 'none';
-      }
-      if (nowPlaying) {
-        nowPlaying.querySelector('h3').textContent = card.dataset.title;
-        nowPlaying.querySelector('p').textContent = card.dataset.meta;
-      }
-      const url = new URL(window.location.href);
-      url.searchParams.set('v', card.dataset.id);
-      try { window.history.replaceState(null, '', url.toString()); } catch(e) {}
-      if (shareBtn) shareBtn.dataset.shareUrl = url.toString();
-    }
-
-    if (shareBtn) {
-      shareBtn.addEventListener('click', () => {
-        const url = shareBtn.dataset.shareUrl || window.location.href;
-        const done = () => {
-          const original = shareBtn.textContent;
-          shareBtn.textContent = 'Link Copied!';
-          setTimeout(() => { shareBtn.textContent = original; }, 1800);
-        };
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(url).then(done).catch(() => { window.prompt('Copy this link:', url); });
-        } else {
-          window.prompt('Copy this link:', url);
-        }
-      });
-    }
-
-    function selectCategory(cat, preferredCard) {
-      tabs.forEach(t => t.classList.toggle('active', t.dataset.category === cat));
-      Array.from(list.children).forEach(c => { c.style.display = (c.dataset.category === cat) ? '' : 'none'; });
-      const target = preferredCard || list.querySelector('.msg-card[data-category="' + cat + '"]');
-      if (target) {
-        loadCard(target);
-      } else {
-        if (frame) frame.src = '';
-        playerWrap.style.display = 'none';
-        playerEmpty.style.display = '';
-        playerEmpty.querySelector('p').textContent = 'No ' + TAB_LABELS[cat] + ' yet.';
-        if (nowPlaying) { nowPlaying.querySelector('h3').textContent = ''; nowPlaying.querySelector('p').textContent = ''; }
-      }
-    }
-
-    function render(items) {
-      allItems = items;
-      list.innerHTML = '';
-      ['audio','reel','video'].forEach(cat => {
-        const inCat = items.filter(m => m.category === cat);
-        inCat.forEach((m, i) => list.appendChild(buildCard(m, false)));
-        if (!inCat.length) list.appendChild(buildEmpty(cat));
-      });
-      list.querySelectorAll('.msg-card').forEach(card => {
-        card.addEventListener('click', () => {
-          loadCard(card);
-          if (frame && typeof frame.scrollIntoView === 'function') {
-            try { frame.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(e) {}
-          }
-        });
-      });
-
-      const params = new URLSearchParams(window.location.search);
-      const wantedId = params.get('v');
-      const deepLinkCard = wantedId ? list.querySelector('.msg-card[data-id="' + wantedId + '"]') : null;
-      if (deepLinkCard) {
-        selectCategory(deepLinkCard.dataset.category, deepLinkCard);
-      } else {
-        selectCategory('video');
-      }
-    }
-
-    tabs.forEach(tab => tab.addEventListener('click', () => selectCategory(tab.dataset.category)));
-
-    fetch('messages-data.json?_=' + Date.now())
-      .then(r => r.ok ? r.json() : [])
-      .then(items => { render(Array.isArray(items) ? items : []); })
-      .catch(() => { render([]); });
-  })();
+const toggle = document.getElementById('navToggle');
+const links = document.getElementById('navLinks');
+if (toggle) {
+toggle.addEventListener('click', () => links.classList.toggle('open'));
+}
+// ---------- lightbox (event delegation so it works with dynamically added items too) ----------
+(function() {
+const lb = document.getElementById('lightbox');
+if (!lb) return;
+const lbContent = document.getElementById('lbContent');
+const lbCaption = document.getElementById('lbCaption');
+let current = 0;
+function getItems() { return Array.from(document.querySelectorAll('.gitem')); }
+function render(idx) {
+const items = getItems();
+if (!items.length) return;
+current = (idx + items.length) % items.length;
+const el = items[current];
+const type = el.dataset.type;
+const src = el.dataset.src;
+const caption = el.dataset.caption || '';
+lbContent.innerHTML = '';
+if (type === 'video') {
+const v = document.createElement('video');
+v.src = src; v.controls = true; v.autoplay = true;
+lbContent.appendChild(v);
+} else if (type === 'youtube') {
+const iframe = document.createElement('iframe');
+iframe.src = 'https://www.youtube.com/embed/' + src + '?autoplay=1';
+iframe.setAttribute('frameborder','0');
+iframe.setAttribute('allow','autoplay; encrypted-media; picture-in-picture');
+iframe.setAttribute('allowfullscreen','');
+lbContent.appendChild(iframe);
+} else {
+const img = document.createElement('img');
+img.src = src; img.alt = caption;
+lbContent.appendChild(img);
+}
+lbCaption.textContent = caption;
+}
+function open(idx) {
+render(idx);
+lb.classList.add('open');
+document.body.style.overflow = 'hidden';
+}
+function close() {
+lb.classList.remove('open');
+lbContent.innerHTML = '';
+document.body.style.overflow = '';
+}
+document.addEventListener('click', (e) => {
+const item = e.target.closest('.gitem');
+if (!item) return;
+const items = getItems();
+open(items.indexOf(item));
+});
+document.getElementById('lbClose').addEventListener('click', close);
+document.getElementById('lbPrev').addEventListener('click', () => render(current - 1));
+document.getElementById('lbNext').addEventListener('click', () => render(current + 1));
+lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+document.addEventListener('keydown', (e) => {
+if (!lb.classList.contains('open')) return;
+if (e.key === 'Escape') close();
+if (e.key === 'ArrowLeft') render(current - 1);
+if (e.key === 'ArrowRight') render(current + 1);
+});
+})();
+// ---------- auto-fetch new gallery uploads from GitHub, per category subfolder ----------
+(function() {
+const grid = document.getElementById('mainGalleryGrid');
+if (!grid) return;
+const note = document.getElementById('galleryLoadingNote');
+const REPO = 'onefleshcommunity-stack/ofc-website';
+const CATEGORIES = ['general','hangouts','retreats','bootcamps','lovefeast'];
+if (note) note.style.display = 'block';
+initGalleryTabs();
+function fetchFolder(cat) {
+return fetch('https://api.github.com/repos/' + REPO + '/contents/gallery-uploads/' + cat)
+.then(r => r.ok ? r.json() : [])
+.then(files => Array.isArray(files) ? files.map(f => ({ file: f, category: cat })) : [])
+.catch(() => []);
+}
+Promise.all(CATEGORIES.map(fetchFolder)).then(results => {
+if (note) note.style.display = 'none';
+const imageExt = /\.(jpe?g|png|gif|webp)$/i;
+const videoExt = /\.(mp4|mov|webm)$/i;
+results.flat().forEach(({ file: f, category }) => {
+if (f.type !== 'file') return;
+const caption = f.name.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ');
+const div = document.createElement('div');
+div.className = 'gitem';
+div.dataset.caption = caption;
+div.dataset.category = category;
+if (imageExt.test(f.name)) {
+div.dataset.type = 'image';
+div.dataset.src = f.download_url;
+const img = document.createElement('img');
+img.src = f.download_url; img.alt = caption;
+div.appendChild(img);
+} else if (videoExt.test(f.name)) {
+div.dataset.type = 'video';
+div.dataset.src = f.download_url;
+const v = document.createElement('video');
+v.muted = true; v.preload = 'metadata';
+const source = document.createElement('source');
+source.src = f.download_url;
+v.appendChild(source);
+const badge = document.createElement('div');
+badge.className = 'play-badge';
+badge.innerHTML = '&#9658;';
+div.appendChild(v);
+div.appendChild(badge);
+} else {
+return;
+}
+grid.appendChild(div);
+});
+initGalleryTabs();
+});
+function initGalleryTabs() {
+const tabs = document.querySelectorAll('.gallery-tab');
+const emptyNote = document.getElementById('galleryEmptyNote');
+if (!tabs.length) return;
+function selectCategory(cat) {
+tabs.forEach(t => t.classList.toggle('active', t.dataset.category === cat));
+const items = Array.from(grid.children);
+let visibleCount = 0;
+items.forEach(el => {
+const show = el.dataset.category === cat;
+el.style.display = show ? '' : 'none';
+if (show) visibleCount++;
+});
+if (emptyNote) emptyNote.style.display = visibleCount === 0 ? 'block' : 'none';
+}
+tabs.forEach(tab => tab.addEventListener('click', () => selectCategory(tab.dataset.category)));
+const activeTab = document.querySelector('.gallery-tab.active');
+selectCategory(activeTab ? activeTab.dataset.category : 'general');
+}
+})();
+// ---------- messages page: fetch messages-data.json and render everything ----------
+(function() {
+const tabs = document.querySelectorAll('.msg-tab');
+const list = document.getElementById('msgList');
+if (!tabs.length || !list) return;
+const frame = document.getElementById('msgFrame');
+const playerWrap = document.getElementById('msgPlayerWrap');
+const playerEmpty = document.getElementById('msgPlayerEmpty');
+const nowPlaying = document.getElementById('msgNowPlaying');
+const shareBtn = document.getElementById('msgShareBtn');
+const TAB_LABELS = { audio: 'audios', reel: 'reels', video: 'videos' };
+const CATEGORY_ORDER = ['video', 'audio', 'reel'];
+const SVG_OPEN = '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+const ICONS = {
+video: SVG_OPEN + '<rect x="3" y="7" width="26" height="18" rx="4"/><path d="M13 12.5v7l6-3.5z" fill="currentColor"/></svg>',
+reel: SVG_OPEN + '<rect x="9" y="3" width="14" height="26" rx="3.5"/><path d="M14 13v6l5-3z" fill="currentColor"/></svg>',
+audio: SVG_OPEN + '<path d="M12 22V8l12-3v14"/><circle cx="9" cy="22" r="3"/><circle cx="21" cy="19" r="3"/></svg>'
+};
+const MONTHS = { jan:0, feb:1, mar:2, apr:3, may:4, jun:5, jul:6, aug:7, sep:8, oct:9, nov:10, dec:11 };
+function embedSrc(item) {
+if (item.type === 'youtube') return 'https://www.youtube.com/embed/' + item.id;
+if (item.type === 'drive') return 'https://drive.google.com/file/d/' + item.id + '/preview';
+return '';
+}
+function thumbUrl(item) {
+if (item.type === 'youtube') return 'https://img.youtube.com/vi/' + item.id + '/hqdefault.jpg';
+return '';
+}
+// understands "6 September 2026", "September 6, 2026" and "2026-09-06"
+function parseDate(str) {
+if (!str) return null;
+let m = /^(\d{4})-(\d{2})-(\d{2})/.exec(str);
+if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+m = /(\d{1,2})(?:st|nd|rd|th)?\s+([A-Za-z]+)\.?,?\s+(\d{4})/.exec(str);
+if (m) {
+const mo = MONTHS[m[2].slice(0, 3).toLowerCase()];
+if (mo !== undefined) return new Date(+m[3], mo, +m[1]);
+}
+const t = Date.parse(str);
+return isNaN(t) ? null : new Date(t);
+}
+// newest first; anything without a readable date goes last, in the order you wrote it
+function newestFirst(arr) {
+return arr
+.map((m, i) => ({ m: m, i: i, d: parseDate(m.date) }))
+.sort((a, b) => {
+if (a.d && b.d) return (b.d - a.d) || (a.i - b.i);
+if (a.d) return -1;
+if (b.d) return 1;
+return a.i - b.i;
+})
+.map(x => x.m);
+}
+function buildCard(item, isActive) {
+const div = document.createElement('div');
+div.className = 'msg-card' + (isActive ? ' active' : '');
+div.dataset.category = item.category;
+div.dataset.id = item.id;
+div.dataset.src = embedSrc(item);
+div.dataset.title = item.title || '';
+div.dataset.meta = (item.speaker || '') + (item.date ? ' ' + item.date : '');
+div.setAttribute('role', 'button');
+div.tabIndex = 0;
+div.setAttribute('aria-label', 'Play ' + (item.title || 'message'));
+const thumbDiv = document.createElement('div');
+thumbDiv.className = 'msg-thumb';
+const thumb = thumbUrl(item);
+if (thumb) {
+const img = document.createElement('img');
+img.src = thumb; img.alt = item.title || '';
+thumbDiv.appendChild(img);
+const badge = document.createElement('div');
+badge.className = 'play-badge'; badge.innerHTML = '&#9658;';
+thumbDiv.appendChild(badge);
+} else {
+// no thumbnail available (e.g. Google Drive): show an icon that matches the type
+thumbDiv.classList.add('is-icon');
+const icon = document.createElement('div');
+icon.className = 'audio-icon';
+icon.innerHTML = ICONS[item.category] || ICONS.video;
+thumbDiv.appendChild(icon);
+}
+const infoDiv = document.createElement('div');
+infoDiv.className = 'msg-info';
+const h4 = document.createElement('h4'); h4.textContent = item.title || '';
+const p = document.createElement('p');
+p.textContent = (item.speaker || '') + (item.date ? ' · ' + item.date : '');
+infoDiv.appendChild(h4); infoDiv.appendChild(p);
+div.appendChild(thumbDiv); div.appendChild(infoDiv);
+return div;
+}
+function loadCard(card) {
+list.querySelectorAll('.msg-card').forEach(c => { c.classList.remove('active'); c.removeAttribute('aria-current'); });
+card.classList.add('active');
+card.setAttribute('aria-current', 'true');
+const src = card.dataset.src;
+if (src && frame) {
+frame.src = src;
+frame.title = card.dataset.title || 'Message player';
+playerWrap.style.display = '';
+playerEmpty.style.display = 'none';
+}
+if (nowPlaying) {
+nowPlaying.querySelector('h3').textContent = card.dataset.title;
+nowPlaying.querySelector('p').textContent = card.dataset.meta;
+nowPlaying.style.display = '';
+}
+const url = new URL(window.location.href);
+url.searchParams.set('v', card.dataset.id);
+try { window.history.replaceState(null, '', url.toString()); } catch(e) {}
+if (shareBtn) shareBtn.dataset.shareUrl = url.toString();
+}
+// shown when a tab has no messages yet
+function showComingSoon(cat) {
+if (frame) frame.src = '';
+playerWrap.style.display = 'none';
+playerEmpty.style.display = '';
+playerEmpty.innerHTML = '';
+const box = document.createElement('div');
+box.className = 'msg-soon';
+const logo = document.createElement('img');
+logo.src = 'logo.jpg'; logo.alt = 'One Flesh Community logo';
+logo.onerror = function() { logo.style.display = 'none'; };
+const p = document.createElement('p');
+const label = TAB_LABELS[cat] || 'messages';
+p.textContent = label.charAt(0).toUpperCase() + label.slice(1) + ' will be shared soon';
+box.appendChild(logo); box.appendChild(p);
+playerEmpty.appendChild(box);
+if (nowPlaying) nowPlaying.style.display = 'none';
+}
+if (shareBtn) {
+shareBtn.addEventListener('click', () => {
+const url = shareBtn.dataset.shareUrl || window.location.href;
+const done = () => {
+const original = shareBtn.textContent;
+shareBtn.textContent = 'Link Copied!';
+setTimeout(() => { shareBtn.textContent = original; }, 1800);
+};
+if (navigator.clipboard && navigator.clipboard.writeText) {
+navigator.clipboard.writeText(url).then(done).catch(() => { window.prompt('Copy this link:', url); });
+} else {
+window.prompt('Copy this link:', url);
+}
+});
+}
+function selectCategory(cat, preferredCard) {
+tabs.forEach(t => {
+const on = t.dataset.category === cat;
+t.classList.toggle('active', on);
+t.setAttribute('aria-pressed', on ? 'true' : 'false');
+});
+Array.from(list.children).forEach(c => { c.style.display = (c.dataset.category === cat) ? '' : 'none'; });
+const target = preferredCard || list.querySelector('.msg-card[data-category="' + cat + '"]');
+if (target) loadCard(target); else showComingSoon(cat);
+}
+function render(items) {
+list.innerHTML = '';
+CATEGORY_ORDER.forEach(cat => {
+newestFirst(items.filter(m => m.category === cat)).forEach(m => list.appendChild(buildCard(m, false)));
+});
+list.querySelectorAll('.msg-card').forEach(card => {
+const play = () => {
+loadCard(card);
+if (frame && typeof frame.scrollIntoView === 'function') {
+try { frame.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(e) {}
+}
+};
+card.addEventListener('click', play);
+card.addEventListener('keydown', (e) => {
+if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); play(); }
+});
+});
+const params = new URLSearchParams(window.location.search);
+const wantedId = params.get('v');
+const deepLinkCard = wantedId ? list.querySelector('.msg-card[data-id="' + wantedId + '"]') : null;
+if (deepLinkCard) {
+selectCategory(deepLinkCard.dataset.category, deepLinkCard);
+} else {
+// open the first tab that actually has something in it (videos, then audios, then reels)
+const firstWithItems = CATEGORY_ORDER.find(cat => list.querySelector('.msg-card[data-category="' + cat + '"]'));
+selectCategory(firstWithItems || 'video');
+}
+}
+tabs.forEach(tab => tab.addEventListener('click', () => selectCategory(tab.dataset.category)));
+fetch('messages-data.json?_=' + Date.now())
+.then(r => r.ok ? r.json() : [])
+.then(items => { render(Array.isArray(items) ? items : []); })
+.catch(() => { render([]); });
+})();
 </script>
 </body>
 </html>
