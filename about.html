@@ -14,27 +14,53 @@
 .ofc-show--top { align-items: start; }
 .ofc-show--top .ofc-stage { position: sticky; top: 96px; }
 
-/* story: the year on a colour stage */
-.ofc-ystage { position: relative; aspect-ratio: 6 / 5; border-radius: 24px; overflow: hidden; background: #7F241B; box-shadow: 0 22px 50px rgba(60, 25, 10, 0.22); }
-.ofc-yslide {
-  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end;
-  padding: clamp(24px, 5%, 44px); color: #fff; opacity: 0; transition: opacity .8s ease;
+/* ---------- our story: a connected journey of dots, with the milestone in focus told below ---------- */
+.ofc-journey { max-width: 900px; margin: 0 auto; }
+.ofc-journey__track { position: relative; display: flex; align-items: flex-start; justify-content: space-between; padding: 6px 2px 0; }
+.ofc-journey__line { position: absolute; left: 26px; right: 26px; top: 21px; height: 3px; background: var(--line); border-radius: 3px; }
+.ofc-journey__line-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--rust), var(--gold)); border-radius: 3px; transition: width .5s cubic-bezier(.3,.7,.3,1); }
+.ofc-journey__seg { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 1 1 0; min-width: 0; }
+.ofc-journey__dot { position: relative; width: 44px; height: 44px; border-radius: 50%; border: 0; padding: 0; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; -webkit-appearance: none; appearance: none; }
+.ofc-journey__dot .core { width: 16px; height: 16px; border-radius: 50%; background: #fff; border: 3px solid var(--line); transition: transform .2s ease, border-color .2s ease, background .2s ease; }
+.ofc-journey__dot .ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--rust); opacity: 0; transform: scale(.7); transition: opacity .25s ease, transform .25s ease; }
+.ofc-journey__dot:hover .core { border-color: var(--gold); }
+.ofc-journey__seg.is-done .ofc-journey__dot .core { background: var(--rust); border-color: var(--rust); }
+.ofc-journey__seg.is-active .ofc-journey__dot .core { background: var(--rust); border-color: var(--rust); transform: scale(1.25); }
+.ofc-journey__seg.is-active .ofc-journey__dot .ring { opacity: 1; transform: scale(1); }
+.ofc-journey__yr { font-size: 13px; font-weight: 700; color: var(--muted); text-align: center; line-height: 1.25; white-space: nowrap; }
+.ofc-journey__seg.is-active .ofc-journey__yr { color: var(--rust); }
+
+/* the milestone in focus */
+.ofc-journey__card { position: relative; overflow: hidden; margin-top: 36px; border-radius: 24px; padding: clamp(28px, 5vw, 48px); color: #fff; box-shadow: 0 22px 50px rgba(60, 25, 10, 0.2); }
+.ofc-journey__card.t-rust  { background: linear-gradient(140deg, #A13327 0%, #7F241B 100%); }
+.ofc-journey__card.t-green { background: linear-gradient(140deg, #1E6F52 0%, #164F39 100%); }
+.ofc-journey__card.t-gold  { background: linear-gradient(140deg, #8A6512 0%, #5E430A 100%); }
+.ofc-journey__card::before {
+  content: ""; position: absolute; right: -60px; top: -40px; width: 460px; height: 260px; pointer-events: none; opacity: .28;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='460' height='260' viewBox='0 0 460 260' fill='none'%3E%3Ccircle cx='175' cy='130' r='115' stroke='%23F4E9D8' stroke-width='1.6'/%3E%3Ccircle cx='285' cy='130' r='115' stroke='%23F4E9D8' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat center / contain;
 }
-.ofc-yslide.is-active { opacity: 1; }
-.ofc-yslide.t-rust  { background: linear-gradient(140deg, #A13327 0%, #7F241B 100%); }
-.ofc-yslide.t-green { background: linear-gradient(140deg, #1E6F52 0%, #164F39 100%); }
-.ofc-yslide.t-gold  { background: linear-gradient(140deg, #8A6512 0%, #5E430A 100%); }
-.ofc-yslide::before {
-  content: ""; position: absolute; right: -60px; top: -30px; width: 520px; height: 300px; pointer-events: none; opacity: .3;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='300' viewBox='0 0 520 300' fill='none'%3E%3Ccircle cx='200' cy='150' r='130' stroke='%23F4E9D8' stroke-width='1.6'/%3E%3Ccircle cx='320' cy='150' r='130' stroke='%23F4E9D8' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat center / contain;
-}
-.ofc-yslide__n { position: absolute; top: clamp(22px, 5%, 40px); left: clamp(24px, 5%, 44px); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: rgba(255,255,255,.78); }
-.ofc-yslide__label { position: relative; font-size: 14px; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; color: #F3E2B0; margin-bottom: 2px; min-height: 1em; }
-.ofc-yslide__year { position: relative; font-family: 'Fraunces', serif; font-weight: 700; font-size: clamp(64px, 11vw, 132px); line-height: 1; color: #fff; }
-.ofc-story-note { font-family: 'Fraunces', serif; font-weight: 600; font-size: clamp(22px, 2.6vw, 30px); line-height: 1.3; color: var(--rust); margin: 14px 0 0; max-width: 24ch; }
+.ofc-journey__of { position: relative; font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: rgba(255,255,255,.75); margin-bottom: 12px; }
+.ofc-journey__year { position: relative; font-family: 'Fraunces', serif; font-weight: 700; font-size: clamp(30px, 3.6vw, 42px); line-height: 1.05; margin-bottom: 12px; }
+.ofc-journey__text { position: relative; font-size: clamp(17px, 2vw, 20px); line-height: 1.6; max-width: 52ch; color: rgba(255,255,255,.96); }
+.ofc-journey__timerwrap { position: relative; margin-top: 26px; height: 3px; border-radius: 3px; background: rgba(255,255,255,.28); overflow: hidden; }
+.ofc-journey__timer { display: block; height: 100%; width: 0; background: #fff; border-radius: 3px; }
+.ofc-journey.is-manual .ofc-journey__timerwrap { display: none; }
+.ofc-journey__timer.is-running { animation: ofc-jtimer var(--ofc-dur, 6.5s) linear forwards; }
+@keyframes ofc-jtimer { to { width: 100%; } }
+.ofc-journey button:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
 .ofc-story-src { list-style: none; margin: 0; padding: 0; max-width: 640px; margin-inline: auto; }
 .ofc-story-src li { padding: 14px 0 14px 18px; border-left: 3px solid var(--gold); margin-bottom: 8px; }
 .ofc-story-src li::before { content: attr(data-year); display: block; font-weight: 800; color: var(--rust); }
+
+@media (max-width: 640px) {
+  .ofc-journey__track { overflow-x: auto; padding-bottom: 4px; }
+  .ofc-journey__yr { font-size: 11.5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ofc-journey__line-fill { transition: none; }
+  .ofc-journey__timer.is-running { animation: none; }
+}
 
 /* founding couples: full photo on a soft backdrop, nothing cropped */
 .ofc-photo { position: relative; aspect-ratio: 4 / 3; border-radius: 16px; overflow: hidden; background: #e6dcc8; display: flex; align-items: center; justify-content: center; padding: 10px; }
@@ -104,7 +130,7 @@
 <li data-year="July 2026">The Quarshies introduced the vision to the Edu-Ansahs. First marriage retreat.</li>
 <li data-year="August 2026">OFC Launch.</li>
 </ol>
-<div class="ofc-show" id="ofcStory" hidden></div>
+<div class="ofc-journey" id="ofcStory" hidden></div>
 </div>
 </section>
 
@@ -277,7 +303,7 @@ function el(tag, cls, text) {
 }
 function retrigger(node, cls) { node.classList.remove(cls); void node.offsetWidth; node.classList.add(cls); }
 
-// ---------- our story: each milestone on a colour stage, advancing by itself ----------
+// ---------- our story: a connected journey of dots; the milestone in focus is told below ----------
 (function() {
   const src = document.getElementById('ofcStorySrc');
   const host = document.getElementById('ofcStory');
@@ -285,50 +311,61 @@ function retrigger(node, cls) { node.classList.remove(cls); void node.offsetWidt
   const items = Array.from(src.querySelectorAll('li')).map(li => ({ year: li.dataset.year || '', note: li.textContent.trim() }));
   if (!items.length) return;
   const THEMES = ['t-rust', 't-green', 't-gold', 't-rust', 't-green'];
+  const DUR_MS = 6500;
   const n = items.length;
-  let idx = 0, manual = calm;
+  let idx = 0, manual = calm, timerEl = null;
 
-  const stage = el('div', 'ofc-ystage');
-  stage.setAttribute('aria-hidden', 'true');   // the same words are in the panel, so screen readers do not hear it twice
-  const slides = items.map((it, i) => {
-    const s = el('div', 'ofc-yslide ' + THEMES[i % THEMES.length]);
-    const m = /^(.*?)\s*(\d{4})$/.exec(it.year);
-    s.appendChild(el('span', 'ofc-yslide__n', 'Milestone ' + (i + 1) + ' of ' + n));
-    s.appendChild(el('div', 'ofc-yslide__label', m ? m[1] : ''));
-    s.appendChild(el('div', 'ofc-yslide__year', m ? m[2] : it.year));
-    stage.appendChild(s);
-    return s;
+  const track = el('div', 'ofc-journey__track');
+  track.setAttribute('role', 'group');
+  track.setAttribute('aria-label', 'Our story, ' + n + ' milestones');
+  const line = el('div', 'ofc-journey__line');
+  const lineFill = el('div', 'ofc-journey__line-fill');
+  line.appendChild(lineFill);
+  track.appendChild(line);
+
+  const segs = items.map((it, i) => {
+    const seg = el('div', 'ofc-journey__seg');
+    const dot = el('button', 'ofc-journey__dot'); dot.type = 'button';
+    dot.setAttribute('aria-label', it.year + ': ' + it.note);
+    dot.appendChild(el('span', 'ring'));
+    dot.appendChild(el('span', 'core'));
+    dot.addEventListener('click', () => { manual = true; host.classList.add('is-manual'); setActive(i); });
+    seg.appendChild(dot);
+    seg.appendChild(el('span', 'ofc-journey__yr', it.year));
+    track.appendChild(seg);
+    return seg;
   });
 
-  const panel = el('div', 'ofc-show__panel');
-  const chip = el('span', 'ofc-chip');
-  const note = el('h2', 'ofc-story-note');
-  note.setAttribute('aria-live', 'polite');
-  const list = el('ul', 'ofc-lineup ofc-lineup--auto');
-  const btns = items.map((it, i) => {
-    const li = el('li');
-    const b = el('button', 'ofc-lineup__btn'); b.type = 'button';
-    b.appendChild(el('span', 'ofc-lineup__name', it.year));
-    b.appendChild(el('span', 'ofc-lineup__meta', String(i + 1) + ' / ' + n));
-    b.addEventListener('click', () => { manual = true; host.classList.add('is-manual'); setActive(i); });
-    li.appendChild(b); list.appendChild(li);
-    return b;
-  });
-  panel.appendChild(chip); panel.appendChild(note); panel.appendChild(list);
-  host.appendChild(stage); host.appendChild(panel);
+  const card = el('div', 'ofc-journey__card');
+  card.setAttribute('aria-live', 'polite');
+  const ofLabel = el('div', 'ofc-journey__of');
+  const yearEl = el('div', 'ofc-journey__year');
+  const textEl = el('p', 'ofc-journey__text');
+  const timerWrap = el('div', 'ofc-journey__timerwrap');
+  timerEl = el('span', 'ofc-journey__timer');
+  timerWrap.appendChild(timerEl);
+  card.appendChild(ofLabel); card.appendChild(yearEl); card.appendChild(textEl); card.appendChild(timerWrap);
+
+  host.style.setProperty('--ofc-dur', (DUR_MS / 1000) + 's');
+  host.appendChild(track); host.appendChild(card);
   if (manual) host.classList.add('is-manual');
 
+  function runTimer() {
+    timerEl.classList.remove('is-running'); void timerEl.offsetWidth;
+    if (!manual) timerEl.classList.add('is-running');
+  }
   function setActive(i) {
     idx = i;
-    slides.forEach((s, k) => s.classList.toggle('is-active', k === i));
-    btns.forEach((b, k) => b.setAttribute('aria-pressed', k === i ? 'true' : 'false'));
-    chip.textContent = items[i].year;
-    note.textContent = items[i].note;
-    retrigger(note, 'ofc-swap');
+    segs.forEach((seg, k) => { seg.classList.toggle('is-active', k === i); seg.classList.toggle('is-done', k < i); });
+    lineFill.style.width = (n > 1 ? (i / (n - 1)) * 100 : 0) + '%';
+    card.className = 'ofc-journey__card ' + THEMES[i % THEMES.length];
+    ofLabel.textContent = 'Milestone ' + (i + 1) + ' of ' + n;
+    yearEl.textContent = items[i].year;
+    textEl.textContent = items[i].note;
+    retrigger(card, 'ofc-swap');
+    runTimer();
   }
-  list.addEventListener('animationend', (e) => {
-    if (e.animationName === 'ofc-prog' && !manual) setActive((idx + 1) % n);
-  });
+  timerEl.addEventListener('animationend', () => { if (!manual) setActive((idx + 1) % n); });
 
   setActive(0);
   host.hidden = false;

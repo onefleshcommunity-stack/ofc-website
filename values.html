@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="ofc-polish.css">
 <style>
 /* ---------- Values page ---------- */
-.ofc-vstage { position: relative; aspect-ratio: 6 / 5; border-radius: 24px; overflow: hidden; background: #7F241B; box-shadow: 0 22px 50px rgba(60, 25, 10, 0.22); }
+.ofc-vstage { position: relative; min-height: clamp(340px, 42vw, 460px); border-radius: 24px; overflow: hidden; background: #7F241B; box-shadow: 0 22px 50px rgba(60, 25, 10, 0.22); }
 .ofc-vslide {
   position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start;
   padding: clamp(24px, 5%, 44px); color: #fff; opacity: 0; transition: opacity .7s ease;
@@ -24,8 +24,9 @@
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='300' viewBox='0 0 520 300' fill='none'%3E%3Ccircle cx='200' cy='150' r='130' stroke='%23F4E9D8' stroke-width='1.6'/%3E%3Ccircle cx='320' cy='150' r='130' stroke='%23F4E9D8' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat center / contain;
 }
 .ofc-vslide__num { position: absolute; top: clamp(8px, 2%, 20px); left: clamp(22px, 5%, 40px); font-family: 'Fraunces', serif; font-style: italic; font-weight: 500; font-size: clamp(90px, 15vw, 170px); line-height: 1; color: rgba(255, 255, 255, 0.22); }
-.ofc-vslide__title { position: relative; font-family: 'Fraunces', serif; font-weight: 700; font-size: clamp(30px, 4vw, 46px); line-height: 1.1; color: #fff; max-width: 14ch; }
-.ofc-vslide__of { position: relative; margin-top: 12px; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: #F3E2B0; }
+.ofc-vslide__title { position: relative; font-family: 'Fraunces', serif; font-weight: 700; font-size: clamp(26px, 3.4vw, 38px); line-height: 1.15; color: #fff; max-width: 16ch; margin-bottom: 14px; }
+.ofc-vslide__text { position: relative; font-size: clamp(15.5px, 1.7vw, 17.5px); line-height: 1.65; color: rgba(255,255,255,.94); max-width: 40ch; }
+.ofc-vslide__of { position: relative; margin-top: 18px; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: #F3E2B0; }
 
 /* the full list stays readable: every guideline is visible, the selected one is highlighted */
 .ofc-vrows { list-style: none; margin: 0; padding: 0; }
@@ -44,7 +45,7 @@
 .ofc-vrow__t span { font-size: 15px; line-height: 1.6; color: #4d4036; }
 .ofc-show--top { align-items: start; }
 .ofc-show--top .ofc-vstage { position: sticky; top: 96px; }   /* stays in view while you read the list */
-@media (max-width: 860px) { .ofc-vstage { aspect-ratio: 16 / 11; } .ofc-show--top .ofc-vstage { position: relative; top: 0; } .ofc-vslide__num { font-size: 96px; } }
+@media (max-width: 860px) { .ofc-vstage { min-height: 300px; } .ofc-show--top .ofc-vstage { position: relative; top: 0; } .ofc-vslide__num { font-size: 96px; } }
 </style>
 </head>
 <body>
@@ -189,6 +190,7 @@ if (toggle) {
     const s = el('div', 'ofc-vslide ' + THEMES[i % THEMES.length]);
     s.appendChild(el('div', 'ofc-vslide__num', it.num));
     s.appendChild(el('div', 'ofc-vslide__title', it.title));
+    s.appendChild(el('p', 'ofc-vslide__text', it.text));
     s.appendChild(el('div', 'ofc-vslide__of', 'Guideline ' + (i + 1) + ' of ' + n));
     stage.appendChild(s);
     return s;
