@@ -31,8 +31,13 @@
     logo: 'logo.jpg',                        // shown while a flyer is not ready
     placeholderText: 'Details will be shared soon',
     hideEventList: true,                     // hide the old Next Up banner + cards
-    failsafeMs: 8000                         // if data is slow/broken, show the old list again
+    failsafeMs: 8000,                        // if data is slow/broken, show the old list again
+    registerUntil: '2026-09-25T22:00:00'     // after this, Register Now hides on every event; the flyer itself keeps showing
   };
+
+  function registrationOpen() {
+    return new Date() < new Date(CONFIG.registerUntil);
+  }
 
   var grid = document.getElementById('eventsGrid');
   if (!grid) return; // not the events page
@@ -437,7 +442,7 @@
       stage.setAttribute('aria-disabled', isFlyer ? 'false' : 'true');
       stage.setAttribute('aria-label', isFlyer ? 'View full flyer: ' + it.title : it.title + ': ' + placeholderMsg(it));
       btn.style.display = isFlyer ? '' : 'none';
-      var r = it.ev.register;                   // events with a registration link get a Register button
+      var r = registrationOpen() ? it.ev.register : null;   // registration closed: flyer stays, button hides
       reg.style.display = r ? '' : 'none';
       if (r) { reg.href = r; regLabel.textContent = it.ev.registerLabel || 'Register now'; }
       btn.classList.toggle('is-secondary', !!r);
