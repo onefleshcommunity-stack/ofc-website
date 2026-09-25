@@ -8,6 +8,10 @@
  * Info-only version (no Register button), e.g. for events.html:
  *     <script src="flyer-popup.js" defer data-mode="info"></script>
  *
+ * Note: a "register" popup (the default) auto-downgrades to info-only
+ * (flyer image, no Register Now button) once CONFIG.registerUntil has
+ * passed - see the settings below.
+ *
  * Testing: open  index.html?flyer=1  to force the popup to show
  * (ignores the "already seen this session" and expiry checks).
  */
@@ -15,14 +19,15 @@
   'use strict';
 
   var me = document.currentScript;
-  var mode = (me && me.getAttribute('data-mode') === 'info') ? 'info' : 'register';
+  var explicitMode = (me && me.getAttribute('data-mode') === 'info') ? 'info' : 'register';
 
   /* ---------------- Settings you may want to change ---------------- */
   var CONFIG = {
     image: 'hangout-flyer.jpg',          // flyer image (same folder as index.html)
     link: 'hangout.html',                // where "Register now" goes
     startDelay: 1000,                    // ms after page load before it pops up
-    showUntil: '2026-09-25T22:00:00',    // popup stops appearing once registration closes (10 PM tonight)
+    showUntil: '2026-09-28T00:00:00',    // popup stops appearing entirely after the event day
+    registerUntil: '2026-09-25T22:00:00',// once past this, a "register" popup drops the Register Now button and shows flyer-only (like "info" mode)
     showFrom: null,                      // optional, e.g. '2026-09-20T00:00:00'
     oncePerSession: true,                // false = show on every page load
     storageKey: 'ofc_hangout_flyer_seen_v1',
@@ -32,6 +37,15 @@
   };
   // Optional: use a different image on a page with  data-image="other-flyer.jpg"
   if (me && me.getAttribute('data-image')) CONFIG.image = me.getAttribute('data-image');
+
+  // Once registration closes, a "register" popup automatically behaves like
+  // "info" mode: flyer image + Close button, no Register Now CTA. Pages that
+  // were explicitly set to data-mode="info" are unaffected (already flyer-only).
+  var mode = explicitMode;
+  if (mode === 'register' && CONFIG.registerUntil && new Date() >= new Date(CONFIG.registerUntil)) {
+    mode = 'info';
+  }
+
   // Each mode remembers separately, so the home popup and the events popup each show once
   CONFIG.storageKey += '_' + mode;
 
