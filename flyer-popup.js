@@ -22,7 +22,7 @@
     image: 'hangout-flyer.jpg',          // flyer image (same folder as index.html)
     link: 'hangout.html',                // where "Register now" goes
     startDelay: 1000,                    // ms after page load before it pops up
-    showUntil: '2026-09-28T00:00:00',    // popup stops appearing after the event day
+    showUntil: '2026-09-25T22:00:00',    // popup stops appearing after the event day
     showFrom: null,                      // optional, e.g. '2026-09-20T00:00:00'
     oncePerSession: false,                // false = show on every page load
     storageKey: 'ofc_hangout_flyer_seen_v1',
