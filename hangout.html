@@ -170,6 +170,7 @@
     background: linear-gradient(180deg, #23a5cf, #167aa0); box-shadow: 0 5px 0 var(--teal-deep), 0 12px 18px rgba(10,80,110,0.25);
   }
   #ret-root .confirm .glow svg { width: 38px; height: 38px; }
+  #ret-root .confirm.closed .glow { background: linear-gradient(180deg, #ffa23a 0%, #ff8a1f 100%); box-shadow: 0 5px 0 var(--orange-deep), 0 12px 18px rgba(184,74,0,0.28); }
   #ret-root .confirm h2 {
     font-family: 'Titan One', 'Arial Black', Impact, sans-serif; font-weight: 400; text-transform: uppercase;
     font-size: 30px; margin: 0 0 14px; color: #ff8a1f;
@@ -292,10 +293,35 @@
     <p>Thank you for confirming your spot at the OFC Community Hangout. We can't wait to spend time with you on 27th September. Don't come alone, invite someone and let's grow in community together!</p>
   </div>
 
+  <div class="confirm closed" id="retClosed" style="display:none;">
+    <div class="glow"><svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.4 2"/></svg></div>
+    <h2>Registrations Closed</h2>
+    <p>Registration for the OFC Community Hangout closed at 10:00 PM. Thank you to everyone who signed up, we can't wait to see you on 27th September!</p>
+  </div>
+
 </div>
 
 <script>
 (function() {
+  // Registrations close at 10:00 PM tonight (visitor's local device time).
+  const REGISTRATION_DEADLINE = new Date('2026-09-25T22:00:00');
+
+  function registrationClosed() {
+    return new Date() >= REGISTRATION_DEADLINE;
+  }
+
+  function showClosed() {
+    const form = document.getElementById('retForm');
+    const closedMsg = document.getElementById('retClosed');
+    if (form) form.style.display = 'none';
+    if (closedMsg) closedMsg.style.display = 'block';
+  }
+
+  if (registrationClosed()) {
+    showClosed();
+    return;
+  }
+
   const state = {};
 
   document.querySelectorAll('#ret-root .pills').forEach(group => {
@@ -373,6 +399,10 @@
 
   form.addEventListener('submit', function(e) {
     e.preventDefault();
+    if (registrationClosed()) {
+      showClosed();
+      return;
+    }
     formError.style.display = 'none';
     formError.textContent = 'Please complete all required fields above before submitting.';
     if (!validate()) {
