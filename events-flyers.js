@@ -255,7 +255,8 @@
     vImg.alt = 'Flyer for ' + f.title;
     var d = dateText(f);
     vCap.textContent = f.title + (d ? ' \u00B7 ' + d : '');
-    if (f.ev.register) {
+    var canRegister = registrationOpen() && f.ev.register;
+    if (canRegister) {
       vReg.href = f.ev.register;
       vReg.firstChild.textContent = f.ev.registerLabel || 'Register now';
       vReg.style.display = '';
