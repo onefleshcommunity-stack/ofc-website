@@ -299,7 +299,7 @@ if (toggle) {
       div.dataset.src = f.download_url;
       div.setAttribute('aria-label', 'Open photo full size');
       const img = document.createElement('img');
-      img.src = f.download_url; img.alt = 'Community photo';
+      img.src = f.download_url; img.alt = 'Community photo'; img.loading = 'lazy'; img.decoding = 'async';
       img.loading = 'lazy'; img.decoding = 'async';
       div.appendChild(img);
     } else if (videoExt.test(f.name)) {
