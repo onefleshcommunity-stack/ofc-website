@@ -31,13 +31,8 @@
     logo: 'logo.jpg',                        // shown while a flyer is not ready
     placeholderText: 'Details will be shared soon',
     hideEventList: true,                     // hide the old Next Up banner + cards
-    failsafeMs: 8000,                        // if data is slow/broken, show the old list again
-    registerUntil: '2026-09-25T22:00:00'     // after this, Register Now hides on every event; the flyer itself keeps showing
+    failsafeMs: 8000                         // if data is slow/broken, show the old list again
   };
-
-  function registrationOpen() {
-    return new Date() < new Date(CONFIG.registerUntil);
-  }
 
   var grid = document.getElementById('eventsGrid');
   if (!grid) return; // not the events page
@@ -255,8 +250,7 @@
     vImg.alt = 'Flyer for ' + f.title;
     var d = dateText(f);
     vCap.textContent = f.title + (d ? ' \u00B7 ' + d : '');
-    var canRegister = registrationOpen() && f.ev.register;
-    if (canRegister) {
+    if (f.ev.register) {
       vReg.href = f.ev.register;
       vReg.firstChild.textContent = f.ev.registerLabel || 'Register now';
       vReg.style.display = '';
@@ -443,7 +437,7 @@
       stage.setAttribute('aria-disabled', isFlyer ? 'false' : 'true');
       stage.setAttribute('aria-label', isFlyer ? 'View full flyer: ' + it.title : it.title + ': ' + placeholderMsg(it));
       btn.style.display = isFlyer ? '' : 'none';
-      var r = registrationOpen() ? it.ev.register : null;   // registration closed: flyer stays, button hides
+      var r = it.ev.register;                   // events with a registration link get a Register button
       reg.style.display = r ? '' : 'none';
       if (r) { reg.href = r; regLabel.textContent = it.ev.registerLabel || 'Register now'; }
       btn.classList.toggle('is-secondary', !!r);
