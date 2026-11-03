@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Khatizo Boot Camp 2026 – Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:ital,wght@0,400;0,600;1,700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--card:#fff;--ink:#12263a;--muted:#5a6b7b;--line:#d5dde5;--field:#f4f7fa;--gold:#ffb300;--green:#6fb51f;--red:#d3141c;--sky1:#0d4f7c;--sky2:#2a86b8;--sand:#b4562a;--sand2:#6b2e14}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--card:#14202c;--ink:#eef3f7;--muted:#9fb1c0;--line:#2c3e4f;--field:#1b2b3a}}
+:root[data-theme="dark"]{--card:#14202c;--ink:#eef3f7;--muted:#9fb1c0;--line:#2c3e4f;--field:#1b2b3a}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;font-family:Poppins,system-ui,sans-serif;color:#fff;background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 38%,var(--sand) 78%,var(--sand2) 100%) fixed;min-height:100vh}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px 40px}
+header{text-align:center;padding-top:0}
+.logo{display:inline-block;background:#fff;color:#12263a;padding:14px 22px 10px;border-radius:0 0 8px 8px}
+.logo b{display:block;letter-spacing:.3em;font-size:15px;margin-top:2px}
+.logo small{display:block;letter-spacing:.35em;font-size:7px}
+.pres{letter-spacing:.5em;font-size:12px;margin:18px 0 6px}
+h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(60px,18vw,92px);line-height:.95;margin:0;letter-spacing:1px;text-shadow:0 4px 14px rgba(0,0,0,.35)}
+.banner{display:inline-block;background:linear-gradient(90deg,#ffc400,#f59a00);color:#0d3a1c;font-family:Anton,Impact,sans-serif;font-size:clamp(34px,10vw,52px);padding:2px 30px;transform:skewX(-10deg);margin-top:-4px;box-shadow:0 6px 16px rgba(0,0,0,.3)}
+.banner span{display:inline-block;transform:skewX(10deg);font-style:italic}
+.edition{font-style:italic;font-weight:700;font-size:18px;margin:10px 0 18px}
+.info{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;margin-bottom:16px}
+.info div{text-align:left}
+.info em{display:block;color:var(--gold);font-weight:700;font-size:14px}
+.info strong{font-size:16px}
+.nb{background:var(--red);border:2px solid #fff;border-radius:999px;padding:8px 18px;font-style:italic;font-weight:600;font-size:13px;margin:0 auto 18px}
+.nb b{color:#ffd400}
+form,.done,.admin{background:var(--card);color:var(--ink);border-radius:18px;padding:22px 18px;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+h2{font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.5px;font-size:24px;margin:0 0 4px;color:var(--ink)}
+.sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+label,.lbl{display:block;font-weight:600;font-size:13px;margin:14px 0 6px}
+label i,.lbl i{color:var(--red);font-style:normal}
+input[type=text],input[type=tel],input[type=email],input[type=number],select,textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--field);border:1.5px solid var(--line);border-radius:10px;padding:11px 12px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(111,181,31,.25)}
+textarea{min-height:80px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:420px){.row{grid-template-columns:1fr}}
+.opts{display:flex;gap:10px;flex-wrap:wrap}
+.opts label{margin:0;font-weight:600}
+.opts input{position:absolute;opacity:0}
+.opts span{display:inline-block;padding:9px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--field);cursor:pointer;font-size:14px}
+.opts input:checked+span{background:var(--green);border-color:var(--green);color:#fff}
+.opts input:focus-visible+span{box-shadow:0 0 0 3px rgba(111,181,31,.4)}
+.chk{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:13px;margin-top:18px}
+.chk input{margin-top:3px;width:18px;height:18px;accent-color:var(--green)}
+.btn{width:100%;margin-top:20px;border:0;border-radius:12px;padding:15px;font:inherit;font-weight:700;font-size:17px;color:#0d3a1c;background:linear-gradient(90deg,#ffc400,#f59a00);cursor:pointer;box-shadow:0 5px 0 #b87400}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #b87400}
+.btn:disabled{opacity:.6;cursor:wait}
+.btn.alt{background:#25a244;color:#fff;box-shadow:0 5px 0 #16722e;text-decoration:none;display:block;text-align:center}
+.err{color:var(--red);font-size:13px;margin-top:10px;min-height:1em}
+.done{text-align:center;display:none}
+.done .tick{width:64px;height:64px;border-radius:50%;background:var(--green);color:#fff;font-size:36px;line-height:64px;margin:0 auto 10px}
+.contact{text-align:center;font-size:14px;margin-top:20px}
+.contact b{font-size:18px}
+.admin{display:none;margin-top:20px}
+.admin .scroll{overflow-x:auto;margin-top:10px}
+table{border-collapse:collapse;font-size:12px;width:100%}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tiny{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="logo">
+    <svg width="58" height="38" viewBox="0 0 58 38" aria-hidden="true"><path d="M29 12c-5-6-12-1-8 4l8 7 8-7c4-5-3-10-8-4z" fill="#e5322d"/><circle cx="14" cy="14" r="4" fill="#1aa0b8"/><circle cx="44" cy="14" r="4" fill="#8dc63f"/><path d="M4 33c4-10 12-10 16-2M54 33c-4-10-12-10-16-2" stroke="#1aa0b8" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+    <b>ONE FLESH</b><small>COMMUNITY</small>
+  </div>
+  <div class="pres">PRESENTS</div>
+  <h1>KHATIZO</h1>
+  <div class="banner"><span>BOOT CAMP</span></div>
+  <div class="edition">(Maiden Edition) · Singles’ Bootcamp</div>
+  <div class="info">
+    <div><em>Date:</em><strong>Saturday 28th November, 2026</strong></div>
+    <div><em>Time:</em><strong>9am to 6pm</strong></div>
+  </div>
+  <div class="nb">NB: Attendance is strictly by <b>REGISTRATION</b></div>
+</header>
+
+<form id="f" novalidate>
+  <h2>Register Your Spot</h2>
+  <p class="sub">A one-day experience for singles. Fill in your details below.</p>
+
+  <label for="name">Full name <i>*</i></label>
+  <input type="text" id="name" autocomplete="name" required>
+
+  <div class="row">
+    <div><label for="phone">Phone / WhatsApp <i>*</i></label><input type="tel" id="phone" autocomplete="tel" inputmode="tel" required></div>
+    <div><label for="age">Age <i>*</i></label><input type="number" id="age" min="16" max="99" inputmode="numeric" required></div>
+  </div>
+
+  <label for="email">Email</label>
+  <input type="email" id="email" autocomplete="email">
+
+  <div class="lbl">Gender <i>*</i></div>
+  <div class="opts" id="gender">
+    <label><input type="radio" name="gender" value="Male"><span>Male</span></label>
+    <label><input type="radio" name="gender" value="Female"><span>Female</span></label>
+  </div>
+
+  <label for="city">Where do you stay? (Town / Area) <i>*</i></label>
+  <input type="text" id="city" required>
+
+  <div class="lbl">Are you a member of One Flesh Community? <i>*</i></div>
+  <div class="opts" id="member">
+    <label><input type="radio" name="member" value="Yes"><span>Yes</span></label>
+    <label><input type="radio" name="member" value="No"><span>No</span></label>
+  </div>
+
+  <label for="heard">How did you hear about this event?</label>
+  <select id="heard">
+    <option value="">Select one</option>
+    <option>Social media</option><option>WhatsApp</option><option>A friend</option><option>Church / Community</option><option>Flyer</option><option>Other</option>
+  </select>
+
+  <label for="notes">Anything we should know? (allergies, questions, expectations)</label>
+  <textarea id="notes"></textarea>
+
+  <label class="chk"><input type="checkbox" id="ok"><span>I confirm my details are correct and I will attend the full event on 28th November, 2026 (9am to 6pm).</span></label>
+
+  <div class="err" id="err" role="alert"></div>
+  <button class="btn" id="go" type="submit">Submit Registration</button>
+</form>
+
+<section class="done" id="done">
+  <div class="tick">✓</div>
+  <h2>You’re registered!</h2>
+  <p class="sub" id="doneMsg">Thank you. We look forward to seeing you on Saturday 28th November, 2026, 9am to 6pm.</p>
+  <a class="btn alt" id="wa" href="#" style="display:none" target="_blank" rel="noopener">Send details via WhatsApp</a>
+</section>
+
+<div class="contact">For enquiries: <b>0539543991</b></div>
+
+</div>
+
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var COLS=["name","phone","age","gender","city","member","email","heard","notes","at"];
+  function val(n){var r=document.querySelector('input[name="'+n+'"]:checked');return r?r.value:""}
+  function data(){return{name:$("name").value.trim(),phone:$("phone").value.trim(),age:Number($("age").value),gender:val("gender"),city:$("city").value.trim(),member:val("member"),email:$("email").value.trim(),heard:$("heard").value,notes:$("notes").value.trim(),at:new Date().toISOString()}}
+  function waLink(d){
+    var t="Khatizo Boot Camp Registration%0AName: "+encodeURIComponent(d.name)+"%0APhone: "+encodeURIComponent(d.phone)+"%0AAge: "+d.age+"%0AGender: "+d.gender+"%0AArea: "+encodeURIComponent(d.city)+"%0AMember: "+d.member;
+    return "https://wa.me/233539543991?text="+t;
+  }
+  function finish(d,saved){
+    $("f").style.display="none";$("done").style.display="block";
+    if(!saved){
+      $("doneMsg").textContent="We couldn’t save your details online. Please tap the button below to send them to the organisers on WhatsApp so your spot is confirmed.";
+      var a=$("wa");a.href=waLink(d);a.style.display="block";
+    }
+    window.scrollTo(0,0);
+  }
+  $("f").addEventListener("submit",async function(e){
+    e.preventDefault();
+    var d=data(),m="";
+    if(!d.name)m="Please enter your full name.";
+    else if(d.phone.replace(/\D/g,"").length<9)m="Please enter a valid phone number.";
+    else if(!d.age||d.age<16)m="Please enter your age.";
+    else if(!d.gender)m="Please select your gender.";
+    else if(!d.city)m="Please tell us where you stay.";
+    else if(!d.member)m="Please say whether you are a One Flesh Community member.";
+    else if(!$("ok").checked)m="Please tick the confirmation box.";
+    $("err").textContent=m;if(m)return;
+    $("go").disabled=true;$("go").textContent="Submitting…";
+    var saved=false;
+    try{
+      await fetch("https://script.google.com/macros/s/AKfycbxH-ekLuSlTcdK1sRfwfG9-knbYWz4wtmPzYkHH8dPE_bHn5K2G87D-cJFo8_V58QyBOA/exec",{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(d)});
+      saved=true;
+    }catch(x){saved=false}
+    finish(d,saved);
+  });
+
+})();
+</script>
+</body>
+</html>
