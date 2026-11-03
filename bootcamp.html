@@ -93,7 +93,7 @@ th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);white-
     <div><label for="age">Age <i>*</i></label><input type="number" id="age" min="16" max="99" inputmode="numeric" required></div>
   </div>
 
-  <label for="email">Email</label>
+  <label for="email">Email <i>*</i></label>
   <input type="email" id="email" autocomplete="email">
 
   <div class="lbl">Gender <i>*</i></div>
@@ -164,6 +164,7 @@ th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);white-
     else if(!d.gender)m="Please select your gender.";
     else if(!d.city)m="Please tell us where you stay.";
     else if(!d.member)m="Please say whether you are a One Flesh Community member.";
+      else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email))m="Please enter a valid email address.";
     else if(!$("ok").checked)m="Please tick the confirmation box.";
     $("err").textContent=m;if(m)return;
     $("go").disabled=true;$("go").textContent="Submitting…";
