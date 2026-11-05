@@ -25,10 +25,13 @@
     "register": "hangout.html"
   },
   {
-    "title": "Boot Camp for Singles",
+    "title": "Khatizo Boot Camp (Maiden Edition)",
     "date": "2026-11-28",
-    "displayDate": "Saturday, 28th November",
-    "description": "A dedicated training day for singles preparing well for what is ahead."
+    "displayDate": "Saturday, 28th November · 9am to 6pm",
+    "description": "A one-day bootcamp for singles preparing well for what is ahead. Attendance is strictly by registration.",
+    "flyer": "bootcamp-flyer.jpg",
+    "register": "bootcamp.html",
+    "registerLabel": "Register now"
   },
   {
     "title": "Love Feast",
