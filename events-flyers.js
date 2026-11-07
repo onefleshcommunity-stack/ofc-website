@@ -32,7 +32,7 @@
     placeholderText: 'Details will be shared soon',
     hideEventList: true,                     // hide the old Next Up banner + cards
     failsafeMs: 8000,                        // if data is slow/broken, show the old list again
-    registerUntil: '2026-11-27T22:00:00'     // after this, Register Now hides on every event; the flyer itself keeps showing
+    registerUntil: '2026-11-21T23:59:00'     // after this, Register Now hides on every event; the flyer itself keeps showing
   };
 
   function registrationOpen() {
