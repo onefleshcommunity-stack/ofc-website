@@ -30,6 +30,8 @@
     "displayDate": "Saturday, 28th November · 9am to 6pm",
     "description": "A one-day bootcamp for singles preparing well for what is ahead. Attendance is strictly by registration.",
     "flyer": "bootcamp-flyer.jpg",
+       "popup": true,
+   "registerUntil": "2026-11-21T22:00:00",
     "register": "bootcamp.html",
     "registerLabel": "Register now"
   },
