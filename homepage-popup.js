@@ -15,7 +15,7 @@
  *     "popup": true,
  *     "flyer": "bootcamp-flyer.jpg",
  *     "register": "bootcamp.html",
- *     "registerUntil": "2026-11-27T22:00:00"
+ *     "registerUntil": "2026-11-21T23:59:00"
  * If several events have "popup": true, the soonest upcoming one is shown.
  *
  * Testing (no need to change any dates):
