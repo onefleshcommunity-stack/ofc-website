@@ -29,7 +29,7 @@
   var CONFIG = {
     dataUrl: 'events-data.json',
     startDelay: 1000,                 // ms after page load before it pops up
-    oncePerSession: true,             // false = show on every page load
+    oncePerSession: false,             // false = show on every page load
     storagePrefix: 'ofc_event_popup_v1:'
   };
 
