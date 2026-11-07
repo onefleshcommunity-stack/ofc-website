@@ -31,7 +31,7 @@ h1 span{display:block}
 .time span{display:block;font-weight:900;font-size:22px;line-height:1}
 .nb{background:var(--brown);color:#fff;border-radius:999px;padding:9px 18px;font-style:italic;font-weight:500;font-size:13px;margin:0 auto 18px}
 .nb b{color:#ffc34d;font-style:normal;font-weight:800}
-form,.done{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 18px;box-shadow:0 10px 28px rgba(90,45,15,.15)}
+form,.done,.closed{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 18px;box-shadow:0 10px 28px rgba(90,45,15,.15)}
 h2{font-family:Poppins,sans-serif;font-weight:800;font-size:22px;margin:0 0 4px;color:var(--brown)}
 .sub{color:var(--muted);font-size:13px;margin:0 0 16px}
 label,.lbl{display:block;font-weight:600;font-size:13px;margin:14px 0 6px;color:var(--ink)}
@@ -70,7 +70,7 @@ textarea{min-height:80px;resize:vertical}
 .hero .time{position:absolute;right:2px;bottom:6px;text-shadow:0 0 8px #fdf5e8,0 0 14px #fdf5e8;font-size:13px;font-weight:800}
 .hero .time span{font-size:19px}
 .hero .time svg{width:24px;height:24px}
-</style>
+.closed{text-align:center;display:none}.closed .tick{width:64px;height:64px;border-radius:50%;background:var(--brown);color:#fff;font-size:30px;line-height:64px;margin:0 auto 10px}</style>
 </head>
 <body>
 <div class="bgb" aria-hidden="true"></div>
@@ -141,6 +141,12 @@ textarea{min-height:80px;resize:vertical}
   <a class="btn alt" id="wa" href="#" style="display:none" target="_blank" rel="noopener">Send details via WhatsApp</a>
 </section>
 
+<section class="closed" id="closed" role="status">
+  <div class="tick" aria-hidden="true">&#10005;</div>
+  <h2>Registration is closed</h2>
+  <p class="sub">Registration for Khatizo Boot Camp (Maiden Edition) has now closed. Thank you for your interest. For enquiries, call or message 0539543991.</p>
+</section>
+
 <div class="contact">For more info: <b>0539543991</b><em>Growing in Oneness, Building Kingdom Marriages</em></div>
 
 </div>
@@ -163,8 +169,13 @@ textarea{min-height:80px;resize:vertical}
     }
     window.scrollTo(0,0);
   }
+  var CLOSES=new Date("2026-11-21T23:59:00Z");   // registration closing time (GMT): change this to move the deadline
+  function isClosed(){return new Date()>=CLOSES}
+  function showClosed(){$("f").style.display="none";$("done").style.display="none";$("closed").style.display="block"}
+  if(isClosed())showClosed();
   $("f").addEventListener("submit",async function(e){
     e.preventDefault();
+    if(isClosed()){showClosed();return;}
     var d=data(),m="";
     if(!d.name)m="Please enter your full name.";
     else if(d.phone.replace(/\D/g,"").length<9)m="Please enter a valid phone number.";
